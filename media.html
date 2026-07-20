@@ -7,15 +7,16 @@
     
     <link rel="icon" href="data:,">
 
-    <!-- Правильное подключение Supabase без ошибок безопасности -->
-    <script type="module" src="supabase.js"></script>
+    <!-- Официальный безопасный скрипт Supabase для браузеров -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
+        // Инициализация сразу после загрузки страницы
         window.addEventListener('DOMContentLoaded', () => {
             const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
             
-            if (window.supabase && window.supabase.createClient) {
+            if (window.supabase) {
                 window._supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             }
         });
@@ -75,7 +76,7 @@
             closeModal('loginModal');
         }
 
-        // НАСТОЯЩАЯ ОТПРАВКА ВИДЕО
+        // ОТПРАВКА ВИДЕО В БАЗУ
         async function sendVideo() {
             const inputField = document.querySelector('#suggestModal .input-field[type="text"]');
             const selectField = document.querySelector('#suggestModal select.input-field');
