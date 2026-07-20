@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Panel</title>
     
-    <!-- Безопасное подключение модуля без использования eval -->
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-        
-        // НАСТРОЙКА SUPABASE
+    <!-- Подключаем твой локальный сохраненный скрипт библиотеки -->
+    <script src="supabase.js"></script>
+    
+    <script>
+        // НАСТРОЙКА SUPABASE ЧЕРЕЗ ЛОКАЛЬНЫЙ ФАЙЛ
         const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        // Делаем переменную доступной для функций ниже
+        // Создаем клиент, используя объект supabase из подключенного файла
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Делаем переменную доступной глобально для функций ниже
         window._supabase = _supabase;
     </script>
 </head>
