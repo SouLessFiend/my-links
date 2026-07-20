@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SouLessFiend | Проекты и соцсети</title>
+    <title>Blondie Bane | Стримы и проекты</title>
     <style>
         * {
             box-sizing: border-box;
@@ -46,6 +46,20 @@
         .bio {
             font-size: 14px;
             color: #8c8c8c;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8c8c8c;
+            margin: 25px 0 12px 0;
+            width: 100%;
+            max-width: 580px;
+            text-align: left;
+            border-bottom: 1px solid #262626;
+            padding-bottom: 6px;
         }
 
         .links-container {
@@ -53,14 +67,14 @@
             max-width: 580px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         }
 
         .link-card {
             background-color: #1a1a1a;
             border: 1px solid #262626;
             border-radius: 12px;
-            padding: 18px;
+            padding: 16px;
             display: flex;
             align-items: center;
             text-decoration: none;
@@ -75,7 +89,7 @@
         }
 
         .link-icon {
-            font-size: 24px;
+            font-size: 22px;
             margin-right: 15px;
         }
 
@@ -92,38 +106,64 @@
 <body>
 
     <div class="profile">
-        <!-- Позже сюда можно будет вставить прямую ссылку на твою аватарку -->
+        <!-- Аватарка ждет своего часа -->
         <img class="avatar" src="https://via.placeholder.com/150" alt="Avatar">
-        <h1 class="name">SouLessFiend</h1>
-        <p class="bio">Соцсети, стримы и проекты</p>
+        <h1 class="name">Blondie Bane</h1>
+        <p class="bio">Соцсети, стримеры и проекты</p>
     </div>
 
+    <!-- БЛОК 1: СОЦСЕТИ -->
+    <div class="section-title">Соцсети</div>
     <div class="links-container">
-        <!-- Кнопка Твича Дианы -->
+        <!-- Twitch -->
         <a href="https://www.twitch.tv/blondbane" target="_blank" class="link-card">
             <span class="link-icon">🔮</span>
-            <span class="link-text">blondbane на Twitch</span>
+            <span class="link-text">Twitch-канал</span>
             <span class="arrow">→</span>
         </a>
 
-        <!-- Твой Telegram (замени 'твой_канал' на свой юзернейм/ссылку, когда понадобится) -->
-        <a href="https://t.me/твой_канал" target="_blank" class="link-card">
+        <!-- Telegram (Наш сохраненный оригинал) -->
+        <a href="https://t.me/goblondbane" target="_blank" class="link-card">
             <span class="link-icon">✈️</span>
-            <span class="link-text">Telegram-канал</span>
+            <span class="link-text">Telegram</span>
             <span class="arrow">→</span>
         </a>
 
-        <!-- Твой Twitch -->
-        <a href="https://twitch.tv/soulessfiend" target="_blank" class="link-card">
-            <span class="link-icon">🎮</span>
-            <span class="link-text">Стримы SouLessFiend</span>
+        <!-- YouTube -->
+        <a href="https://www.youtube.com/@BlondBane" target="_blank" class="link-card">
+            <span class="link-icon">🟥</span>
+            <span class="link-text">YouTube</span>
             <span class="arrow">→</span>
         </a>
 
-        <!-- Группа VK -->
-        <a href="https://vk.com/твой_паблик" target="_blank" class="link-card">
-            <span class="link-icon">👥</span>
-            <span class="link-text">Группа VK</span>
+        <!-- Discord -->
+        <a href="https://discord.gg/56qHXFthJB" target="_blank" class="link-card">
+            <span class="link-icon">💬</span>
+            <span class="link-text">Discord-сервер</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@blondbane?_r=1&_t=ZT-98BZ3OSyH6r" target="_blank" class="link-card">
+            <span class="link-icon">📱</span>
+            <span class="link-text">TikTok</span>
+            <span class="arrow">→</span>
+        </a>
+    </div>
+
+    <!-- БЛОК 2: ПРОЕКТЫ -->
+    <div class="section-title">Проекты</div>
+    <div class="links-container">
+        <!-- Заглушки для будущих проектов Дианы -->
+        <a href="https://ссылка_на_проект_1" target="_blank" class="link-card">
+            <span class="link-icon">✨</span>
+            <span class="link-text">Название проекта 1</span>
+            <span class="arrow">→</span>
+        </a>
+        
+        <a href="https://ссылка_на_проект_2" target="_blank" class="link-card">
+            <span class="link-icon">🔥</span>
+            <span class="link-text">Название проекта 2</span>
             <span class="arrow">→</span>
         </a>
     </div>
