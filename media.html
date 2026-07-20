@@ -1,75 +1,107 @@
-<script>
-    // НАСТРОЙКА SUPABASE — КЛЮЧИ ПОДКЛЮЧЕНЫ
-    const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    function switchTab(tabName, clickedTab) {
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
-        
-        clickedTab.classList.add('active');
-        document.getElementById(`${tabName}-section`).classList.add('active');
-    }
-
-    function selectCategory(clickedButton) {
-        document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-        clickedButton.classList.add('active');
-    }
-
-    function openSuggestModal() { document.getElementById('suggestModal').style.display = 'flex'; }
-    function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Panel</title>
     
-    function closeModal(modalId) { 
-        document.getElementById(modalId).style.display = 'none'; 
-    }
+    <!-- Подключение Supabase, чтобы не было белого экрана -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
 
-    // Переменная для хранения текущего ника (по умолчанию для тестов)
-    let currentTwitchUser = 'blondbane';
+    <!-- Если у тебя здесь был HTML-код (кнопки, модалки), он должен быть здесь. 
+         Ниже идет полностью готовый и рабочий скрипт -->
 
-    function simulateLogin() {
-        const nick = document.getElementById('twitchNickInput').value.trim() || 'Viewer';
-        currentTwitchUser = nick;
-        const firstLetter = nick.charAt(0).toUpperCase();
+    <script>
+        // НАСТРОЙКА SUPABASE — КЛЮЧИ ПОДКЛЮЧЕНЫ
+        const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function switchTab(tabName, clickedTab) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
+            
+            clickedTab.classList.add('active');
+            const targetSection = document.getElementById(`${tabName}-section`);
+            if (targetSection) targetSection.classList.add('active');
+        }
+
+        function selectCategory(clickedButton) {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            clickedButton.classList.add('active');
+        }
+
+        function openSuggestModal() { 
+            const modal = document.getElementById('suggestModal');
+            if (modal) modal.style.display = 'flex'; 
+        }
         
-        const authPanel = document.getElementById('authPanel');
-        authPanel.innerHTML = `
-            <div class="user-info-block">
-                <span style="font-size: 14px; color: #aaa; font-weight: 600;">${nick}</span>
-                <div class="user-avatar">${firstLetter}</div>
-            </div>
-        `;
-        closeModal('loginModal');
-    }
-
-    // НАСТОЯЩАЯ ОТПРАВКА ВИДЕО В БАЗУ ДАННЫХ
-    async function sendVideo() {
-        const inputUrl = document.querySelector('#suggestModal .input-field[type="text"]').value.trim();
-        const selectedCategory = document.querySelector('#suggestModal select.input-field').value;
-
-        if (!inputUrl) {
-            alert('Пожалуйста, вставь ссылку на видео!');
-            return;
+        function openLoginModal() { 
+            const modal = document.getElementById('loginModal');
+            if (modal) modal.style.display = 'flex'; 
+        }
+        
+        function closeModal(modalId) { 
+            const modal = document.getElementById(modalId);
+            if (modal) modal.style.display = 'none'; 
         }
 
-        // Отправляем данные в таблицу 'videos'
-        const { data, error } = await _supabase
-            .from('videos')
-            .insert([
-                { 
-                    url: inputUrl, 
-                    category: selectedCategory, 
-                    username: currentTwitchUser 
-                }
-            ]);
+        // Переменная для хранения текущего ника (по умолчанию для тестов)
+        let currentTwitchUser = 'blondbane';
 
-        if (error) {
-            console.error('Ошибка бэкенда:', error);
-            alert('Что-то пошло не так при отправке.');
-        } else {
-            alert('Видео успешно предложено! Оно появится в базе.');
-            document.querySelector('#suggestModal .input-field[type="text"]').value = ''; // Очищаем поле
-            closeModal('suggestModal');
+        function simulateLogin() {
+            const input = document.getElementById('twitchNickInput');
+            const nick = input ? input.value.trim() : 'Viewer';
+            currentTwitchUser = nick;
+            const firstLetter = nick.charAt(0).toUpperCase();
+            
+            const authPanel = document.getElementById('authPanel');
+            if (authPanel) {
+                authPanel.innerHTML = `
+                    <div class="user-info-block">
+                        <span style="font-size: 14px; color: #aaa; font-weight: 600;">${nick}</span>
+                        <div class="user-avatar">${firstLetter}</div>
+                    </div>
+                `;
+            }
+            closeModal('loginModal');
         }
-    }
-</script>
+
+        // НАСТОЯЩАЯ ОТПРАВКА ВИДЕО В БАЗУ ДАННЫХ
+        async function sendVideo() {
+            const inputField = document.querySelector('#suggestModal .input-field[type="text"]');
+            const selectField = document.querySelector('#suggestModal select.input-field');
+            
+            const inputUrl = inputField ? inputField.value.trim() : '';
+            const selectedCategory = selectField ? selectField.value : '';
+
+            if (!inputUrl) {
+                alert('Пожалуйста, вставь ссылку на видео!');
+                return;
+            }
+
+            // Отправляем данные в таблицу 'videos'
+            const { data, error } = await _supabase
+                .from('videos')
+                .insert([
+                    { 
+                        url: inputUrl, 
+                        category: selectedCategory, 
+                        username: currentTwitchUser 
+                    }
+                ]);
+
+            if (error) {
+                console.error('Ошибка бэкенда:', error);
+                alert('Что-то пошло не так при отправке.');
+            } else {
+                alert('Видео успешно предложено! Оно появится в базе.');
+                if (inputField) inputField.value = ''; // Очищаем поле
+                closeModal('suggestModal');
+            }
+        }
+    </script>
+</body>
+</html>
