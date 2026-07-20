@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blondie Play | Главная</title>
+    <!-- Подключаем стильный округлый шрифт Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif; /* Применяем новый шрифт */
         }
 
         body {
@@ -48,8 +53,9 @@
         .logo-text {
             font-size: 24px;
             font-weight: 800;
-            color: #ff4181; /* Основной розовый */
+            color: #ff4181;
             text-shadow: 0 0 10px rgba(255, 65, 129, 0.3);
+            letter-spacing: -0.5px;
         }
 
         .nav-links {
@@ -61,11 +67,12 @@
             color: #8c8c8c;
             text-decoration: none;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700; /* Сделали пункты меню чуть выразительнее */
             transition: all 0.2s;
             cursor: pointer;
             padding-bottom: 4px;
             border-bottom: 2px solid transparent;
+            letter-spacing: 0.3px;
         }
 
         .nav-item.active {
@@ -79,13 +86,12 @@
             gap: 15px;
         }
 
-        /* Кнопка входа Twitch */
         .twitch-login-btn {
             background-color: #6441a5;
             color: #fff;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 10px 18px;
+            border-radius: 8px;
             font-weight: 700;
             font-size: 13px;
             cursor: pointer;
@@ -93,6 +99,7 @@
             align-items: center;
             gap: 8px;
             transition: background-color 0.2s;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .twitch-login-btn:hover {
@@ -139,16 +146,17 @@
             background-color: #262626;
             border: 1px solid #333;
             color: #ffffff;
-            padding: 10px 20px;
+            padding: 10px 22px;
             border-radius: 20px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
             transition: all 0.2s;
             user-select: none;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .cat-btn.active {
@@ -160,9 +168,10 @@
 
         .cat-count {
             font-size: 11px;
-            opacity: 0.6;
+            font-weight: 600;
+            opacity: 0.7;
             background-color: rgba(255,255,255,0.1);
-            padding: 2px 6px;
+            padding: 2px 7px;
             border-radius: 10px;
         }
 
@@ -170,9 +179,9 @@
             background-color: #ff4181;
             color: #ffffff;
             border: none;
-            padding: 12px 24px;
+            padding: 12px 26px;
             border-radius: 8px;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 14px;
             cursor: pointer;
             display: flex;
@@ -180,6 +189,8 @@
             gap: 8px;
             transition: all 0.2s;
             box-shadow: 0 0 12px rgba(255, 65, 129, 0.2);
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
         }
 
         .suggest-btn:hover {
@@ -201,7 +212,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 80px 20px;
+            padding: 90px 20px;
             color: #555555;
             text-align: center;
             border: 2px dashed #262626;
@@ -209,14 +220,15 @@
         }
 
         .empty-state-icon {
-            font-size: 40px;
+            font-size: 44px;
             margin-bottom: 15px;
             opacity: 0.4;
         }
 
         .empty-state-text {
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
+            letter-spacing: 0.2px;
         }
 
         /* МОДАЛЬНЫЕ ОКНА */
@@ -237,7 +249,7 @@
             background-color: #212121;
             border: 1px solid #2d2d2d;
             padding: 25px;
-            border-radius: 12px;
+            border-radius: 14px;
             width: 100%;
             max-width: 450px;
             display: flex;
@@ -248,16 +260,19 @@
         .modal-title {
             font-size: 18px;
             font-weight: 700;
+            letter-spacing: -0.3px;
         }
 
         .input-field {
             background-color: #262626;
             border: 1px solid #333;
             color: #fff;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
             outline: none;
             width: 100%;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
         }
 
         .input-field:focus {
@@ -275,9 +290,12 @@
             background-color: transparent;
             border: 1px solid #444;
             color: #aaa;
-            padding: 10px 16px;
+            padding: 10px 18px;
             border-radius: 8px;
             cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -294,9 +312,8 @@
                 <span class="nav-item" onclick="switchTab('feed', this)">Лента (Скоро)</span>
             </div>
             <div class="user-panel" id="authPanel">
-                <!-- Начальное состояние: кнопка входа -->
                 <button class="twitch-login-btn" onclick="openLoginModal()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle;"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 2px;"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
                     Войти через Twitch
                 </button>
             </div>
@@ -304,7 +321,6 @@
 
         <!-- СЕКЦИЯ: ВИДОСЫ -->
         <div id="videos-section" class="page-section active">
-            <!-- ПАНЕЛЬ УПРАВЛЕНИЯ КАТЕГОРИЯМИ -->
             <div class="controls-row">
                 <div class="categories">
                     <button class="cat-btn active" onclick="selectCategory(this)">⭐ Рекомендуем</button>
@@ -316,7 +332,6 @@
                 </button>
             </div>
 
-            <!-- ПУСТОЙ СПИСОК -->
             <div class="empty-state">
                 <div class="empty-state-icon">🎬</div>
                 <div class="empty-state-text">В этой категории пока ничего нет. Будь первым!</div>
@@ -352,7 +367,7 @@
     <div class="modal-overlay" id="loginModal">
         <div class="modal" style="max-width: 380px;">
             <div class="modal-title" style="text-align: center; color: #ff4181;">Авторизация Twitch</div>
-            <p style="font-size: 14px; color: #aaa; text-align: center;">Введите ваш никнейм для симуляции входа через Twitch API</p>
+            <p style="font-size: 13px; color: #aaa; text-align: center; line-height: 1.4;">Введите ваш никнейм для симуляции входа через Twitch API</p>
             <input type="text" id="twitchNickInput" class="input-field" placeholder="Ваш ник на Twitch" value="blondbane">
             <div class="modal-actions" style="justify-content: center; width: 100%;">
                 <button class="cancel-btn" onclick="closeModal('loginModal')">Отмена</button>
@@ -362,7 +377,6 @@
     </div>
 
     <script>
-        // Переключение вкладок (Видосы / Лента)
         function switchTab(tabName, clickedTab) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
@@ -371,13 +385,11 @@
             document.getElementById(`${tabName}-section`).classList.add('active');
         }
 
-        // Переключение фильтров категорий
         function selectCategory(clickedButton) {
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             clickedButton.classList.add('active');
         }
 
-        // Управление модалками
         function openSuggestModal() { document.getElementById('suggestModal').style.display = 'flex'; }
         function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
         
@@ -385,7 +397,6 @@
             document.getElementById(modalId).style.display = 'none'; 
         }
 
-        // Симуляция входа через Твич
         function simulateLogin() {
             const nick = document.getElementById('twitchNickInput').value.trim() || 'Viewer';
             const firstLetter = nick.charAt(0).toUpperCase();
@@ -393,7 +404,7 @@
             const authPanel = document.getElementById('authPanel');
             authPanel.innerHTML = `
                 <div class="user-info-block">
-                    <span style="font-size: 14px; color: #aaa;">${nick}</span>
+                    <span style="font-size: 14px; color: #aaa; font-weight: 600;">${nick}</span>
                     <div class="user-avatar">${firstLetter}</div>
                 </div>
             `;
