@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blondie Play | Видосы</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            padding: 20px 40px;
+            min-height: 100vh;
+        }
+
+        /* ШАПКА САЙТА (НАВИГАЦИЯ) */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #222;
+            margin-bottom: 30px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            color: #73b627; /* Фирменный зеленый Вовы, можем поменять на цвет Дианы */
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-item {
+            color: #8c8c8c;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-item.active {
+            color: #73b627;
+            border-bottom: 2px solid #73b627;
+            padding-bottom: 4px;
+        }
+
+        .user-panel {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #333;
+        }
+
+        /* ФИЛЬТРЫ И КНОПКА ПРЕДЛОЖКИ */
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cat-btn {
+            background-color: #222;
+            border: 1px solid #2d2d2d;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .cat-btn:hover {
+            background-color: #2b2b2b;
+        }
+
+        .cat-btn.active {
+            background-color: #73b627;
+            color: #000;
+            border-color: #73b627;
+        }
+
+        .cat-count {
+            font-size: 11px;
+            opacity: 0.6;
+            background-color: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .cat-btn.active .cat-count {
+            background-color: rgba(0,0,0,0.15);
+        }
+
+        .suggest-btn {
+            background-color: #73b627;
+            color: #000000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .suggest-btn:hover {
+            background-color: #86d42e;
+        }
+
+        /* СЕТКА С ВИДЕОКАРТОЧКАМИ */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .video-card {
+            background-color: #1a1a1a;
+            border: 1px solid #262626;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .thumbnail-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* Пропорции 16:9 */
+            background-color: #000;
+        }
+
+        .thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-grow: 1;
+        }
+
+        .author-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .author-avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .like-btn {
+            background-color: #262626;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+        }
+
+        .like-btn:hover {
+            background-color: #333;
+        }
+
+        .like-btn.liked {
+            background-color: rgba(115, 182, 39, 0.15);
+            border-color: #73b627;
+            color: #73b627;
+        }
+
+        .video-title {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #fff;
+            margin-top: 5px;
+        }
+
+        /* МОДАЛЬНОЕ ОКНО ПРЕДЛОЖКИ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal {
+            background-color: #1a1a1a;
+            border: 1px solid #2c2c2c;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .input-field {
+            background-color: #222;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            outline: none;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            border-color: #73b627;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .cancel-btn {
+            background-color: transparent;
+            border: 1px solid #444;
+            color: #aaa;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .cancel-btn:hover {
+            color: #fff;
+            border-color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+    <header>
+        <div class="logo-area">
+            <span class="logo-text">BlondiePlay</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-item active">Видосы</a>
+            <a href="#" class="nav-item">Лента (Скоро)</a>
+        </div>
+        <div class="user-panel">
+            <span style="font-size: 14px; color: #aaa;">Viewer_Test</span>
+            <img class="user-avatar" src="https://via.placeholder.com/50" alt="User">
+        </div>
+    </header>
+
+    <!-- ПАНЕЛЬ УПРАВЛЕНИЯ КАТЕГОРИЯМИ -->
+    <div class="controls-row">
+        <div class="categories">
+            <button class="cat-btn active">⭐ Рекомендуем</button>
+            <button class="cat-btn">Смешные <span class="cat-count">1</span></button>
+            <button class="cat-btn">Разное <span class="cat-count">0</span></button>
+        </div>
+        <button class="suggest-btn" onclick="openModal()">
+            ПРЕДЛОЖИТЬ ВИДЕО ➔
+        </button>
+    </div>
+
+    <!-- СЕТКА С ВИДОСАМИ -->
+    <div class="video-grid">
+        <!-- Карточка 1 -->
+        <div class="video-card">
+            <div class="thumbnail-wrapper">
+                <img class="thumbnail" src="https://via.placeholder.com/320x180/1f1f1f/fff?text=YouTube+Preview" alt="Превью">
+            </div>
+            <div class="video-info">
+                <div class="author-line">
+                    <div class="author-info">
+                        <img class="author-avatar" src="https://via.placeholder.com/20" alt="User">
+                        <span>ImCrazyPotatoes</span>
+                    </div>
+                    <button class="like-btn" onclick="toggleLike(this)">
+                        👍 <span class="like-count">116</span>
+                    </button>
+                </div>
+                <div class="video-title">Тестовое видео предложки — Всё работает стабильно!</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ВСПЛЫВАЮЩЕЕ ОКНО (ПРЕДЛОЖКА) -->
+    <div class="modal-overlay" id="suggestModal">
+        <div class="modal">
+            <div class="modal-title">Предложить видео на стрим</div>
+            <input type="text" class="input-field" placeholder="Вставьте ссылку на YouTube или TikTok">
+            <select class="input-field">
+                <option value="funny">Смешные</option>
+                <option value="other">Разное</option>
+            </select>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeModal()">Отмена</button>
+                <button class="suggest-btn" style="padding: 10px 16px;" onclick="closeModal()">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- СКРИПТЫ ИНТЕРАКТИВА -->
+    <script>
+        function openModal() {
+            document.getElementById('suggestModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('suggestModal').style.display = 'none';
+        }
+
+        function toggleLike(btn) {
+            const countElement = btn.querySelector('.like-count');
+            let currentCount = parseInt(countElement.innerText);
+            
+            if(btn.classList.contains('liked')) {
+                btn.classList.remove('liked');
+                countElement.innerText = currentCount - 1;
+            } else {
+                btn.classList.add('liked');
+                countElement.innerText = currentCount + 1;
+            }
+        }
+    </script>
+</body>
+</html>
