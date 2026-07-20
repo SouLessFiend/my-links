@@ -4,70 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Panel</title>
-    
-    <link rel="icon" href="data:,">
+    <!-- Твои стили и подключение шрифтов/иконок (если есть) -->
 </head>
-<body style="font-family: Arial, sans-serif; background-color: #121212; color: #ffffff; margin: 0; padding: 20px;">
+<body>
 
-    <div style="max-width: 600px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 10px;">
-        <!-- Навигация -->
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <button class="nav-item active" onclick="switchTab('videos', this)" style="background: #007bff; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Видео</button>
-            <button class="nav-item" onclick="switchTab('settings', this)" style="background: #333; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Настройки</button>
-        </div>
+    <!-- ЗДЕСЬ НАХОДИТСЯ ВСЯ ТВОЯ КРАСИВАЯ ВЕРСТКА, КАРТОЧКИ И КНОПКИ -->
+    <!-- (ее мы вообще не трогаем, она остается твоей уникальной) -->
 
-        <!-- Секция видео -->
-        <div id="videos-section" class="page-section active" style="display: block;">
-            <h2>Панель медиа</h2>
-            <p>Управление контентом для стрима.</p>
-            <button onclick="openSuggestModal()" style="background: #333; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Предложить видео</button>
-            <div id="authPanel" style="margin-top: 15px;">
-                <button onclick="openLoginModal()" style="background: #333; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Войти</button>
-            </div>
-        </div>
-
-        <!-- Секция настроек -->
-        <div id="settings-section" class="page-section" style="display: none;">
-            <h2>Настройки</h2>
-            <p>Параметры панели.</p>
-        </div>
-    </div>
-
-    <!-- Модальное окно отправки видео -->
-    <div id="suggestModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center;">
-        <div style="background: #222; padding: 20px; border-radius: 8px; width: 300px; display: flex; flex-direction: column; gap: 10px;">
-            <h3>Предложить видео</h3>
-            <input type="text" class="input-field" placeholder="Вставьте ссылку на видео..." style="padding: 8px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px;">
-            <select class="input-field" style="padding: 8px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px;">
-                <option value="fun">Смешное</option>
-                <option value="music">Музыка</option>
-                <option value="other">Другое</option>
-            </select>
-            <button onclick="sendVideo()" style="background: #333; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Отправить</button>
-            <button onclick="closeModal('suggestModal')" style="background: #333; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Закрыть</button>
-        </div>
-    </div>
-
-    <!-- Модальное окно входа -->
-    <div id="loginModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center;">
-        <div style="background: #222; padding: 20px; border-radius: 8px; width: 300px; display: flex; flex-direction: column; gap: 10px;">
-            <h3>Вход по нику Twitch</h3>
-            <input type="text" id="twitchNickInput" class="input-field" placeholder="Ваш ник..." style="padding: 8px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px;">
-            <button onclick="simulateLogin()" style="background: #333; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Войти</button>
-            <button onclick="closeModal('loginModal')" style="background: #333; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">Закрыть</button>
-        </div>
-    </div>
-
+    <!-- СКРИПТЫ УПРАВЛЕНИЯ И ОТПРАВКИ (их нужно просто положить в самый низ) -->
     <script>
         function switchTab(tabName, clickedTab) {
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
-                item.style.background = '#333';
             });
             document.querySelectorAll('.page-section').forEach(section => section.style.display = 'none');
             
             clickedTab.classList.add('active');
-            clickedTab.style.background = '#007bff';
             const targetSection = document.getElementById(`${tabName}-section`);
             if (targetSection) targetSection.style.display = 'block';
         }
@@ -107,7 +59,6 @@
             closeModal('loginModal');
         }
 
-        // Прямая отправка данных в твою базу Supabase
         async function sendVideo() {
             const inputField = document.querySelector('#suggestModal .input-field[type="text"]');
             const selectField = document.querySelector('#suggestModal select.input-field');
