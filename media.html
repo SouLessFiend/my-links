@@ -5,20 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Panel</title>
     
-    <!-- Защита от поиска несуществующей иконки -->
     <link rel="icon" href="data:,">
 
-    <!-- Подключаем твой локальный файл библиотеки Supabase -->
-    <script src="supabase.js"></script>
+    <!-- Подключаем модуль с локального файла supabase.js -->
+    <script type="module" src="supabase.js"></script>
     
     <script>
-        // НАСТРОЙКА SUPABASE
-        const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
-        
-        // Создаем клиент через локальный скрипт
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        window._supabase = _supabase;
+        // Ждем пару миллисекунд, пока модуль инициализирует window.supabase
+        window.addEventListener('DOMContentLoaded', () => {
+            const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
+            const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
+            
+            if (window.supabase && window.supabase.createClient) {
+                window._supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+        });
     </script>
 
     <style>
@@ -41,7 +42,7 @@
             gap: 10px;
             margin-bottom: 20px;
         }
-        .nav-item, .cat-btn, button {
+        .nav-item, button {
             background: #333;
             color: #fff;
             border: none;
@@ -49,7 +50,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .nav-item.active, .cat-btn.active {
+        .nav-item.active {
             background: #007bff;
         }
         .page-section {
@@ -101,13 +102,11 @@
 <body>
 
     <div class="container">
-        <!-- Навигация -->
         <div class="nav-bar">
             <button class="nav-item active" onclick="switchTab('videos', this)">Видео</button>
             <button class="nav-item" onclick="switchTab('settings', this)">Настройки</button>
         </div>
 
-        <!-- Секция видео -->
         <div id="videos-section" class="page-section active">
             <h2>Панель медиа</h2>
             <p>Управление контентом для стрима.</p>
@@ -117,14 +116,12 @@
             </div>
         </div>
 
-        <!-- Секция настроек -->
         <div id="settings-section" class="page-section">
             <h2>Настройки</h2>
             <p>Параметры панели.</p>
         </div>
     </div>
 
-    <!-- Модальное окно отправки видео -->
     <div id="suggestModal" class="modal">
         <div class="modal-content">
             <h3>Предложить видео</h3>
@@ -139,7 +136,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно входа -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <h3>Вход по нику Twitch</h3>
@@ -194,7 +190,6 @@
             closeModal('loginModal');
         }
 
-        // Отправка данных в Supabase
         async function sendVideo() {
             const inputField = document.querySelector('#suggestModal .input-field[type="text"]');
             const selectField = document.querySelector('#suggestModal select.input-field');
