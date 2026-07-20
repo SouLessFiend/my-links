@@ -7,11 +7,10 @@
     
     <link rel="icon" href="data:,">
 
-    <!-- Подключаем модуль с локального файла supabase.js -->
+    <!-- Правильное подключение Supabase без ошибок безопасности -->
     <script type="module" src="supabase.js"></script>
     
     <script>
-        // Ждем пару миллисекунд, пока модуль инициализирует window.supabase
         window.addEventListener('DOMContentLoaded', () => {
             const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
             const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
@@ -21,129 +20,10 @@
             }
         });
     </script>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .nav-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .nav-item, button {
-            background: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .nav-item.active {
-            background: #007bff;
-        }
-        .page-section {
-            display: none;
-        }
-        .page-section.active {
-            display: block;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: #222;
-            padding: 20px;
-            border-radius: 8px;
-            width: 300px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .input-field {
-            padding: 8px;
-            background: #333;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 4px;
-        }
-        .user-info-block {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .user-avatar {
-            width: 30px; height: 30px;
-            background: #007bff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-    </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="nav-bar">
-            <button class="nav-item active" onclick="switchTab('videos', this)">Видео</button>
-            <button class="nav-item" onclick="switchTab('settings', this)">Настройки</button>
-        </div>
-
-        <div id="videos-section" class="page-section active">
-            <h2>Панель медиа</h2>
-            <p>Управление контентом для стрима.</p>
-            <button onclick="openSuggestModal()">Предложить видео</button>
-            <div id="authPanel" style="margin-top: 15px;">
-                <button onclick="openLoginModal()">Войти</button>
-            </div>
-        </div>
-
-        <div id="settings-section" class="page-section">
-            <h2>Настройки</h2>
-            <p>Параметры панели.</p>
-        </div>
-    </div>
-
-    <div id="suggestModal" class="modal">
-        <div class="modal-content">
-            <h3>Предложить видео</h3>
-            <input type="text" class="input-field" placeholder="Вставьте ссылку на видео...">
-            <select class="input-field">
-                <option value="fun">Смешное</option>
-                <option value="music">Музыка</option>
-                <option value="other">Другое</option>
-            </select>
-            <button onclick="sendVideo()">Отправить</button>
-            <button onclick="closeModal('suggestModal')">Закрыть</button>
-        </div>
-    </div>
-
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <h3>Вход по нику Twitch</h3>
-            <input type="text" id="twitchNickInput" class="input-field" placeholder="Ваш ник...">
-            <button onclick="simulateLogin()">Войти</button>
-            <button onclick="closeModal('loginModal')">Закрыть</button>
-        </div>
-    </div>
+    <!-- ВСТАВЬ СВОЮ НАСТОЯЩУЮ ВЕРСТКУ И СТИЛИ СЮДА -->
 
     <script>
         function switchTab(tabName, clickedTab) {
@@ -153,6 +33,11 @@
             clickedTab.classList.add('active');
             const targetSection = document.getElementById(`${tabName}-section`);
             if (targetSection) targetSection.classList.add('active');
+        }
+
+        function selectCategory(clickedButton) {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            clickedButton.classList.add('active');
         }
 
         function openSuggestModal() { 
@@ -190,6 +75,7 @@
             closeModal('loginModal');
         }
 
+        // НАСТОЯЩАЯ ОТПРАВКА ВИДЕО
         async function sendVideo() {
             const inputField = document.querySelector('#suggestModal .input-field[type="text"]');
             const selectField = document.querySelector('#suggestModal select.input-field');
