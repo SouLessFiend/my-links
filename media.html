@@ -1,415 +1,75 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blondie Play | Главная</title>
-    <!-- Подключаем стильный округлый шрифт Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif; /* Применяем новый шрифт */
-        }
+<script>
+    // НАСТРОЙКА SUPABASE — КЛЮЧИ ПОДКЛЮЧЕНЫ
+    const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        body {
-            background-color: #171717;
-            color: #ffffff;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* ШАПКА САЙТА */
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #262626;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: 800;
-            color: #ff4181;
-            text-shadow: 0 0 10px rgba(255, 65, 129, 0.3);
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-item {
-            color: #8c8c8c;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 700; /* Сделали пункты меню чуть выразительнее */
-            transition: all 0.2s;
-            cursor: pointer;
-            padding-bottom: 4px;
-            border-bottom: 2px solid transparent;
-            letter-spacing: 0.3px;
-        }
-
-        .nav-item.active {
-            color: #ff4181;
-            border-bottom: 2px solid #ff4181;
-        }
-
-        .user-panel {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .twitch-login-btn {
-            background-color: #6441a5;
-            color: #fff;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: background-color 0.2s;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .twitch-login-btn:hover {
-            background-color: #7d5bbe;
-        }
-
-        .user-info-block {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #ff4181;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #fff;
-            font-size: 14px;
-            box-shadow: 0 0 8px rgba(255, 65, 129, 0.4);
-        }
-
-        /* ФИЛЬТРЫ И КНОПКА ПРЕДЛОЖКИ */
-        .controls-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .categories {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .cat-btn {
-            background-color: #262626;
-            border: 1px solid #333;
-            color: #ffffff;
-            padding: 10px 22px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            user-select: none;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .cat-btn.active {
-            background-color: #ff4181;
-            color: #fff;
-            border-color: #ff4181;
-            box-shadow: 0 0 10px rgba(255, 65, 129, 0.3);
-        }
-
-        .cat-count {
-            font-size: 11px;
-            font-weight: 600;
-            opacity: 0.7;
-            background-color: rgba(255,255,255,0.1);
-            padding: 2px 7px;
-            border-radius: 10px;
-        }
-
-        .suggest-btn {
-            background-color: #ff4181;
-            color: #ffffff;
-            border: none;
-            padding: 12px 26px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s;
-            box-shadow: 0 0 12px rgba(255, 65, 129, 0.2);
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 0.5px;
-        }
-
-        .suggest-btn:hover {
-            background-color: #ff5c93;
-            box-shadow: 0 0 15px rgba(255, 65, 129, 0.4);
-        }
-
-        /* КОНТЕНТНЫЕ БЛОКИ */
-        .page-section {
-            display: none;
-        }
-
-        .page-section.active {
-            display: block;
-        }
-
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 90px 20px;
-            color: #555555;
-            text-align: center;
-            border: 2px dashed #262626;
-            border-radius: 16px;
-        }
-
-        .empty-state-icon {
-            font-size: 44px;
-            margin-bottom: 15px;
-            opacity: 0.4;
-        }
-
-        .empty-state-text {
-            font-size: 16px;
-            font-weight: 600;
-            letter-spacing: 0.2px;
-        }
-
-        /* МОДАЛЬНЫЕ ОКНА */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-        }
-
-        .modal {
-            background-color: #212121;
-            border: 1px solid #2d2d2d;
-            padding: 25px;
-            border-radius: 14px;
-            width: 100%;
-            max-width: 450px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
-
-        .input-field {
-            background-color: #262626;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 14px;
-            border-radius: 8px;
-            outline: none;
-            width: 100%;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-        }
-
-        .input-field:focus {
-            border-color: #ff4181;
-        }
-
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .cancel-btn {
-            background-color: transparent;
-            border: 1px solid #444;
-            color: #aaa;
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
-        <header>
-            <div class="logo-area">
-                <span class="logo-text">BlondiePlay</span>
-            </div>
-            <div class="nav-links">
-                <span class="nav-item active" onclick="switchTab('videos', this)">Видосы</span>
-                <span class="nav-item" onclick="switchTab('feed', this)">Лента (Скоро)</span>
-            </div>
-            <div class="user-panel" id="authPanel">
-                <button class="twitch-login-btn" onclick="openLoginModal()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; margin-right: 2px;"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-                    Войти через Twitch
-                </button>
-            </div>
-        </header>
-
-        <!-- СЕКЦИЯ: ВИДОСЫ -->
-        <div id="videos-section" class="page-section active">
-            <div class="controls-row">
-                <div class="categories">
-                    <button class="cat-btn active" onclick="selectCategory(this)">⭐ Рекомендуем</button>
-                    <button class="cat-btn" onclick="selectCategory(this)">Смешные <span class="cat-count">0</span></button>
-                    <button class="cat-btn" onclick="selectCategory(this)">Разное <span class="cat-count">0</span></button>
-                </div>
-                <button class="suggest-btn" onclick="openSuggestModal()">
-                    ПРЕДЛОЖИТЬ ВИДЕО ▶
-                </button>
-            </div>
-
-            <div class="empty-state">
-                <div class="empty-state-icon">🎬</div>
-                <div class="empty-state-text">В этой категории пока ничего нет. Будь первым!</div>
-            </div>
-        </div>
-
-        <!-- СЕКЦИЯ: ЛЕНТА -->
-        <div id="feed-section" class="page-section">
-            <div class="empty-state" style="border-style: solid;">
-                <div class="empty-state-icon">📰</div>
-                <div class="empty-state-text">Лента новостей находится в разработке. Здесь будут важные посты от стримера!</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА: ПРЕДЛОЖИТЬ ВИДЕО -->
-    <div class="modal-overlay" id="suggestModal">
-        <div class="modal">
-            <div class="modal-title">Предложить видео на стрим</div>
-            <input type="text" class="input-field" placeholder="Вставьте ссылку на YouTube или TikTok">
-            <select class="input-field">
-                <option value="funny">Смешные</option>
-                <option value="other">Разное</option>
-            </select>
-            <div class="modal-actions">
-                <button class="cancel-btn" onclick="closeModal('suggestModal')">Отмена</button>
-                <button class="suggest-btn" style="padding: 10px 16px;" onclick="closeModal('suggestModal')">Отправить</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА: СИМУЛЯЦИЯ СИСТЕМЫ ВХОДА TWITCH -->
-    <div class="modal-overlay" id="loginModal">
-        <div class="modal" style="max-width: 380px;">
-            <div class="modal-title" style="text-align: center; color: #ff4181;">Авторизация Twitch</div>
-            <p style="font-size: 13px; color: #aaa; text-align: center; line-height: 1.4;">Введите ваш никнейм для симуляции входа через Twitch API</p>
-            <input type="text" id="twitchNickInput" class="input-field" placeholder="Ваш ник на Twitch" value="blondbane">
-            <div class="modal-actions" style="justify-content: center; width: 100%;">
-                <button class="cancel-btn" onclick="closeModal('loginModal')">Отмена</button>
-                <button class="suggest-btn" style="padding: 10px 16px; background-color: #6441a5;" onclick="simulateLogin()">Авторизоваться</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function switchTab(tabName, clickedTab) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
-            
-            clickedTab.classList.add('active');
-            document.getElementById(`${tabName}-section`).classList.add('active');
-        }
-
-        function selectCategory(clickedButton) {
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            clickedButton.classList.add('active');
-        }
-
-        function openSuggestModal() { document.getElementById('suggestModal').style.display = 'flex'; }
-        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+    function switchTab(tabName, clickedTab) {
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
         
-        function closeModal(modalId) { 
-            document.getElementById(modalId).style.display = 'none'; 
+        clickedTab.classList.add('active');
+        document.getElementById(`${tabName}-section`).classList.add('active');
+    }
+
+    function selectCategory(clickedButton) {
+        document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+        clickedButton.classList.add('active');
+    }
+
+    function openSuggestModal() { document.getElementById('suggestModal').style.display = 'flex'; }
+    function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+    
+    function closeModal(modalId) { 
+        document.getElementById(modalId).style.display = 'none'; 
+    }
+
+    // Переменная для хранения текущего ника (по умолчанию для тестов)
+    let currentTwitchUser = 'blondbane';
+
+    function simulateLogin() {
+        const nick = document.getElementById('twitchNickInput').value.trim() || 'Viewer';
+        currentTwitchUser = nick;
+        const firstLetter = nick.charAt(0).toUpperCase();
+        
+        const authPanel = document.getElementById('authPanel');
+        authPanel.innerHTML = `
+            <div class="user-info-block">
+                <span style="font-size: 14px; color: #aaa; font-weight: 600;">${nick}</span>
+                <div class="user-avatar">${firstLetter}</div>
+            </div>
+        `;
+        closeModal('loginModal');
+    }
+
+    // НАСТОЯЩАЯ ОТПРАВКА ВИДЕО В БАЗУ ДАННЫХ
+    async function sendVideo() {
+        const inputUrl = document.querySelector('#suggestModal .input-field[type="text"]').value.trim();
+        const selectedCategory = document.querySelector('#suggestModal select.input-field').value;
+
+        if (!inputUrl) {
+            alert('Пожалуйста, вставь ссылку на видео!');
+            return;
         }
 
-        function simulateLogin() {
-            const nick = document.getElementById('twitchNickInput').value.trim() || 'Viewer';
-            const firstLetter = nick.charAt(0).toUpperCase();
-            
-            const authPanel = document.getElementById('authPanel');
-            authPanel.innerHTML = `
-                <div class="user-info-block">
-                    <span style="font-size: 14px; color: #aaa; font-weight: 600;">${nick}</span>
-                    <div class="user-avatar">${firstLetter}</div>
-                </div>
-            `;
-            closeModal('loginModal');
+        // Отправляем данные в таблицу 'videos'
+        const { data, error } = await _supabase
+            .from('videos')
+            .insert([
+                { 
+                    url: inputUrl, 
+                    category: selectedCategory, 
+                    username: currentTwitchUser 
+                }
+            ]);
+
+        if (error) {
+            console.error('Ошибка бэкенда:', error);
+            alert('Что-то пошло не так при отправке.');
+        } else {
+            alert('Видео успешно предложено! Оно появится в базе.');
+            document.querySelector('#suggestModal .input-field[type="text"]').value = ''; // Очищаем поле
+            closeModal('suggestModal');
         }
-    </script>
-</body>
-</html>
+    }
+</script>
