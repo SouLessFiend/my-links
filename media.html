@@ -13,19 +13,18 @@
         }
 
         body {
-            background-color: #121212;
+            background-color: #171717; /* Угольный фон как на eblo.id */
             color: #ffffff;
             padding: 20px 40px;
             min-height: 100vh;
         }
 
-        /* ШАПКА САЙТА (НАВИГАЦИЯ) */
+        /* ШАПКА САЙТА */
         header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
             margin-bottom: 30px;
         }
 
@@ -36,9 +35,9 @@
         }
 
         .logo-text {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 800;
-            color: #73b627; /* Фирменный зеленый Вовы, можем поменять на цвет Дианы */
+            color: #73b627;
         }
 
         .nav-links {
@@ -90,22 +89,18 @@
         }
 
         .cat-btn {
-            background-color: #222;
-            border: 1px solid #2d2d2d;
+            background-color: #262626;
+            border: 1px solid #333;
             color: #ffffff;
-            padding: 8px 16px;
+            padding: 10px 20px;
             border-radius: 20px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             transition: all 0.2s;
-        }
-
-        .cat-btn:hover {
-            background-color: #2b2b2b;
         }
 
         .cat-btn.active {
@@ -130,7 +125,7 @@
             background-color: #73b627;
             color: #000000;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 8px;
             font-weight: 700;
             font-size: 14px;
@@ -145,31 +140,33 @@
             background-color: #86d42e;
         }
 
-        /* СЕТКА С ВИДЕОКАРТОЧКАМИ */
+        /* СЕТКА С ВИДЕОКАРТОЧКАМИ (ПОРТРЕТНЫЙ ФОРМАТ) */
         .video-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
         }
 
         .video-card {
-            background-color: #1a1a1a;
-            border: 1px solid #262626;
-            border-radius: 12px;
+            background-color: #212121; /* Точный цвет карточки */
+            border: 1px solid #2d2d2d;
+            border-radius: 16px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             transition: transform 0.2s;
+            max-width: 360px;
         }
 
         .video-card:hover {
             transform: translateY(-4px);
         }
 
+        /* Обрезка картинки ближе к оригиналу */
         .thumbnail-wrapper {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* Пропорции 16:9 */
+            padding-top: 62%; /* Сделали чуть выше, чем обычные 16:9 */
             background-color: #000;
         }
 
@@ -182,12 +179,28 @@
             object-fit: cover;
         }
 
+        /* Плашка со звездами рейтинга поверх видео */
+        .rating-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffb800;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Блок информации под картинкой */
         .video-info {
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            flex-grow: 1;
+            gap: 12px;
         }
 
         .author-line {
@@ -200,50 +213,56 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 13px;
-            color: #aaa;
+            font-size: 14px;
+            color: #fff;
+            font-weight: 600;
         }
 
         .author-avatar {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
         }
 
+        /* Кнопка лайка в стиле eblo.id */
         .like-btn {
-            background-color: #262626;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
+            background-color: #2b2b2b;
+            border: 1px solid #3a3a3a;
+            color: #ff9100; /* Оранжевый огонек/лайк */
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             transition: all 0.2s;
         }
 
-        .like-btn:hover {
-            background-color: #333;
-        }
-
         .like-btn.liked {
-            background-color: rgba(115, 182, 39, 0.15);
-            border-color: #73b627;
-            color: #73b627;
+            background-color: rgba(255, 145, 0, 0.15);
+            border-color: #ff9100;
         }
 
         .video-title {
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             line-height: 1.4;
             color: #fff;
-            margin-top: 5px;
+            margin-bottom: 5px;
         }
 
-        /* МОДАЛЬНОЕ ОКНО ПРЕДЛОЖКИ */
+        /* Мета-данные в самом низу карточки */
+        .video-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #666666;
+            font-weight: 500;
+        }
+
+        /* МОДАЛЬНОЕ ОКНО */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -258,8 +277,8 @@
         }
 
         .modal {
-            background-color: #1a1a1a;
-            border: 1px solid #2c2c2c;
+            background-color: #212121;
+            border: 1px solid #2d2d2d;
             padding: 25px;
             border-radius: 12px;
             width: 100%;
@@ -275,7 +294,7 @@
         }
 
         .input-field {
-            background-color: #222;
+            background-color: #262626;
             border: 1px solid #333;
             color: #fff;
             padding: 12px;
@@ -303,11 +322,6 @@
             border-radius: 8px;
             cursor: pointer;
         }
-
-        .cancel-btn:hover {
-            color: #fff;
-            border-color: #666;
-        }
     </style>
 </head>
 <body>
@@ -331,32 +345,37 @@
     <div class="controls-row">
         <div class="categories">
             <button class="cat-btn active">⭐ Рекомендуем</button>
-            <button class="cat-btn">Смешные <span class="cat-count">1</span></button>
-            <button class="cat-btn">Разное <span class="cat-count">0</span></button>
+            <button class="cat-btn">Смешные <span class="cat-count">15</span></button>
+            <button class="cat-btn">Разное <span class="cat-count">38</span></button>
         </div>
         <button class="suggest-btn" onclick="openModal()">
-            ПРЕДЛОЖИТЬ ВИДЕО ➔
+            ПРЕДЛОЖИТЬ ВИДЕО ▶
         </button>
     </div>
 
     <!-- СЕТКА С ВИДОСАМИ -->
     <div class="video-grid">
-        <!-- Карточка 1 -->
         <div class="video-card">
             <div class="thumbnail-wrapper">
-                <img class="thumbnail" src="https://via.placeholder.com/320x180/1f1f1f/fff?text=YouTube+Preview" alt="Превью">
+                <!-- Заглушка вместо картинки, имитирующая скриншот -->
+                <img class="thumbnail" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&auto=format&fit=crop" alt="Превью">
+                <div class="rating-badge">★ 67</div>
             </div>
             <div class="video-info">
                 <div class="author-line">
                     <div class="author-info">
-                        <img class="author-avatar" src="https://via.placeholder.com/20" alt="User">
+                        <img class="author-avatar" src="https://via.placeholder.com/24/000/fff?text=P" alt="User">
                         <span>ImCrazyPotatoes</span>
                     </div>
                     <button class="like-btn" onclick="toggleLike(this)">
-                        👍 <span class="like-count">116</span>
+                        🔥 <span class="like-count">116</span>
                     </button>
                 </div>
-                <div class="video-title">Тестовое видео предложки — Всё работает стабильно!</div>
+                <div class="video-title">I Exposed Scammers In Milan! *attacked*</div>
+                <div class="video-meta">
+                    <span>Tyler Oliveira</span>
+                    <span>👁 3,4 млн</span>
+                </div>
             </div>
         </div>
     </div>
@@ -377,7 +396,6 @@
         </div>
     </div>
 
-    <!-- СКРИПТЫ ИНТЕРАКТИВА -->
     <script>
         function openModal() {
             document.getElementById('suggestModal').style.display = 'flex';
