@@ -6,21 +6,6 @@
     <title>Media Panel</title>
     
     <link rel="icon" href="data:,">
-
-    <!-- Официальный безопасный скрипт Supabase для браузеров -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script>
-        // Инициализация сразу после загрузки страницы
-        window.addEventListener('DOMContentLoaded', () => {
-            const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
-            const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
-            
-            if (window.supabase) {
-                window._supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
-        });
-    </script>
 </head>
 <body>
 
@@ -76,7 +61,7 @@
             closeModal('loginModal');
         }
 
-        // ОТПРАВКА ВИДЕО В БАЗУ
+        // ПРЯМАЯ ОТПРАВКА ЧЕРЕЗ FETCH (без библиотек и ошибок eval)
         async function sendVideo() {
             const inputField = document.querySelector('#suggestModal .input-field[type="text"]');
             const selectField = document.querySelector('#suggestModal select.input-field');
@@ -89,28 +74,36 @@
                 return;
             }
 
-            if (!window._supabase) {
-                alert('База данных еще загружается, подожди секунду...');
-                return;
-            }
+            const SUPABASE_URL = 'https://ikgyzuuybdqpaqnnkoxa.supabase.co';
+            const SUPABASE_ANON_KEY = 'sb_publishable_3hjVfXObGBdFUayB-a5qMA_XG-4iB-Y83Vj';
 
-            const { data, error } = await window._supabase
-                .from('videos')
-                .insert([
-                    { 
-                        url: inputUrl, 
-                        category: selectedCategory, 
-                        username: currentTwitchUser 
-                    }
-                ]);
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/videos`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                        url: inputUrl,
+                        category: selectedCategory,
+                        username: currentTwitchUser
+                    })
+                });
 
-            if (error) {
-                console.error('Ошибка бэкенда:', error);
-                alert('Что-то пошло не так при отправке.');
-            } else {
+                if (!response.ok) {
+                    throw new Error('Ошибка сервера Supabase');
+                }
+
                 alert('Видео успешно предложено! Оно появится в базе.');
                 if (inputField) inputField.value = '';
                 closeModal('suggestModal');
+
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                alert('Что-то пошло не так при отправке.');
             }
         }
     </script>
