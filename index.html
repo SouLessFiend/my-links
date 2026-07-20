@@ -88,6 +88,28 @@
             transform: translateY(-2px);
         }
 
+        /* Стиль для кнопки доната */
+        .donate-card {
+            border: 1px solid #c97d14;
+        }
+        
+        .donate-card:hover {
+            background-color: #241a0e;
+        }
+
+        /* Стиль для НЕКЛИКАБЕЛЬНЫХ карточек (Проекты и Реклама) */
+        .disabled-card {
+            background-color: #131313;
+            border: 1px dashed #262626;
+            color: #666666;
+            cursor: default;
+        }
+
+        .disabled-card:hover {
+            background-color: #131313;
+            transform: none;
+        }
+
         .link-icon {
             font-size: 22px;
             margin-right: 15px;
@@ -102,11 +124,15 @@
             font-size: 18px;
         }
 
-        .empty-project-text {
-            color: #555;
-            font-style: italic;
-            font-size: 14px;
-            margin-top: 5px;
+        .badge {
+            font-size: 11px;
+            text-transform: uppercase;
+            background-color: #262626;
+            color: #8c8c8c;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
@@ -117,6 +143,17 @@
         <img class="avatar" src="https://via.placeholder.com/150" alt="Avatar">
         <h1 class="name">Blondie Bane</h1>
         <p class="bio">Соцсети, стримеры и проекты</p>
+    </div>
+
+    <!-- БЛОК: ПОДДЕРЖКА -->
+    <div class="section-title">Поддержать автора</div>
+    <div class="links-container">
+        <!-- DonationAlerts -->
+        <a href="https://www.donationalerts.com/r/blondbane" target="_blank" class="link-card donate-card">
+            <span class="link-icon">💰</span>
+            <span class="link-text">DonationAlerts</span>
+            <span class="arrow">→</span>
+        </a>
     </div>
 
     <!-- БЛОК 1: СОЦСЕТИ -->
@@ -159,9 +196,21 @@
     </div>
 
     <!-- БЛОК 2: ПРОЕКТЫ -->
-    <div class="section-title">Проекты</div>
+    <div class="section-title">Проекты и реклама</div>
     <div class="links-container">
-        <p class="empty-project-text">Скоро здесь появятся новые проекты...</p>
+        <!-- Мерч (Некликабельный) -->
+        <div class="link-card disabled-card">
+            <span class="link-icon">👕</span>
+            <span class="link-text">Фирменный мерч</span>
+            <span class="badge">В разработке</span>
+        </div>
+        
+        <!-- Реклама (Некликабельный) -->
+        <div class="link-card disabled-card">
+            <span class="link-icon">💼</span>
+            <span class="link-text">Сотрудничество и реклама</span>
+            <span class="badge">Скоро</span>
+        </div>
     </div>
 
 </body>
