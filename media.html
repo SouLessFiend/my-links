@@ -231,6 +231,56 @@
             letter-spacing: 0.2px;
         }
 
+        /* СПИСОК СОХРАНЕННЫХ ВИДЕО */
+        .videos-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .video-card {
+            background-color: #212121;
+            border: 1px solid #2d2d2d;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .video-card a {
+            color: #ff4181;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            word-break: break-all;
+        }
+
+        .video-card a:hover {
+            text-decoration: underline;
+        }
+
+        .delete-video-btn {
+            background-color: transparent;
+            border: 1px solid #ff4181;
+            color: #ff4181;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.2s;
+            font-family: 'Montserrat', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .delete-video-btn:hover {
+            background-color: #ff4181;
+            color: #fff;
+        }
+
         /* МОДАЛЬНЫЕ ОКНА */
         .modal-overlay {
             position: fixed;
@@ -297,6 +347,13 @@
             font-weight: 600;
             font-size: 14px;
         }
+
+        .error-text {
+            color: #ff4181;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: -5px;
+        }
     </style>
 </head>
 <body>
@@ -323,18 +380,22 @@
         <div id="videos-section" class="page-section active">
             <div class="controls-row">
                 <div class="categories">
-                    <button class="cat-btn active" onclick="selectCategory(this)">⭐ Рекомендуем</button>
-                    <button class="cat-btn" onclick="selectCategory(this)">Смешные <span class="cat-count">0</span></button>
-                    <button class="cat-btn" onclick="selectCategory(this)">Разное <span class="cat-count">0</span></button>
+                    <button class="cat-btn active" onclick="selectCategory(this)">⭐ Рекомендуем <span class="cat-count" id="recCount">0</span></button>
+                    <button class="cat-btn" onclick="selectCategory(this)">Смешные <span class="cat-count" id="funnyCount">0</span></button>
+                    <button class="cat-btn" onclick="selectCategory(this)">Разное <span class="cat-count" id="otherCount">0</span></button>
                 </div>
                 <button class="suggest-btn" onclick="openSuggestModal()">
                     ПРЕДЛОЖИТЬ ВИДЕО ▶
                 </button>
             </div>
 
-            <div class="empty-state">
-                <div class="empty-state-icon">🎬</div>
-                <div class="empty-state-text">В этой категории пока ничего нет. Будь первым!</div>
+            <!-- Контейнер для списка видео или заглушки -->
+            <div id="videosContainer">
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-state-icon">🎬</div>
+                    <div class="empty-state-text">В этой категории пока ничего нет. Будь первым!</div>
+                </div>
+                <div class="videos-grid" id="videosGrid"></div>
             </div>
         </div>
 
@@ -351,14 +412,16 @@
     <div class="modal-overlay" id="suggestModal">
         <div class="modal">
             <div class="modal-title">Предложить видео на стрим</div>
-            <input type="text" class="input-field" placeholder="Вставьте ссылку на YouTube или TikTok">
-            <select class="input-field">
+            <input type="text" id="suggestVideoInput" class="input-field" placeholder="Вставьте ссылку на YouTube (youtube.com или youtu.be)">
+            <div class="error-text" id="suggestErrorMsg"></div>
+            <select class="input-field" id="suggestCategorySelect">
+                <option value="rec">⭐ Рекомендуем</option>
                 <option value="funny">Смешные</option>
                 <option value="other">Разное</option>
             </select>
             <div class="modal-actions">
                 <button class="cancel-btn" onclick="closeModal('suggestModal')">Отмена</button>
-                <button class="suggest-btn" style="padding: 10px 16px;" onclick="closeModal('suggestModal')">Отправить</button>
+                <button class="suggest-btn" style="padding: 10px 16px;" onclick="addVideo()">Отправить</button>
             </div>
         </div>
     </div>
@@ -377,6 +440,9 @@
     </div>
 
     <script>
+        // База видео в localStorage браузере
+        let savedVideos = JSON.parse(localStorage.getItem('blondBaneVideos')) || [];
+
         function switchTab(tabName, clickedTab) {
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.querySelectorAll('.page-section').forEach(section => section.classList.remove('active'));
@@ -385,13 +451,25 @@
             document.getElementById(`${tabName}-section`).classList.add('active');
         }
 
+        let currentCategory = '⭐ Рекомендуем';
+
         function selectCategory(clickedButton) {
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             clickedButton.classList.add('active');
+            // Убираем счетчик из текста кнопки для точного определения категории
+            currentCategory = clickedButton.textContent.split(' ')[0] === '⭐' ? '⭐ Рекомендуем' : clickedButton.textContent.split(' ')[0];
+            renderVideos();
         }
 
-        function openSuggestModal() { document.getElementById('suggestModal').style.display = 'flex'; }
-        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function openSuggestModal() { 
+            document.getElementById('suggestErrorMsg').textContent = '';
+            document.getElementById('suggestVideoInput').value = '';
+            document.getElementById('suggestModal').style.display = 'flex'; 
+        }
+
+        function openLoginModal() { 
+            document.getElementById('loginModal').style.display = 'flex'; 
+        }
         
         function closeModal(modalId) { 
             document.getElementById(modalId).style.display = 'none'; 
@@ -410,6 +488,90 @@
             `;
             closeModal('loginModal');
         }
+
+        // Функция добавления видео с проверкой на YouTube
+        function addVideo() {
+            const input = document.getElementById('suggestVideoInput');
+            const errorMsg = document.getElementById('suggestErrorMsg');
+            const categorySelect = document.getElementById('suggestCategorySelect');
+            
+            let url = input.value.trim();
+            errorMsg.textContent = '';
+
+            // Регулярка для проверки YouTube (поддерживает youtube.com и youtu.be)
+            const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+
+            if (!youtubeRegex.test(url)) {
+                errorMsg.textContent = 'Это не YouTube';
+                return;
+            }
+
+            // Маппинг категорий в понятный текст
+            const catMap = {
+                'rec': '⭐ Рекомендуем',
+                'funny': 'Смешные',
+                'other': 'Разное'
+            };
+
+            const videoItem = {
+                url: url,
+                category: catMap[categorySelect.value] || '⭐ Рекомендуем'
+            };
+
+            savedVideos.push(videoItem);
+            localStorage.setItem('blondBaneVideos', JSON.stringify(savedVideos));
+
+            renderVideos();
+            closeModal('suggestModal');
+        }
+
+        // Функция удаления видео
+        window.deleteVideo = function(index) {
+            savedVideos.splice(index, 1);
+            localStorage.setItem('blondBaneVideos', JSON.stringify(savedVideos));
+            renderVideos();
+        }
+
+        // Рендеринг видео на странице
+        function renderVideos() {
+            const grid = document.getElementById('videosGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            // Считаем количество по категориям для плашек
+            let recCount = savedVideos.filter(v => v.category === '⭐ Рекомендуем').length;
+            let funnyCount = savedVideos.filter(v => v.category === 'Смешные').length;
+            let otherCount = savedVideos.filter(v => v.category === 'Разное').length;
+
+            document.getElementById('recCount').textContent = recCount;
+            document.getElementById('funnyCount').textContent = funnyCount;
+            document.getElementById('otherCount').textContent = otherCount;
+
+            // Фильтруем видео под текущую выбранную вкладку
+            let filtered = savedVideos.filter(v => v.category === currentCategory);
+
+            grid.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyState.style.display = 'flex';
+            } else {
+                emptyState.style.display = 'none';
+                filtered.forEach((item) => {
+                    // Ищем реальный глобальный индекс в массиве, чтобы корректно удалять
+                    let originalIndex = savedVideos.indexOf(item);
+                    
+                    let card = document.createElement('div');
+                    card.className = 'video-card';
+                    card.innerHTML = `
+                        <a href="${item.url}" target="_blank">${item.url}</a>
+                        <button class="delete-video-btn" onclick="deleteVideo(${originalIndex})">Удалить</button>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // Запускаем отрисовку при загрузке страницы
+        renderVideos();
     </script>
 </body>
 </html>
