@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlondieMedia - Предложка</title>
+    <style>
+        /* Основная цветовая палитра */
+        :root { 
+            --pink: #ff69b4; 
+            --bg: #121212; 
+            --panel: #1e1e1e; 
+            --text: #ffffff; 
+        }
+        
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        
+        header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+        }
+        
+        h1 { 
+            color: var(--pink); 
+            margin-bottom: 5px;
+        }
+        
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: var(--panel); 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2); 
+        }
+        
+        .form-group { 
+            margin-bottom: 15px; 
+        }
+        
+        input, select, button { 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 5px; 
+            border-radius: 5px; 
+            border: 1px solid #333; 
+            background: #2a2a2a; 
+            color: white; 
+            box-sizing: border-box; 
+            font-size: 16px;
+        }
+        
+        button { 
+            background-color: var(--pink); 
+            color: #121212; 
+            font-weight: bold; 
+            border: none; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+            margin-top: 15px;
+        }
+        
+        button:hover { 
+            background-color: #ff3399; 
+        }
+        
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        
+        .video-list { 
+            margin-top: 30px; 
+        }
+        
+        .video-item { 
+            background: #2a2a2a; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 10px; 
+            border-left: 4px solid var(--pink); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .video-info { 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden;
+            padding-right: 15px;
+        }
+        
+        .video-title { 
+            font-weight: bold; 
+            margin-bottom: 5px; 
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .video-meta { 
+            font-size: 0.85em; 
+            color: #aaa; 
+        }
+        
+        .delete-btn { 
+            width: auto; 
+            padding: 8px 15px; 
+            background: #ff4444; 
+            color: white; 
+            margin-top: 0;
+        }
+        
+        .delete-btn:hover { 
+            background: #cc0000; 
+        }
+        
+        /* Модалка Twitch */
+        #twitchModal { 
+            display: flex; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.85); 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000; 
+        }
+        
+        .modal-content { 
+            background: var(--panel); 
+            padding: 40px; 
+            border-radius: 10px; 
+            text-align: center; 
+            border: 1px solid var(--pink); 
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+        }
+        
+        .twitch-btn { 
+            background: #9146FF; 
+            color: white; 
+            margin-top: 20px; 
+        }
+        
+        .twitch-btn:hover { 
+            background: #772ce8; 
+        }
+        
+        /* Лента */
+        .dev-section { 
+            margin-top: 40px; 
+            text-align: center; 
+            padding: 20px; 
+            border: 1px dashed #555; 
+            border-radius: 10px; 
+            color: #777; 
+        }
+        
+        .loader { 
+            display: none; 
+            color: var(--pink); 
+            margin-top: 10px; 
+            font-size: 0.9em; 
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Имитация входа через Twitch -->
+    <div id="twitchModal">
+        <div class="modal-content">
+            <h2>Вход в BlondieMedia</h2>
+            <p>Авторизуйтесь, чтобы предлагать видео на стрим</p>
+            <button class="twitch-btn" onclick="loginTwitch()">Войти через Twitch</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>BlondieMedia</h1>
+            <p>Портал предложки для стримов</p>
+        </header>
+
+        <!-- Форма добавления видео -->
+        <form id="addVideoForm">
+            <div class="form-group">
+                <label for="videoUrl">Ссылка на YouTube:</label>
+                <input type="text" id="videoUrl" placeholder="Вставь ссылку на видео..." required>
+            </div>
+            
+            <div class="form-group">
+                <label for="videoCategory">Категория:</label>
+                <select id="videoCategory">
+                    <option value="Трукрайм">Трукрайм</option>
+                    <option value="Разоблачения">Разоблачения</option>
+                    <option value="Смешное">Смешное</option>
+                    <option value="Игры">Игры</option>
+                    <option value="Музыка">Музыка</option>
+                    <option value="Другое">Другое</option>
+                </select>
+            </div>
+            
+            <button type="submit" id="submitBtn">Добавить в предложку</button>
+            <div id="loader" class="loader">Получаю данные с YouTube... (обходим защиту)</div>
+        </form>
+
+        <!-- Список видео -->
+        <div class="video-list">
+            <h2>Очередь видео</h2>
+            <div id="videosContainer"></div>
+        </div>
+        
+        <!-- Заглушка под ленту -->
+        <div class="dev-section">
+            <h3>Лента</h3>
+            <p>Этот раздел находится в разработке...</p>
+        </div>
+    </div>
+
+    <script>
+        // Закрытие модалки Twitch
+        function loginTwitch() {
+            document.getElementById('twitchModal').style.display = 'none';
+        }
+
+        // Вытаскиваем ID видео из любой ссылки YouTube
+        function getYouTubeId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        // Основная функция: добавление видео с обходом CORS
+        document.getElementById('addVideoForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const urlInput = document.getElementById('videoUrl').value;
+            const category = document.getElementById('videoCategory').value;
+            const videoId = getYouTubeId(urlInput);
+            const submitBtn = document.getElementById('submitBtn');
+            const loader = document.getElementById('loader');
+
+            if (!videoId) {
+                alert('Не могу распознать ссылку. Пожалуйста, введи нормальную ссылку на YouTube.');
+                return;
+            }
+
+            // Блокируем кнопку на время загрузки, чтобы не накликали дублей
+            submitBtn.disabled = true;
+            loader.style.display = 'block';
+
+            try {
+                // Используем бесплатный прокси allorigins для обхода блокировки CORS от YouTube
+                const targetUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+                
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error('Ошибка сети или прокси');
+
+                const data = await response.json();
+                const html = data.contents; 
+
+                // Парсим название видео
+                const titleMatch = html.match(/<title>(.*?)<\/title>/);
+                const title = titleMatch ? titleMatch[1].replace(' - YouTube', '') : 'Неизвестное видео';
+
+                // Парсим длительность из скрытой микроразметки (в миллисекундах)
+                const durationMatch = html.match(/"approxDurationMs":"(\d+)"/);
+                let duration = '??:??';
+                
+                if (durationMatch) {
+                    const totalSeconds = Math.floor(parseInt(durationMatch[1]) / 1000);
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const seconds = totalSeconds % 60;
+                    duration = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+
+                // Собираем объект для сохранения
+                const newVideo = {
+                    id: videoId,
+                    title: title,
+                    duration: duration,
+                    category: category,
+                    status: 'pending',
+                    timestamp: Date.now()
+                };
+
+                // Сохраняем в localStorage базы браузера
+                let videos = JSON.parse(localStorage.getItem('blondBaneVideos')) || [];
+                videos.push(newVideo);
+                localStorage.setItem('blondBaneVideos', JSON.stringify(videos));
+
+                // Очищаем поле ввода и обновляем интерфейс
+                document.getElementById('videoUrl').value = '';
+                renderVideos();
+
+            } catch (error) {
+                console.error('Ошибка при добавлении видео:', error);
+                alert('Не удалось получить данные с YouTube. Проверь интернет или попробуй чуть позже.');
+            } finally {
+                // Возвращаем кнопку в рабочее состояние
+                submitBtn.disabled = false;
+                loader.style.display = 'none';
+            }
+        });
+
+        // Функция отрисовки списка видео на странице
+        function renderVideos() {
+            const container = document.getElementById('videosContainer');
+            const videos = JSON.parse(localStorage.getItem('blondBaneVideos')) || [];
+            
+            container.innerHTML = '';
+            
+            if (videos.length === 0) {
+                container.innerHTML = '<p style="color: #777; text-align: center;">Очередь пуста. Кидай ссылки!</p>';
+                return;
+            }
+
+            // Сортируем так, чтобы новые видео были сверху
+            videos.sort((a, b) => b.timestamp - a.timestamp).forEach((video, index) => {
+                const videoEl = document.createElement('div');
+                videoEl.className = 'video-item';
+                videoEl.innerHTML = `
+                    <div class="video-info">
+                        <span class="video-title">${video.title}</span>
+                        <span class="video-meta">
+                            Категория: <strong>${video.category}</strong> | Длительность: <strong>${video.duration}</strong>
+                        </span>
+                    </div>
+                    <button class="delete-btn" onclick="deleteVideo(${index})">Удалить</button>
+                `;
+                container.appendChild(videoEl);
+            });
+        }
+
+        // Функция удаления видео из очереди
+        function deleteVideo(index) {
+            let videos = JSON.parse(localStorage.getItem('blondBaneVideos')) || [];
+            videos.splice(index, 1);
+            localStorage.setItem('blondBaneVideos', JSON.stringify(videos));
+            renderVideos();
+        }
+
+        // Рендерим список при первом запуске страницы
+        renderVideos();
+    </script>
+</body>
+</html>
