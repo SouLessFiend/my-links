@@ -601,7 +601,7 @@
     <!-- SIDEBAR НИВИГАЦИЯ -->
     <aside class="sidebar">
         <div class="brand-zone">
-            <!-- Тот самый пиксельный Патрик через SVG -->
+            <!-- Пиксельный Патрик -->
             <svg class="logo-avatar" viewBox="0 0 32 32" shape-rendering="crispEdges">
                 <path d="M10 2 h12 v2 h4 v4 h2 v12 h-2 v4 h-4 v2 h-12 v-2 h-4 v-4 h-2 v-12 h2 v-4 h4 z" fill="#ff7da8"/>
                 <path d="M12 4 h8 v2 h4 v4 h2 v8 h-2 v4 h-4 v2 h-8 v-2 h-4 v-4 h-2 v-8 h2 v-4 h4 z" fill="#a83262"/>
@@ -641,14 +641,19 @@
             </a>
 
             <div class="nav-label" style="margin-top: 20px;">Онлайн друзья</div>
-            <div class="sub-item" onclick="showToast('Styopa сейчас играет в CS2', 'info')">
+            <div class="sub-item" onclick="showToast('steffrunn3r сейчас играет в CS2', 'info')">
                 <div class="sub-avatar" style="background:#10b981;">S</div>
-                <span class="sub-name">Styopa</span>
+                <span class="sub-name">steffrunn3r</span>
                 <div class="live-badge"></div>
             </div>
-            <div class="sub-item" onclick="showToast('Diana смотрит Трейлеры', 'info')">
-                <div class="sub-avatar" style="background:#ff4181;">D</div>
-                <span class="sub-name">Diana</span>
+            <div class="sub-item" onclick="showToast('blondbane смотрит Трейлеры', 'info')">
+                <div class="sub-avatar" style="background:#ff4181;">B</div>
+                <span class="sub-name">blondbane</span>
+            </div>
+            <div class="sub-item" onclick="showToast('ebanidolboeb на связи', 'success')">
+                <div class="sub-avatar" style="background:#7c3aed;">E</div>
+                <span class="sub-name">ebanidolboeb</span>
+                <div class="live-badge" style="background: var(--accent-primary); box-shadow: 0 0 5px var(--accent-primary);"></div>
             </div>
         </nav>
     </aside>
@@ -710,7 +715,7 @@
             <p style="color: var(--text-muted); margin-top: 15px; font-size: 16px;">Здесь скоро появится система постов и анонсов от стримера.</p>
         </div>
 
-        <!-- КОНТЕНТ: НАСТРОЙКИ (ПАСХАЛКИ И ФУНКЦИОНАЛ) -->
+        <!-- КОНТЕНТ: НАСТРОЙКИ -->
         <div id="settings-tab" class="content-area dev-section">
             <h2 class="page-title" style="text-align: left; margin-bottom: 30px;">Настройки трансляции & Системы</h2>
             <div style="background: var(--bg-surface); padding: 30px; border-radius: var(--radius-lg); text-align: left; max-width: 600px;">
@@ -778,13 +783,13 @@
             </div>
             <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">Имитация входа для локальной работы</p>
             <div class="form-group" style="text-align: left;">
-                <input type="text" id="loginInput" class="form-input" placeholder="Введите ваш ник Twitch" value="PatrickFan">
+                <input type="text" id="loginInput" class="form-input" placeholder="Введите ваш ник Twitch" value="ebanidolboeb">
             </div>
             <button class="btn btn-twitch" style="width: 100%; justify-content: center;" onclick="simulateAuth()">Авторизоваться</button>
         </div>
     </div>
 
-    <!-- МОДАЛКА: ФЕЙКОВЫЙ ПЛЕЕР (ДЕТАЛИ ВИДЕО) -->
+    <!-- МОДАЛКА: ФЕЙКОВЫЙ ПЛЕЕР -->
     <div class="modal-backdrop" id="playerModal">
         <div class="modal-box player-modal">
             <div class="player-video-area">
@@ -819,7 +824,6 @@
 
     <!-- JAVASCRIPT ЛОГИКА -->
     <script>
-        // --- 1. ПЕРСОНАЛИЗИРОВАННАЯ БАЗА ДАННЫХ (Mock Data) ---
         const defaultMockData = [
             {
                 id: "vid_1", url: "https://youtube.com/watch?v=mock1", videoId: "hw1_am5", 
@@ -865,7 +869,6 @@
             }
         ];
 
-        // Инициализация базы
         let appData = JSON.parse(localStorage.getItem('patrickV2_data'));
         if (!appData || appData.length === 0) {
             appData = [...defaultMockData];
@@ -875,12 +878,10 @@
         let currentFilter = 'Все';
         let searchQuery = '';
 
-        // --- 2. CORE ФУНКЦИИ ИНТЕРФЕЙСА ---
-
         function switchMainTab(tabId, btnElement) {
             document.querySelectorAll('.content-area').forEach(el => {
                 el.classList.add('hidden');
-                el.classList.remove('active'); // для dev-section
+                el.classList.remove('active');
             });
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             
@@ -902,7 +903,6 @@
             renderGrid();
         }
 
-        // --- 3. СИСТЕМА УВЕДОМЛЕНИЙ (TOASTS) ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -917,17 +917,13 @@
             toast.innerHTML = `${icon} <span>${message}</span>`;
             container.appendChild(toast);
             
-            // Анимация появления
             setTimeout(() => toast.classList.add('show'), 50);
-            
-            // Удаление
             setTimeout(() => {
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
             }, 4000);
         }
 
-        // --- 4. МОДАЛЬНЫЕ ОКНА ---
         function openModal(id) {
             document.getElementById(id).classList.add('active');
             if(id === 'suggestModal') {
@@ -937,9 +933,8 @@
         }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-        // Эмуляция входа
         function simulateAuth() {
-            const nick = document.getElementById('loginInput').value || 'User';
+            const nick = document.getElementById('loginInput').value || 'ebanidolboeb';
             document.getElementById('authZone').innerHTML = `
                 <div style="display:flex; align-items:center; gap:12px;">
                     <span style="font-weight:600; font-size:14px;">${nick}</span>
@@ -952,7 +947,6 @@
             showToast(`Добро пожаловать, ${nick}!`, 'success');
         }
 
-        // --- 5. ДОБАВЛЕНИЕ И УДАЛЕНИЕ ВИДЕО ---
         function getYTId(url) {
             const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             const match = url.match(regExp);
@@ -976,7 +970,6 @@
                 return;
             }
 
-            // Создаем новую запись (имитация парсинга)
             const newItem = {
                 id: 'vid_' + Date.now(),
                 url: url,
@@ -988,7 +981,7 @@
                 thumb: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
             };
 
-            appData.unshift(newItem); // В начало
+            appData.unshift(newItem);
             localStorage.setItem('patrickV2_data', JSON.stringify(appData));
             
             closeModal('suggestModal');
@@ -997,7 +990,7 @@
         }
 
         function removeVideo(id, event) {
-            event.stopPropagation(); // Не кликать на карточку
+            event.stopPropagation();
             if(confirm('Точно удалить этот шедевр?')) {
                 appData = appData.filter(v => v.id !== id);
                 localStorage.setItem('patrickV2_data', JSON.stringify(appData));
@@ -1006,7 +999,6 @@
             }
         }
 
-        // --- 6. ПЛЕЕР И ИМИТАЦИЯ ЧАТА ---
         function openPlayer(vidObjId) {
             const vid = appData.find(v => v.id === vidObjId);
             if(!vid) return;
@@ -1015,16 +1007,15 @@
             document.getElementById('playerAuthor').innerText = vid.author;
             document.getElementById('playerCategory').innerText = vid.category;
             
-            // Если дефолтная мок картинка (unsplash) или youtube
             let imgUrl = vid.thumb.includes('unsplash') ? vid.thumb : `https://img.youtube.com/vi/${vid.videoId}/hqdefault.jpg`;
             document.getElementById('playerThumb').src = imgUrl;
 
-            // Фейковый чат с пасхалками на друзей
             const chatBox = document.getElementById('chatContainer');
             chatBox.innerHTML = '';
             const fakeMsgs = [
-                {a: "Styopa", m: "О, нормально, запускай!"},
-                {a: "Diana", m: "А пёсель Харли одобряет? 🐶"},
+                {a: "steffrunn3r", m: "О, нормально, запускай!"},
+                {a: "blondbane", m: "А пёсель Харли одобряет? 🐶"},
+                {a: "ebanidolboeb", m: "Здарова, этот видос просто имба"},
                 {a: "Viewer_77", m: "LULW"},
                 {a: "Nightbot", m: "Не забывайте фолловиться на канал!"}
             ];
@@ -1042,7 +1033,6 @@
             openModal('playerModal');
         }
 
-        // --- 7. РЕНДЕР СЕТКИ ---
         function updateCounts() {
             const cats = ['Все', 'Игры', 'Железо ПК', 'Спорт', 'Аниме', 'Смешные', 'Трукрайм'];
             cats.forEach(c => {
@@ -1059,12 +1049,10 @@
 
             let filtered = appData;
             
-            // Применяем фильтр категорий
             if (currentFilter !== 'Все') {
                 filtered = filtered.filter(v => v.category === currentFilter);
             }
             
-            // Применяем поиск
             if (searchQuery) {
                 filtered = filtered.filter(v => 
                     v.title.toLowerCase().includes(searchQuery) || 
@@ -1084,10 +1072,8 @@
                 card.className = 'video-card';
                 card.onclick = () => openPlayer(vid.id);
 
-                // Определение превью (если это мок с unsplash или ютуб)
                 let thumbSrc = vid.thumb;
                 if(thumbSrc.includes('maxresdefault') && vid.videoId.startsWith('hw1')) {
-                    // Fallback для моков, если они попали под логику ютуба
                     thumbSrc = `https://img.youtube.com/vi/${vid.videoId}/hqdefault.jpg`; 
                 }
 
@@ -1123,7 +1109,6 @@
             });
         }
 
-        // Первичный запуск
         document.addEventListener('DOMContentLoaded', () => {
             renderGrid();
         });
