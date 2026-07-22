@@ -18,21 +18,23 @@
             background-color: #1a1a1a;
             color: #ffffff;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            align-items: flex-start;
             padding: 40px 15px;
             min-height: 100vh;
+            width: 100%;
         }
 
+        /* Жесткая вертикальная колонка */
         .container {
             width: 100%;
             max-width: 580px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            flex-direction: column !important;
+            align-items: stretch;
         }
 
-        /* Аватар и Никнейм */
+        /* Шапка */
         .profile {
             text-align: center;
             margin-bottom: 12px;
@@ -51,16 +53,16 @@
             font-size: 26px;
             font-weight: 800;
             letter-spacing: -0.5px;
-            margin-bottom: 4px;
+            text-align: center;
         }
 
-        /* Быстрые иконки под ником */
+        /* Быстрые иконки */
         .quick-icons {
             display: flex;
             gap: 18px;
             justify-content: center;
             align-items: center;
-            margin-bottom: 25px;
+            margin: 15px 0 25px 0;
         }
 
         .quick-icons a {
@@ -74,7 +76,7 @@
             opacity: 0.7;
         }
 
-        /* Баннерные карточки (Зеленая неоновая рамка) */
+        /* Топовые баннеры с неоновой рамкой */
         .banner-card {
             width: 100%;
             background-color: #222222;
@@ -147,8 +149,8 @@
             font-size: 16px;
         }
 
-        /* КНОПКИ В СТИЛЕ КАРТИНКИ 3 (По центру) */
-        .btn-centered {
+        /* Обычные кнопки-ссылки */
+        .link-card {
             width: 100%;
             background-color: #222222;
             border: 1px solid #333333;
@@ -157,8 +159,6 @@
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
             text-decoration: none;
             color: #ffffff;
             font-weight: 600;
@@ -166,23 +166,44 @@
             transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
-        .btn-centered:hover {
+        .link-card:hover {
             background-color: #2a2a2a;
             border-color: #444444;
         }
 
-        .btn-icon {
+        .link-icon {
             font-size: 18px;
+            margin-right: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 24px;
+            flex-shrink: 0;
         }
 
-        /* Промо секция снизу */
+        .link-text {
+            flex-grow: 1;
+        }
+
+        .arrow {
+            color: #555555;
+            font-size: 16px;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .link-card:hover .arrow, .banner-card:hover .arrow {
+            color: #ffffff;
+            transform: translateX(3px);
+        }
+
+        /* Промо секция */
         .promo-section {
             width: 100%;
             text-align: center;
             margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .promo-title {
@@ -225,6 +246,7 @@
                 <div class="banner-title">DonationAlerts - Поддержать автора</div>
                 <div class="banner-desc">Прямая поддержка стрима и отправка сообщений на экран.</div>
             </div>
+            <span class="arrow">→</span>
         </a>
 
         <div class="banner-card">
@@ -254,53 +276,62 @@
                 <div class="banner-title">patrick.id - Hub</div>
                 <div class="banner-desc">Единый хаб для всех проектов и ссылок сообщества.</div>
             </div>
-        </a>
+            <span class="arrow">→</span>
+        </div>
 
         <!-- Разделитель -->
         <div class="divider">
             <span>&infin;</span>
         </div>
 
-        <!-- Кнопки Соцсетей по центру (Как на фотке 3) -->
-        <a href="https://t.me/goblondbane" target="_blank" class="btn-centered">
-            <span class="btn-icon"><i class="fa-paper-plane fas"></i></span>
-            <span>Telegram</span>
+        <!-- Соцсети -->
+        <a href="https://t.me/goblondbane" target="_blank" class="link-card">
+            <span class="link-icon"><i class="fa-paper-plane fas"></i></span>
+            <span class="link-text">Telegram</span>
+            <span class="arrow">→</span>
         </a>
 
-        <a href="https://www.twitch.tv/blondbane" target="_blank" class="btn-centered">
-            <span class="btn-icon"><i class="fab fa-twitch"></i></span>
-            <span>Twitch</span>
+        <a href="https://www.twitch.tv/blondbane" target="_blank" class="link-card">
+            <span class="link-icon"><i class="fab fa-twitch"></i></span>
+            <span class="link-text">Twitch</span>
+            <span class="arrow">→</span>
         </a>
 
-        <a href="https://discord.gg/56qHXFthJB" target="_blank" class="btn-centered">
-            <span class="btn-icon"><i class="fab fa-discord"></i></span>
-            <span>Discord</span>
+        <a href="https://discord.gg/56qHXFthJB" target="_blank" class="link-card">
+            <span class="link-icon"><i class="fab fa-discord"></i></span>
+            <span class="link-text">Discord</span>
+            <span class="arrow">→</span>
         </a>
 
-        <a href="https://www.tiktok.com/@blondbane?_r=1&_t=ZT-98BZ3OSyH6r" target="_blank" class="btn-centered">
-            <span class="btn-icon"><i class="fab fa-tiktok"></i></span>
-            <span>TikTok</span>
+        <a href="https://www.tiktok.com/@blondbane?_r=1&_t=ZT-98BZ3OSyH6r" target="_blank" class="link-card">
+            <span class="link-icon"><i class="fab fa-tiktok"></i></span>
+            <span class="link-text">TikTok</span>
+            <span class="arrow">→</span>
         </a>
 
-        <a href="#" target="_blank" class="btn-centered">
-            <span class="btn-icon"><i class="fa-solid fa-circle-play"></i></span>
-            <span>Приватка Boosty (стримы с фильмами)</span>
+        <a href="#" target="_blank" class="link-card">
+            <span class="link-icon"><i class="fa-solid fa-circle-play"></i></span>
+            <span class="link-text">Приватка Boosty (стримы с фильмами)</span>
+            <span class="arrow">→</span>
         </a>
 
-        <a href="https://www.youtube.com/@BlondBane" target="_blank" class="btn-centered">
-            <span class="btn-icon"><i class="fab fa-youtube"></i></span>
-            <span>YouTube</span>
+        <a href="https://www.youtube.com/@BlondBane" target="_blank" class="link-card">
+            <span class="link-icon"><i class="fab fa-youtube"></i></span>
+            <span class="link-text">YouTube</span>
+            <span class="arrow">→</span>
         </a>
 
         <!-- Инструменты комьюнити -->
-        <a href="#" target="_blank" class="btn-centered">
-            <span class="btn-icon">🖼️</span>
-            <span>eblo.id (Медиа и предложка)</span>
+        <a href="#" target="_blank" class="link-card">
+            <span class="link-icon">🖼️</span>
+            <span class="link-text">eblo.id (Медиа и предложка)</span>
+            <span class="arrow">→</span>
         </a>
 
-        <a href="#" target="_blank" class="btn-centered">
-            <span class="btn-icon">🤖</span>
-            <span>CaltentBot (Связь с модерацией)</span>
+        <a href="#" target="_blank" class="link-card">
+            <span class="link-icon">🤖</span>
+            <span class="link-text">CaltentBot (Связь с модерацией)</span>
+            <span class="arrow">→</span>
         </a>
 
         <!-- Разделитель -->
