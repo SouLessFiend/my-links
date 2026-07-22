@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlondBane | Стримы и проекты</title>
+    <!-- FontAwesome для иконок соцсетей -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -12,332 +14,302 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* АНИМИРОВАННЫЙ КАСТОМНЫЙ ФОН */
         body {
-            background-color: #08080a;
-            background: linear-gradient(135deg, #08080a, #150b24, #0b1524, #08080a);
-            background-size: 400% 400%;
-            animation: gradientBg 15s ease infinite;
+            background-color: #1a1a1a;
             color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 40px 20px;
+            padding: 40px 15px;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        @keyframes gradientBg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .profile {
-            text-align: center;
-            margin-bottom: 30px;
-            z-index: 10;
-        }
-
-        .avatar {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            object-fit: cover;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .name {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .bio {
-            font-size: 14px;
-            color: #aaaaaa;
-            margin-bottom: 10px;
-        }
-
-        .section-title {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.5);
-            margin: 30px 0 15px 0;
-            width: 100%;
-            max-width: 580px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 8px;
-            z-index: 10;
-        }
-
-        .links-container {
+        .container {
             width: 100%;
             max-width: 580px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            z-index: 10;
+            align-items: center;
         }
 
-        /* ИНДИКАТОР СТРИМА */
+        /* Аватар и Никнейм */
+        .profile {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            border: 2px solid #333;
+            object-fit: cover;
+            margin-bottom: 12px;
+        }
+
+        .nickname {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .bio {
+            font-size: 13px;
+            color: #888888;
+            margin-bottom: 15px;
+        }
+
+        /* Быстрые иконки под ником */
+        .quick-icons {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quick-icons a {
+            color: #ffffff;
+            font-size: 20px;
+            text-decoration: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .quick-icons a:hover {
+            color: #88cc00;
+            transform: translateY(-2px);
+        }
+
+        /* Статус Twitch */
         .status-container {
             width: 100%;
-            max-width: 580px;
-            margin-bottom: 15px;
-            z-index: 10;
+            margin-bottom: 20px;
         }
 
         .status-badge {
-            background-color: rgba(26, 26, 26, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(5px);
-            border-radius: 14px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-color: #222222;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
             font-weight: 700;
-            font-size: 15px;
-            color: #8c8c8c;
-            letter-spacing: 0.5px;
-            transition: all 0.4s ease;
+            font-size: 14px;
+            color: #888888;
+            transition: all 0.3s ease;
         }
 
         .status-badge.live {
-            border-color: rgba(255, 74, 74, 0.5);
-            background-color: rgba(31, 18, 18, 0.7);
+            border-color: #ff4a4a;
+            background-color: rgba(255, 74, 74, 0.1);
             color: #ff4a4a;
-            box-shadow: 0 0 20px rgba(255, 74, 74, 0.2);
-            animation: pulseLive 2s infinite;
         }
 
-        @keyframes pulseLive {
-            0% { box-shadow: 0 0 20px rgba(255, 74, 74, 0.2); }
-            50% { box-shadow: 0 0 30px rgba(255, 74, 74, 0.4); }
-            100% { box-shadow: 0 0 20px rgba(255, 74, 74, 0.2); }
+        /* Баннерные карточки с зеленой рамкой */
+        .banner-card {
+            width: 100%;
+            background-color: #222222;
+            border: 1px solid #88cc00;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            color: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* ОБЩИЙ СТИЛЬ КНОПОК */
+        .banner-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(136, 204, 0, 0.15);
+        }
+
+        .banner-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .banner-content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .banner-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .banner-desc {
+            font-size: 12px;
+            color: #aaaaaa;
+            line-height: 1.3;
+        }
+
+        /* Разделитель со знаком бесконечности */
+        .divider {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 18px 0;
+            color: #555555;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #333333;
+        }
+
+        .divider span {
+            padding: 0 15px;
+            font-size: 16px;
+        }
+
+        /* Стандартные карточки-ссылки */
         .link-card {
-            background-color: rgba(26, 26, 26, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(3px);
-            border-radius: 14px;
-            padding: 18px;
+            width: 100%;
+            background-color: #222222;
+            border: 1px solid #333333;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             text-decoration: none;
             color: #ffffff;
             font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-            overflow: hidden;
+            font-size: 15px;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
         }
 
         .link-card:hover {
-            transform: translateY(-3px);
-            background-color: rgba(35, 35, 35, 0.8);
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .donate-card:hover {
-            border-color: rgba(201, 125, 20, 0.6);
-            box-shadow: 0 5px 25px rgba(201, 125, 20, 0.3);
-            background-color: rgba(36, 26, 14, 0.8);
-        }
-
-        .twitch-card:hover {
-            border-color: rgba(145, 70, 255, 0.6);
-            box-shadow: 0 5px 25px rgba(145, 70, 255, 0.3);
-            background-color: rgba(25, 15, 41, 0.8);
-        }
-
-        .telegram-card:hover {
-            border-color: rgba(0, 136, 204, 0.6);
-            box-shadow: 0 5px 25px rgba(0, 136, 204, 0.3);
-            background-color: rgba(10, 28, 41, 0.8);
-        }
-
-        .youtube-card:hover {
-            border-color: rgba(255, 0, 0, 0.5);
-            box-shadow: 0 5px 25px rgba(255, 0, 0, 0.25);
-            background-color: rgba(36, 14, 14, 0.8);
-        }
-
-        .discord-card:hover {
-            border-color: rgba(88, 101, 242, 0.6);
-            box-shadow: 0 5px 25px rgba(88, 101, 242, 0.3);
-            background-color: rgba(18, 20, 38, 0.8);
-        }
-
-        .tiktok-card:hover {
-            border-color: rgba(0, 242, 234, 0.5);
-            box-shadow: 0 5px 25px rgba(0, 242, 234, 0.25);
-            background-color: rgba(14, 36, 35, 0.8);
-        }
-
-        .boosty-card:hover {
-            border-color: rgba(241, 114, 39, 0.6);
-            box-shadow: 0 5px 25px rgba(241, 114, 39, 0.3);
-            background-color: rgba(41, 23, 10, 0.8);
-        }
-
-        .partner-card:hover {
-            border-color: rgba(74, 222, 128, 0.5);
-            box-shadow: 0 5px 25px rgba(74, 222, 128, 0.2);
-            background-color: rgba(14, 33, 20, 0.8);
+            background-color: #282828;
+            border-color: #555555;
+            transform: translateY(-2px);
         }
 
         .disabled-card {
-            background-color: rgba(19, 19, 19, 0.5);
-            border: 1px dashed rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.5);
+            background-color: #1c1c1c;
+            border: 1px dashed #333333;
+            color: #666666;
             cursor: default;
         }
 
         .disabled-card:hover {
-            background-color: rgba(19, 19, 19, 0.5);
             transform: none;
-            box-shadow: none;
-            border-color: rgba(255, 255, 255, 0.08);
+            background-color: #1c1c1c;
+            border-color: #333333;
         }
 
         .link-icon {
-            font-size: 24px;
-            margin-right: 18px;
+            font-size: 20px;
+            margin-right: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 24px;
-            height: 24px;
             flex-shrink: 0;
         }
 
         .link-text {
             flex-grow: 1;
-            letter-spacing: -0.2px;
         }
 
         .arrow {
-            color: rgba(255, 255, 255, 0.15);
-            font-size: 20px;
-            transition: all 0.3s ease;
+            color: #555555;
+            font-size: 16px;
+            transition: color 0.2s ease, transform 0.2s ease;
         }
 
         .link-card:hover .arrow {
-            color: rgba(255, 255, 255, 0.6);
+            color: #ffffff;
             transform: translateX(3px);
         }
 
         .badge {
             font-size: 10px;
             text-transform: uppercase;
-            background-color: rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.4);
-            padding: 5px 9px;
-            border-radius: 7px;
+            background-color: #2a2a2a;
+            color: #888888;
+            padding: 4px 8px;
+            border-radius: 4px;
             font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        /* Промо секция */
+        .promo-section {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .promo-title {
+            font-size: 16px;
+            font-weight: 800;
             letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .promo-image {
+            width: 100%;
+            max-width: 380px;
+            border-radius: 10px;
+            border: 1px solid #333;
         }
     </style>
 </head>
 <body>
 
-    <div class="profile">
-        <img class="avatar" src="https://via.placeholder.com/150" alt="Avatar">
-        <h1 class="name">BlondBane</h1>
-        <p class="bio">Соцсети, стримы и проекты</p>
-    </div>
-
-    <!-- ТЕКУЩИЙ СТАТУС СТРИМА (Автоматический) -->
-    <div class="status-container">
-        <div id="twitch-status" class="status-badge">
-            <span id="status-text">⚪ Проверка трансляции...</span>
+    <div class="container">
+        <!-- Шапка -->
+        <div class="profile">
+            <img class="avatar" src="https://via.placeholder.com/150" alt="BlondBane">
+            <h1 class="nickname">BlondBane</h1>
+            <p class="bio">Соцсети, стримы и проекты</p>
         </div>
-    </div>
 
-    <!-- БЛОК: ПОДДЕРЖКА -->
-    <div class="section-title">Поддержать автора</div>
-    <div class="links-container">
-        <a href="https://www.donationalerts.com/r/blondbane" target="_blank" class="link-card donate-card">
-            <span class="link-icon">💰</span>
-            <span class="link-text">DonationAlerts</span>
-            <span class="arrow">→</span>
-        </a>
-    </div>
+        <!-- Быстрые иконки -->
+        <div class="quick-icons">
+            <a href="https://t.me/goblondbane" target="_blank" title="Telegram"><i class="fa-paper-plane fas"></i></a>
+            <a href="https://t.me/goblondbane" target="_blank" title="Telegram Channel"><i class="fab fa-telegram"></i></a>
+            <a href="https://www.tiktok.com/@blondbane" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.twitch.tv/blondbane" target="_blank" title="Twitch"><i class="fab fa-twitch"></i></a>
+        </div>
 
-    <!-- БЛОК 1: СОЦСЕТИ -->
-    <div class="section-title">Соцсети</div>
-    <div class="links-container">
-        <a href="https://www.twitch.tv/blondbane" target="_blank" class="link-card twitch-card">
-            <span class="link-icon">🔮</span>
-            <span class="link-text">Twitch-канал</span>
-            <span class="arrow">→</span>
-        </a>
+        <!-- Статус Twitch -->
+        <div class="status-container">
+            <div id="twitch-status" class="status-badge">
+                <span id="status-text">⚪ Проверка трансляции...</span>
+            </div>
+        </div>
 
-        <a href="https://t.me/goblondbane" target="_blank" class="link-card telegram-card">
-            <span class="link-icon">✈️</span>
-            <span class="link-text">Telegram</span>
-            <span class="arrow">→</span>
-        </a>
-
-        <a href="https://www.youtube.com/@BlondBane" target="_blank" class="link-card youtube-card">
-            <span class="link-icon">🟥</span>
-            <span class="link-text">YouTube</span>
+        <!-- Главные Баннеры (Зеленая рамка Братишкина) -->
+        <a href="https://www.donationalerts.com/r/blondbane" target="_blank" class="banner-card">
+            <div class="banner-img">💰</div>
+            <div class="banner-content">
+                <div class="banner-title">DonationAlerts - Поддержать автора</div>
+                <div class="banner-desc">Прямая поддержка стрима и отправка сообщений на экран.</div>
+            </div>
             <span class="arrow">→</span>
         </a>
 
-        <a href="https://discord.gg/56qHXFthJB" target="_blank" class="link-card discord-card">
-            <span class="link-icon">💬</span>
-            <span class="link-text">Discord-сервер</span>
-            <span class="arrow">→</span>
-        </a>
-
-        <a href="https://www.tiktok.com/@blondbane?_r=1&_t=ZT-98BZ3OSyH6r" target="_blank" class="link-card tiktok-card">
-            <span class="link-icon">📱</span>
-            <span class="link-text">TikTok</span>
-            <span class="arrow">→</span>
-        </a>
-
-        <a href="#" target="_blank" class="link-card boosty-card">
-            <span class="link-icon">🟠</span>
-            <span class="link-text">Boosty (Кинопросмотры)</span>
-            <span class="arrow">→</span>
-        </a>
-    </div>
-
-    <!-- БЛОК 2: ИНСТРУМЕНТЫ КОМЬЮНИТИ -->
-    <div class="section-title">Инструменты и контент</div>
-    <div class="links-container">
-        <a href="#" target="_blank" class="link-card partner-card">
-            <span class="link-icon">🖼️</span>
-            <span class="link-text">eblo.id (Медиа и предложка)</span>
-            <span class="arrow">→</span>
-        </a>
-
-        <a href="#" target="_blank" class="link-card partner-card">
-            <span class="link-icon">🤖</span>
-            <span class="link-text">CaltentBot (Связь с модерацией)</span>
-            <span class="arrow">→</span>
-        </a>
-    </div>
-
-    <!-- БЛОК 3: ПАРТНЕРЫ И ПРОЕКТЫ -->
-    <div class="section-title">Проекты и реклама</div>
-    <div class="links-container">
-        <!-- Некликабельный patrick.id с пиксельным Патриком -->
-        <div class="link-card disabled-card">
-            <span class="link-icon">
-                <svg viewBox="0 0 32 32" shape-rendering="crispEdges" style="width: 24px; height: 24px; display: block;">
+        <div class="banner-card">
+            <div class="banner-img">
+                <svg viewBox="0 0 32 32" shape-rendering="crispEdges" style="width: 28px; height: 28px; display: block;">
                     <path d="M10 2 h12 v2 h4 v4 h2 v12 h-2 v4 h-4 v2 h-12 v-2 h-4 v-4 h-2 v-12 h2 v-4 h4 z" fill="#ff7da8"/>
                     <path d="M12 4 h8 v2 h4 v4 h2 v8 h-2 v4 h-4 v2 h-8 v-2 h-4 v-4 h-2 v-8 h2 v-4 h4 z" fill="#a83262"/>
                     <path d="M11 6 h10 v20 h-10 z" fill="#ff7da8"/>
@@ -357,27 +329,100 @@
                     <rect x="18" y="23" width="2" height="2" fill="#9c27b0"/>
                     <rect x="9" y="22" width="14" height="1" fill="#000"/>
                 </svg>
-            </span>
-            <span class="link-text">patrick.id</span>
+            </div>
+            <div class="banner-content">
+                <div class="banner-title">patrick.id - Hub</div>
+                <div class="banner-desc">Единый хаб для всех проектов и ссылок сообщества.</div>
+            </div>
             <span class="badge">Hub</span>
         </div>
 
-        <!-- Мерч -->
+        <!-- Разделитель -->
+        <div class="divider">
+            <span>&infin;</span>
+        </div>
+
+        <!-- Соцсети -->
+        <a href="https://www.twitch.tv/blondbane" target="_blank" class="link-card">
+            <span class="link-icon">🔮</span>
+            <span class="link-text">Twitch-канал</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="https://t.me/goblondbane" target="_blank" class="link-card">
+            <span class="link-icon">✈️</span>
+            <span class="link-text">Telegram</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="https://www.youtube.com/@BlondBane" target="_blank" class="link-card">
+            <span class="link-icon">🟥</span>
+            <span class="link-text">YouTube</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="https://discord.gg/56qHXFthJB" target="_blank" class="link-card">
+            <span class="link-icon">💬</span>
+            <span class="link-text">Discord-сервер</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="https://www.tiktok.com/@blondbane?_r=1&_t=ZT-98BZ3OSyH6r" target="_blank" class="link-card">
+            <span class="link-icon">📱</span>
+            <span class="link-text">TikTok</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="#" target="_blank" class="link-card">
+            <span class="link-icon">🟠</span>
+            <span class="link-text">Boosty (Кинопросмотры)</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <!-- Разделитель -->
+        <div class="divider">
+            <span>&infin;</span>
+        </div>
+
+        <!-- Инструменты и контент -->
+        <a href="#" target="_blank" class="link-card">
+            <span class="link-icon">🖼️</span>
+            <span class="link-text">eblo.id (Медиа и предложка)</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="#" target="_blank" class="link-card">
+            <span class="link-icon">🤖</span>
+            <span class="link-text">CaltentBot (Связь с модерацией)</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <!-- Проекты и статус разработки -->
         <div class="link-card disabled-card">
             <span class="link-icon">👕</span>
             <span class="link-text">Фирменный мерч</span>
             <span class="badge">В разработке</span>
         </div>
-        
-        <!-- Реклама -->
+
         <div class="link-card disabled-card">
             <span class="link-icon">💼</span>
             <span class="link-text">Сотрудничество</span>
             <span class="badge">Скоро</span>
         </div>
+
+        <!-- Разделитель перед медиа-блоком -->
+        <div class="divider">
+            <span>&infin;</span>
+        </div>
+
+        <!-- Нижний блок -->
+        <div class="promo-section">
+            <div class="promo-title">STREAM & COMMUNITY</div>
+            <img class="promo-image" src="https://via.placeholder.com/380x500/111/fff?text=BlondBane+Poster" alt="Poster">
+        </div>
     </div>
 
-    <!-- СКРИПТ ПРОВЕРКИ ОНЛАЙНА -->
+    <!-- Скрипт проверки онлайна Twitch -->
     <script>
         const twitchUser = 'blondbane';
         const statusElement = document.getElementById('twitch-status');
@@ -405,6 +450,5 @@
         checkTwitchStatus();
         setInterval(checkTwitchStatus, 60000);
     </script>
-
 </body>
 </html>
