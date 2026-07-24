@@ -420,7 +420,7 @@
             display: flex; align-items: center; justify-content: center;
             opacity: 0; transition: var(--transition-normal);
             z-index: 3;
-            pointer-events: none; /* Исправлено: не блокирует клики по карточке */
+            pointer-events: none;
         }
         .video-card:hover .play-overlay { opacity: 1; }
         .play-btn-icon {
@@ -489,6 +489,7 @@
             border-radius: var(--radius-sm);
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; transition: var(--transition-fast);
+            z-index: 4; /* чтобы кликалось поверх карточки */
         }
         .btn-icon:hover {
             border-color: var(--accent-danger);
@@ -525,7 +526,7 @@
         .modal-title { font-size: 20px; font-weight: 700; }
         .btn-close {
             background: none; border: none; color: var(--text-muted);
-            cursor: pointer; padding: 5px; transition: 0.2s;
+            cursor: pointer; padding: 5px; transition: 0.2s; font-size: 18px;
         }
         .btn-close:hover { color: #fff; transform: rotate(90deg); }
 
@@ -641,7 +642,7 @@
         <div id="videos-tab" class="content-area">
             <div class="page-header">
                 <h1 class="page-title">Предложка на стрим</h1>
-                <button class="btn btn-primary" onclick="showToast('Функция предложки активна', 'success')">
+                <button class="btn btn-primary" onclick="openAddModal()">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Закинуть видос
                 </button>
@@ -702,12 +703,47 @@
         </div>
     </div>
 
+    <!-- МОДАЛКА ДОБАВЛЕНИЯ ВИДЕО -->
+    <div class="modal-backdrop" id="addVideoModal" onclick="closeAddModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Закинуть видос на стрим</h3>
+                <button class="btn-close" onclick="closeAddModalDirect()">✕</button>
+            </div>
+            <form id="addVideoForm" onsubmit="submitNewVideo(event)">
+                <div class="form-group">
+                    <label class="form-label">Название видео</label>
+                    <input type="text" class="form-input" id="newVideoTitle" required placeholder="Например: Эпичный клатч...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ссылка или ID с YouTube</label>
+                    <input type="text" class="form-input" id="newVideoYt" required placeholder="Например: dQw4w9WgXcQ или ссылка">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Категория</label>
+                    <select class="form-select" id="newVideoCategory">
+                        <option value="Игры">Игры</option>
+                        <option value="Железо ПК">Железо ПК</option>
+                        <option value="Спорт">Спорт</option>
+                        <option value="Аниме">Аниме</option>
+                        <option value="Смешные">Смешные</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Автор / Ник</label>
+                    <input type="text" class="form-input" id="newVideoAuthor" required placeholder="Твой ник">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Добавить видос</button>
+            </form>
+        </div>
+    </div>
+
     <!-- УВЕДОМЛЕНИЯ -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // База видео с реальными ID с YouTube для корректного открытия плеера
-        const videosData = [
+        // База видео
+        let videosData = [
             { id: 1, title: "Эпичный клатч 1 в 5 на FACEIT в CS2", category: "Игры", author: "steffrunn3r", duration: "03:45", ytId: "dQw4w9WgXcQ", views: "1.4K" },
             { id: 2, title: "Сравнение процессоров AMD Ryzen под новый сетап", category: "Железо ПК", author: "blondbane", duration: "12:20", ytId: "dQw4w9WgXcQ", views: "3.2K" },
             { id: 3, title: "Разбор лучших моментов Лиги Чемпионов", category: "Спорт", author: "Patrick", duration: "08:15", ytId: "dQw4w9WgXcQ", views: "950" },
@@ -754,6 +790,12 @@
                             <span class="stat-text">👁️ ${video.views}</span>
                         </div>
                         <div class="card-title">${video.title}</div>
+                        <div class="card-footer">
+                            <span class="stat-text">ID: #${video.id}</span>
+                            <button class="btn-icon" onclick="event.stopPropagation(); deleteVideo(${video.id})" title="Удалить ролик">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </button>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -777,6 +819,62 @@
             renderVideos(filtered);
         }
 
+        // Удаление видео
+        function deleteVideo(id) {
+            const index = videosData.findIndex(v => v.id === id);
+            if (index !== -1) {
+                videosData.splice(index, 1);
+                filterVideos();
+                showToast('Ролик успешно удален', 'error');
+            }
+        }
+
+        // Модалка добавления видео
+        function openAddModal() {
+            document.getElementById('addVideoModal').classList.add('active');
+        }
+        function closeAddModal(e) {
+            if (e.target.id === 'addVideoModal') closeAddModalDirect();
+        }
+        function closeAddModalDirect() {
+            document.getElementById('addVideoModal').classList.remove('active');
+        }
+
+        // Выделение YouTube ID из ссылки, если юзер вставил полный урл
+        function extractYtId(urlOrId) {
+            if (!urlOrId) return 'dQw4w9WgXcQ';
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = urlOrId.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : urlOrId.trim();
+        }
+
+        function submitNewVideo(e) {
+            e.preventDefault();
+            const title = document.getElementById('newVideoTitle').value;
+            const rawYt = document.getElementById('newVideoYt').value;
+            const category = document.getElementById('newVideoCategory').value;
+            const author = document.getElementById('newVideoAuthor').value;
+            
+            const ytId = extractYtId(rawYt);
+            const newId = videosData.length > 0 ? Math.max(...videosData.map(v => v.id)) + 1 : 1;
+            
+            videosData.unshift({
+                id: newId,
+                title: title,
+                category: category,
+                author: author,
+                duration: "03:15",
+                ytId: ytId || "dQw4w9WgXcQ",
+                views: "1"
+            });
+            
+            filterVideos();
+            closeAddModalDirect();
+            document.getElementById('addVideoForm').reset();
+            showToast('Видос успешно закинут в хаб!', 'success');
+        }
+
+        // Плеер
         function openPlayer(video) {
             const modal = document.getElementById('playerModal');
             const iframe = document.getElementById('playerIframe');
@@ -800,13 +898,10 @@
         }
 
         function switchMainTab(tabId, el) {
-            document.querySelectorAll('.content-area').forEach(area => area.classList.remove('active', 'dev-section'));
-            // скрываем всё
             document.getElementById('videos-tab').style.display = 'none';
             document.getElementById('feed-tab').style.display = 'none';
             document.getElementById('settings-tab').style.display = 'none';
 
-            // включаем нужную
             document.getElementById(tabId).style.display = 'block';
             
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
@@ -826,7 +921,7 @@
             }, 3000);
         }
 
-        // Инициализация при загрузке
+        // Инициализация
         window.onload = () => {
             switchMainTab('videos-tab', null);
             renderVideos(videosData);
