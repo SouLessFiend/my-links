@@ -12,10 +12,9 @@
     
     <style>
         /* ==========================================================================
-           CSS ПЕРЕМЕННЫЕ (ТЕМАТИЗАЦИЯ)
-           ========================================================================== */
+            CSS ПЕРЕМЕННЫЕ (ТЕМАТИЗАЦИЯ)
+            ========================================================================== */
         :root {
-            /* Цветовая палитра - Dark Mode by default */
             --bg-base: #0f0f13;
             --bg-surface: #1c1c24;
             --bg-surface-hover: #2a2a35;
@@ -51,9 +50,6 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
 
-        /* ==========================================================================
-           БАЗОВЫЕ НАСТРОЙКИ
-           ========================================================================== */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -90,9 +86,6 @@
             background: var(--accent-primary);
         }
 
-        /* ==========================================================================
-           LAYOUT: SIDEBAR & MAIN
-           ========================================================================== */
         .sidebar {
             width: 260px;
             background-color: var(--bg-surface);
@@ -116,9 +109,6 @@
             width: calc(100% - 260px);
         }
 
-        /* ==========================================================================
-           SIDEBAR: ЛОГОТИП И НАВИГАЦИЯ
-           ========================================================================== */
         .brand-zone {
             padding: 24px;
             display: flex;
@@ -203,7 +193,6 @@
             opacity: 1;
         }
 
-        /* Fake subs */
         .sub-item {
             display: flex;
             align-items: center;
@@ -231,9 +220,6 @@
             margin-left: auto; box-shadow: 0 0 5px var(--accent-danger);
         }
 
-        /* ==========================================================================
-           HEADER (ТОП-ПАНЕЛЬ)
-           ========================================================================== */
         .top-header {
             height: 80px;
             padding: 0 40px;
@@ -313,9 +299,6 @@
         }
         .btn-twitch:hover { background-color: #7d5bbe; }
 
-        /* ==========================================================================
-           ГЛАВНЫЙ КОНТЕНТ И ФИЛЬТРЫ
-           ========================================================================== */
         .content-area {
             padding: 30px 40px;
             flex: 1;
@@ -375,9 +358,6 @@
         }
         .chip.active .chip-count { background: rgba(0,0,0,0.1); }
 
-        /* ==========================================================================
-           СЕТКА ВИДЕО КАРТОЧЕК
-           ========================================================================== */
         .video-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -404,7 +384,7 @@
         .card-thumb {
             position: relative;
             width: 100%;
-            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            padding-top: 56.25%;
             background-color: #000;
             overflow: hidden;
         }
@@ -428,11 +408,11 @@
             font-weight: 700;
             font-family: var(--font-mono);
             z-index: 2;
+            pointer-events: none;
         }
         .badge-top { top: 10px; left: 10px; color: var(--accent-warning); }
         .badge-duration { bottom: 10px; right: 10px; }
         
-        /* Play overlay on hover */
         .play-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -440,6 +420,7 @@
             display: flex; align-items: center; justify-content: center;
             opacity: 0; transition: var(--transition-normal);
             z-index: 3;
+            pointer-events: none; /* Исправлено: не блокирует клики по карточке */
         }
         .video-card:hover .play-overlay { opacity: 1; }
         .play-btn-icon {
@@ -515,9 +496,7 @@
             background: rgba(239, 68, 68, 0.1);
         }
 
-        /* ==========================================================================
-           МОДАЛЬНЫЕ ОКНА И ОВЕРЛЕИ
-           ========================================================================== */
+        /* МОДАЛЬНЫЕ ОКНА И ПЛЕЕР */
         .modal-backdrop {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -560,20 +539,13 @@
             transition: 0.2s;
         }
         .form-input:focus, .form-select:focus { border-color: var(--accent-primary); }
-        .error-msg { color: var(--accent-danger); font-size: 12px; margin-top: 5px; display: block; font-weight: 500;}
 
-        /* Плеер (Симуляция) */
+        /* Плеер модалка */
         .player-modal { max-width: 900px; padding: 0; overflow: hidden; display: flex; flex-direction: column; }
         .player-video-area { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
-        .player-info-area { padding: 20px; display: flex; gap: 20px; background: var(--bg-surface); }
-        .fake-chat { width: 300px; border-left: 1px solid var(--border-light); padding: 15px; display: flex; flex-direction: column; max-height: 400px;}
-        .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;}
-        .chat-msg { font-size: 13px; line-height: 1.4; }
-        .chat-author { font-weight: 700; color: var(--accent-secondary); margin-right: 5px;}
-        
-        /* ==========================================================================
-           СИСТЕМА УВЕДОМЛЕНИЙ (TOASTS)
-           ========================================================================== */
+        .player-video-area iframe { width: 100%; height: 100%; border: none; }
+        .player-info-area { padding: 20px; display: flex; gap: 20px; background: var(--bg-surface); align-items: center; justify-content: space-between; }
+
         .toast-container {
             position: fixed; bottom: 30px; right: 30px;
             display: flex; flex-direction: column; gap: 10px; z-index: 9999;
@@ -588,20 +560,16 @@
         .toast.success { border-left-color: var(--accent-success); }
         .toast.error { border-left-color: var(--accent-danger); }
         
-        /* Секция: В Разработке */
         .dev-section { display: none; padding: 60px 20px; text-align: center; border: 2px dashed var(--border-light); border-radius: var(--radius-lg); margin-top: 20px;}
         .dev-section.active { display: block; }
         .dev-icon { font-size: 48px; margin-bottom: 20px; opacity: 0.5; }
-
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR НИВИГАЦИЯ -->
+    <!-- SIDEBAR НАВИГАЦИЯ -->
     <aside class="sidebar">
         <div class="brand-zone">
-            <!-- Пиксельный Патрик -->
             <svg class="logo-avatar" viewBox="0 0 32 32" shape-rendering="crispEdges">
                 <path d="M10 2 h12 v2 h4 v4 h2 v12 h-2 v4 h-4 v2 h-12 v-2 h-4 v-4 h-2 v-12 h2 v-4 h4 z" fill="#ff7da8"/>
                 <path d="M12 4 h8 v2 h4 v4 h2 v8 h-2 v4 h-4 v2 h-8 v-2 h-4 v-4 h-2 v-8 h2 v-4 h4 z" fill="#a83262"/>
@@ -650,36 +618,30 @@
                 <div class="sub-avatar" style="background:#ff4181;">B</div>
                 <span class="sub-name">blondbane</span>
             </div>
-            <div class="sub-item" onclick="showToast('ebanidolboeb на связи', 'success')">
-                <div class="sub-avatar" style="background:#7c3aed;">E</div>
-                <span class="sub-name">ebanidolboeb</span>
-                <div class="live-badge" style="background: var(--accent-primary); box-shadow: 0 0 5px var(--accent-primary);"></div>
-            </div>
         </nav>
     </aside>
 
     <!-- ОСНОВНАЯ ЗОНА -->
     <main class="main-content">
-        <!-- HEADER -->
         <header class="top-header">
             <div class="search-bar">
                 <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" class="search-input" placeholder="Поиск видосов, стримов, тактик..." id="searchInput" onkeyup="filterBySearch()">
+                <input type="text" class="search-input" placeholder="Поиск видосов, стримов, тактик..." id="searchInput" onkeyup="filterVideos()">
             </div>
             
-            <div class="user-actions" id="authZone">
-                <button class="btn btn-twitch" onclick="openModal('loginModal')">
+            <div class="user-actions">
+                <button class="btn btn-twitch" onclick="showToast('Авторизация через Twitch', 'info')">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
                     Войти (Twitch)
                 </button>
             </div>
         </header>
 
-        <!-- КОНТЕНТ: ХАБ ВИДЕО -->
+        <!-- ХАБ ВИДЕО -->
         <div id="videos-tab" class="content-area">
             <div class="page-header">
                 <h1 class="page-title">Предложка на стрим</h1>
-                <button class="btn btn-primary" onclick="openModal('suggestModal')">
+                <button class="btn btn-primary" onclick="showToast('Функция предложки активна', 'success')">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     Закинуть видос
                 </button>
@@ -687,431 +649,188 @@
 
             <!-- ФИЛЬТРЫ -->
             <div class="filter-scroll" id="categoryFilters">
-                <button class="chip active" onclick="setFilter('Все', this)">Все <span class="chip-count" id="count-Все">0</span></button>
-                <button class="chip" onclick="setFilter('Игры', this)">Игры <span class="chip-count" id="count-Игры">0</span></button>
-                <button class="chip" onclick="setFilter('Железо ПК', this)">Железо ПК <span class="chip-count" id="count-Железо ПК">0</span></button>
-                <button class="chip" onclick="setFilter('Спорт', this)">Спорт <span class="chip-count" id="count-Спорт">0</span></button>
-                <button class="chip" onclick="setFilter('Аниме', this)">Аниме <span class="chip-count" id="count-Аниме">0</span></button>
-                <button class="chip" onclick="setFilter('Смешные', this)">Смешные <span class="chip-count" id="count-Смешные">0</span></button>
-                <button class="chip" onclick="setFilter('Трукрайм', this)">Трукрайм <span class="chip-count" id="count-Трукрайм">0</span></button>
+                <button class="chip active" onclick="setFilter('Все', this)">Все</button>
+                <button class="chip" onclick="setFilter('Игры', this)">Игры</button>
+                <button class="chip" onclick="setFilter('Железо ПК', this)">Железо ПК</button>
+                <button class="chip" onclick="setFilter('Спорт', this)">Спорт</button>
+                <button class="chip" onclick="setFilter('Аниме', this)">Аниме</button>
+                <button class="chip" onclick="setFilter('Смешные', this)">Смешные</button>
             </div>
 
             <!-- СЕТКА ВИДЕО -->
-            <div class="video-grid" id="videoGridElement">
-                <!-- Рендерится через JS -->
-            </div>
+            <div class="video-grid" id="videoGridElement"></div>
             
             <div class="dev-section" id="emptyStateVideo">
                 <div class="dev-icon">📭</div>
                 <h3>В этой категории пусто</h3>
-                <p style="color: var(--text-muted); margin-top: 10px;">Будь первым, кто предложит годный контент!</p>
             </div>
         </div>
 
-        <!-- КОНТЕНТ: ЛЕНТА (В РАЗРАБОТКЕ) -->
+        <!-- ЛЕНТА -->
         <div id="feed-tab" class="content-area dev-section">
             <div class="dev-icon">🚧</div>
             <h2 class="page-title">Лента в разработке</h2>
-            <p style="color: var(--text-muted); margin-top: 15px; font-size: 16px;">Здесь скоро появится система постов и анонсов от стримера.</p>
         </div>
 
-        <!-- КОНТЕНТ: НАСТРОЙКИ -->
+        <!-- НАСТРОЙКИ -->
         <div id="settings-tab" class="content-area dev-section">
-            <h2 class="page-title" style="text-align: left; margin-bottom: 30px;">Настройки трансляции & Системы</h2>
+            <h2 class="page-title" style="text-align: left; margin-bottom: 30px;">Настройки трансляции</h2>
             <div style="background: var(--bg-surface); padding: 30px; border-radius: var(--radius-lg); text-align: left; max-width: 600px;">
-                <div class="form-group">
-                    <label class="form-label">Команды Nightbot (Предустановки)</label>
-                    <select class="form-select">
-                        <option>Стандартный пак (!vk, !tg, !uptime)</option>
-                        <option>Гейминг пак (!rank, !faceit, !sens)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Оптимальная температура хранения Jägermeister (°C)</label>
-                    <input type="number" class="form-input" value="-18" disabled title="Идеальная температура по классике">
-                    <span style="font-size: 11px; color: var(--accent-success); margin-top: 5px; display: block;">*Системно зафиксировано для стримов</span>
-                </div>
                 <div class="form-group">
                     <label class="form-label">Статус Faceit Anti-Cheat TPM/Secure Boot</label>
                     <div style="padding: 12px; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-success); border-radius: var(--radius-sm); color: var(--accent-success); font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg> BIOS Настроен (Зеленый статус)
                     </div>
                 </div>
-                <button class="btn btn-primary" onclick="showToast('Настройки сохранены локально', 'success')">Сохранить параметры</button>
             </div>
         </div>
     </main>
 
-    <!-- ТОСТЕР УВЕДОМЛЕНИЙ -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- МОДАЛКА: ПРЕДЛОЖИТЬ ВИДЕО -->
-    <div class="modal-backdrop" id="suggestModal">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3 class="modal-title">Предложить на стрим</h3>
-                <button class="btn-close" onclick="closeModal('suggestModal')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Ссылка на YouTube</label>
-                <input type="text" id="suggestInput" class="form-input" placeholder="https://www.youtube.com/watch?v=...">
-                <span id="suggestError" class="error-msg"></span>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Категория</label>
-                <select id="suggestCategory" class="form-select">
-                    <option value="Игры">Игры</option>
-                    <option value="Железо ПК">Железо ПК</option>
-                    <option value="Спорт">Спорт</option>
-                    <option value="Аниме">Аниме</option>
-                    <option value="Смешные">Смешные</option>
-                    <option value="Трукрайм">Трукрайм</option>
-                </select>
-            </div>
-            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 30px;">
-                <button class="btn" style="background: transparent; color: var(--text-muted); border: 1px solid var(--border-light);" onclick="closeModal('suggestModal')">Отмена</button>
-                <button class="btn btn-primary" onclick="processVideoAdd()">Закинуть в очередь</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА: АВТОРИЗАЦИЯ -->
-    <div class="modal-backdrop" id="loginModal">
-        <div class="modal-box" style="max-width: 400px; text-align: center;">
-            <div class="modal-header" style="justify-content: center; margin-bottom: 15px;">
-                <h3 class="modal-title">Вход через Twitch</h3>
-            </div>
-            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 25px;">Имитация входа для локальной работы</p>
-            <div class="form-group" style="text-align: left;">
-                <input type="text" id="loginInput" class="form-input" placeholder="Введите ваш ник Twitch" value="ebanidolboeb">
-            </div>
-            <button class="btn btn-twitch" style="width: 100%; justify-content: center;" onclick="simulateAuth()">Авторизоваться</button>
-        </div>
-    </div>
-
-    <!-- МОДАЛКА: ФЕЙКОВЫЙ ПЛЕЕР -->
-    <div class="modal-backdrop" id="playerModal">
-        <div class="modal-box player-modal">
+    <!-- МОДАЛКА ПЛЕЕРА -->
+    <div class="modal-backdrop" id="playerModal" onclick="closePlayerModal(event)">
+        <div class="modal-box player-modal" onclick="event.stopPropagation()">
             <div class="player-video-area">
-                <img id="playerThumb" src="" style="width:100%; height:100%; object-fit:cover; opacity: 0.5;">
-                <div style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%); cursor:pointer;">
-                    <div class="play-btn-icon" style="width: 70px; height: 70px;"><svg width="30" height="30" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>
-                </div>
-                <button class="btn-close" style="position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border-radius: 50%;" onclick="closeModal('playerModal')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <iframe id="playerIframe" src="" allowfullscreen></iframe>
             </div>
             <div class="player-info-area">
-                <div style="flex: 1;">
-                    <h3 id="playerTitle" style="font-size: 18px; font-weight: 700; margin-bottom: 10px;">Название видео</h3>
-                    <div style="display: flex; gap: 15px; color: var(--text-muted); font-size: 13px; align-items: center;">
-                        <span id="playerAuthor" style="font-weight: 600; color: #fff;">Автор</span>
-                        <span>•</span>
-                        <span id="playerCategory" class="chip" style="padding: 4px 10px; font-size: 11px;">Категория</span>
-                    </div>
+                <div>
+                    <h3 id="playerModalTitle" style="font-size: 16px; font-weight: 700; margin-bottom: 5px;"></h3>
+                    <span id="playerModalAuthor" style="font-size: 13px; color: var(--text-muted);"></span>
                 </div>
-                <div class="fake-chat">
-                    <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 15px; border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">ЧАТ ТРАНСЛЯЦИИ</div>
-                    <div class="chat-messages" id="chatContainer">
-                        <!-- Чат генерится JS -->
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" class="form-input" style="padding: 8px; font-size: 12px;" placeholder="Сообщение...">
-                        <button class="btn btn-primary" style="padding: 8px 12px;">></button>
-                    </div>
-                </div>
+                <button class="btn btn-primary" onclick="closePlayerModalDirect()">Закрыть плеер</button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT ЛОГИКА -->
+    <!-- УВЕДОМЛЕНИЯ -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <script>
-        const defaultMockData = [
-            {
-                id: "vid_1", url: "https://youtube.com/watch?v=mock1", videoId: "hw1_am5", 
-                title: "Сборка ПК на базе AM5: Идеальный баланс для 300+ FPS в CS2", 
-                author: "PC Hardware Guru", duration: "18:45", category: "Железо ПК", 
-                thumb: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                id: "vid_2", url: "https://youtube.com/watch?v=mock2", videoId: "game1_ever", 
-                title: "Everfront: Глубокий разбор геймплея лучшей политической стратегии года", 
-                author: "Strategy Master", duration: "42:10", category: "Игры", 
-                thumb: "https://images.unsplash.com/photo-1616423640778-28d1b53229bd?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                id: "vid_3", url: "https://youtube.com/watch?v=mock3", videoId: "sport1_mba", 
-                title: "Мбаппе в мадридском Реале: Тактический анализ и статистика", 
-                author: "Football Analytics", duration: "12:30", category: "Спорт", 
-                thumb: "https://images.unsplash.com/photo-1518605368461-1ee7e163396f?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                id: "vid_4", url: "https://youtube.com/watch?v=mock4", videoId: "anime1_gojo", 
-                title: "Сатору Годжо - Расширение Территории (Лучшие моменты 4K)", 
-                author: "Anime Edits Ultra", duration: "05:15", category: "Аниме", 
-                thumb: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                id: "vid_5", url: "https://youtube.com/watch?v=mock5", videoId: "game2_fm", 
-                title: "Football Manager 2026: Ультимативная тактика для победы в ЛЧ", 
-                author: "FM Tactics Couch", duration: "24:00", category: "Игры", 
-                thumb: "https://images.unsplash.com/photo-1508344928928-7137b29de218?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                id: "vid_6", url: "https://youtube.com/watch?v=mock6", videoId: "fun1_jack", 
-                title: "Капитан Джек Воробей: Гений или безумец? Все смешные сцены", 
-                author: "Movie Clips HD", duration: "09:50", category: "Смешные", 
-                thumb: "https://images.unsplash.com/photo-1599839619722-39751411ea63?auto=format&fit=crop&w=600&q=80"
-            },
-            {
-                id: "vid_7", url: "https://youtube.com/watch?v=mock7", videoId: "stream_obs", 
-                title: "Настройка Twitch стрима: OBS, оверлеи и интеграция бота (Туториал)", 
-                author: "Stream Setup Pro", duration: "31:20", category: "Железо ПК", 
-                thumb: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80"
-            }
+        // База видео с реальными ID с YouTube для корректного открытия плеера
+        const videosData = [
+            { id: 1, title: "Эпичный клатч 1 в 5 на FACEIT в CS2", category: "Игры", author: "steffrunn3r", duration: "03:45", ytId: "dQw4w9WgXcQ", views: "1.4K" },
+            { id: 2, title: "Сравнение процессоров AMD Ryzen под новый сетап", category: "Железо ПК", author: "blondbane", duration: "12:20", ytId: "dQw4w9WgXcQ", views: "3.2K" },
+            { id: 3, title: "Разбор лучших моментов Лиги Чемпионов", category: "Спорт", author: "Patrick", duration: "08:15", ytId: "dQw4w9WgXcQ", views: "950" },
+            { id: 4, title: "Лучшие моменты с Сатору Годжо (Jujutsu Kaisen)", category: "Аниме", author: "Diana", duration: "04:10", ytId: "dQw4w9WgXcQ", views: "2.1K" },
+            { id: 5, title: "Угарные моменты со стримов и дискорда", category: "Смешные", author: "ebanidolboeb", duration: "06:50", ytId: "dQw4w9WgXcQ", views: "4.5K" }
         ];
 
-        let appData = JSON.parse(localStorage.getItem('patrickV2_data'));
-        if (!appData || appData.length === 0) {
-            appData = [...defaultMockData];
-            localStorage.setItem('patrickV2_data', JSON.stringify(appData));
-        }
+        let currentCategory = 'Все';
 
-        let currentFilter = 'Все';
-        let searchQuery = '';
-
-        function switchMainTab(tabId, btnElement) {
-            document.querySelectorAll('.content-area').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('active');
-            });
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            
-            let target = document.getElementById(tabId);
-            target.classList.remove('hidden');
-            if(target.classList.contains('dev-section')) target.classList.add('active');
-            btnElement.classList.add('active');
-        }
-
-        function setFilter(cat, btnEl) {
-            currentFilter = cat;
-            document.querySelectorAll('.chip').forEach(el => el.classList.remove('active'));
-            btnEl.classList.add('active');
-            renderGrid();
-        }
-
-        function filterBySearch() {
-            searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            renderGrid();
-        }
-
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            const icon = type === 'success' 
-                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-success)" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>'
-                : type === 'error'
-                ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-danger)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>'
-                : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>';
-
-            toast.innerHTML = `${icon} <span>${message}</span>`;
-            container.appendChild(toast);
-            
-            setTimeout(() => toast.classList.add('show'), 50);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
-            }, 4000);
-        }
-
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            if(id === 'suggestModal') {
-                document.getElementById('suggestInput').value = '';
-                document.getElementById('suggestError').innerText = '';
-            }
-        }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-
-        function simulateAuth() {
-            const nick = document.getElementById('loginInput').value || 'ebanidolboeb';
-            document.getElementById('authZone').innerHTML = `
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <span style="font-weight:600; font-size:14px;">${nick}</span>
-                    <div style="width:36px; height:36px; border-radius:50%; background:var(--accent-primary); display:flex; align-items:center; justify-content:center; font-weight:700;">
-                        ${nick.charAt(0).toUpperCase()}
-                    </div>
-                </div>
-            `;
-            closeModal('loginModal');
-            showToast(`Добро пожаловать, ${nick}!`, 'success');
-        }
-
-        function getYTId(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
-
-        function processVideoAdd() {
-            const url = document.getElementById('suggestInput').value.trim();
-            const err = document.getElementById('suggestError');
-            const cat = document.getElementById('suggestCategory').value;
-            err.innerText = '';
-
-            const videoId = getYTId(url);
-            if (!videoId) {
-                err.innerText = 'Некорректная ссылка YouTube. Пример: https://youtu.be/xxx';
-                return;
-            }
-
-            if (appData.some(v => v.videoId === videoId)) {
-                err.innerText = 'Это видео уже есть в базе!';
-                return;
-            }
-
-            const newItem = {
-                id: 'vid_' + Date.now(),
-                url: url,
-                videoId: videoId,
-                title: "Новое предложенное видео (Обработка API...)",
-                author: "Стример / Зритель",
-                duration: "10:00",
-                category: cat,
-                thumb: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-            };
-
-            appData.unshift(newItem);
-            localStorage.setItem('patrickV2_data', JSON.stringify(appData));
-            
-            closeModal('suggestModal');
-            showToast('Видео успешно добавлено в очередь!', 'success');
-            renderGrid();
-        }
-
-        function removeVideo(id, event) {
-            event.stopPropagation();
-            if(confirm('Точно удалить этот шедевр?')) {
-                appData = appData.filter(v => v.id !== id);
-                localStorage.setItem('patrickV2_data', JSON.stringify(appData));
-                showToast('Видео удалено', 'error');
-                renderGrid();
-            }
-        }
-
-        function openPlayer(vidObjId) {
-            const vid = appData.find(v => v.id === vidObjId);
-            if(!vid) return;
-
-            document.getElementById('playerTitle').innerText = vid.title;
-            document.getElementById('playerAuthor').innerText = vid.author;
-            document.getElementById('playerCategory').innerText = vid.category;
-            
-            let imgUrl = vid.thumb.includes('unsplash') ? vid.thumb : `https://img.youtube.com/vi/${vid.videoId}/hqdefault.jpg`;
-            document.getElementById('playerThumb').src = imgUrl;
-
-            const chatBox = document.getElementById('chatContainer');
-            chatBox.innerHTML = '';
-            const fakeMsgs = [
-                {a: "steffrunn3r", m: "О, нормально, запускай!"},
-                {a: "blondbane", m: "А пёсель Харли одобряет? 🐶"},
-                {a: "ebanidolboeb", m: "Здарова, этот видос просто имба"},
-                {a: "Viewer_77", m: "LULW"},
-                {a: "Nightbot", m: "Не забывайте фолловиться на канал!"}
-            ];
-            
-            fakeMsgs.forEach((msg, i) => {
-                setTimeout(() => {
-                    const d = document.createElement('div');
-                    d.className = 'chat-msg';
-                    d.innerHTML = `<span class="chat-author">${msg.a}:</span> <span style="color:#ccc;">${msg.m}</span>`;
-                    chatBox.appendChild(d);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                }, 400 * (i + 1));
-            });
-
-            openModal('playerModal');
-        }
-
-        function updateCounts() {
-            const cats = ['Все', 'Игры', 'Железо ПК', 'Спорт', 'Аниме', 'Смешные', 'Трукрайм'];
-            cats.forEach(c => {
-                const count = c === 'Все' ? appData.length : appData.filter(v => v.category === c).length;
-                document.getElementById(`count-${c}`).innerText = count;
-            });
-        }
-
-        function renderGrid() {
-            updateCounts();
+        function renderVideos(list) {
             const grid = document.getElementById('videoGridElement');
             const emptyState = document.getElementById('emptyStateVideo');
+            
             grid.innerHTML = '';
-
-            let filtered = appData;
             
-            if (currentFilter !== 'Все') {
-                filtered = filtered.filter(v => v.category === currentFilter);
-            }
-            
-            if (searchQuery) {
-                filtered = filtered.filter(v => 
-                    v.title.toLowerCase().includes(searchQuery) || 
-                    v.author.toLowerCase().includes(searchQuery)
-                );
-            }
-
-            if (filtered.length === 0) {
-                emptyState.style.display = 'block';
+            if (list.length === 0) {
+                emptyState.classList.add('active');
                 return;
             }
-            
-            emptyState.style.display = 'none';
+            emptyState.classList.remove('active');
 
-            filtered.forEach(vid => {
+            list.forEach(video => {
                 const card = document.createElement('div');
                 card.className = 'video-card';
-                card.onclick = () => openPlayer(vid.id);
-
-                let thumbSrc = vid.thumb;
-                if(thumbSrc.includes('maxresdefault') && vid.videoId.startsWith('hw1')) {
-                    thumbSrc = `https://img.youtube.com/vi/${vid.videoId}/hqdefault.jpg`; 
-                }
-
+                card.onclick = () => openPlayer(video);
+                
                 card.innerHTML = `
                     <div class="card-thumb">
-                        <span class="badge-top">${vid.category}</span>
-                        <span class="badge-duration">${vid.duration}</span>
-                        <img src="${thumbSrc}" alt="Превью" onerror="this.src='https://via.placeholder.com/600x338/1c1c24/ff4181?text=Patrick.id'">
+                        <img src="https://img.youtube.com/vi/${video.ytId}/hqdefault.jpg" alt="${video.title}">
+                        <div class="badge-top">${video.category}</div>
+                        <div class="badge-duration">${video.duration}</div>
                         <div class="play-overlay">
                             <div class="play-btn-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                             </div>
                         </div>
                     </div>
                     <div class="card-content">
                         <div class="card-meta-row">
                             <div class="author-box">
-                                <div class="author-avatar">${vid.author.charAt(0)}</div>
-                                <span>${vid.author}</span>
+                                <div class="author-avatar">${video.author[0].toUpperCase()}</div>
+                                <span>${video.author}</span>
                             </div>
-                            <span class="stat-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> ${Math.floor(Math.random() * 100) + 1}K</span>
+                            <span class="stat-text">👁️ ${video.views}</span>
                         </div>
-                        <h3 class="card-title">${vid.title}</h3>
-                        <div class="card-footer">
-                            <span class="stat-text">Добавлено недавно</span>
-                            <button class="btn-icon" onclick="removeVideo('${vid.id}', event)" title="Удалить">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                            </button>
-                        </div>
+                        <div class="card-title">${video.title}</div>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderGrid();
-        });
+        function setFilter(category, btn) {
+            currentCategory = category;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            filterVideos();
+        }
+
+        function filterVideos() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = videosData.filter(v => {
+                const matchCategory = currentCategory === 'Все' || v.category === currentCategory;
+                const matchQuery = v.title.toLowerCase().includes(query) || v.author.toLowerCase().includes(query);
+                return matchCategory && matchQuery;
+            });
+            renderVideos(filtered);
+        }
+
+        function openPlayer(video) {
+            const modal = document.getElementById('playerModal');
+            const iframe = document.getElementById('playerIframe');
+            document.getElementById('playerModalTitle').innerText = video.title;
+            document.getElementById('playerModalAuthor').innerText = `Автор: ${video.author} • Категория: ${video.category}`;
+            iframe.src = `https://www.youtube.com/embed/${video.ytId}?autoplay=1`;
+            modal.classList.add('active');
+        }
+
+        function closePlayerModal(e) {
+            if (e.target.id === 'playerModal') {
+                closePlayerModalDirect();
+            }
+        }
+
+        function closePlayerModalDirect() {
+            const modal = document.getElementById('playerModal');
+            const iframe = document.getElementById('playerIframe');
+            iframe.src = '';
+            modal.classList.remove('active');
+        }
+
+        function switchMainTab(tabId, el) {
+            document.querySelectorAll('.content-area').forEach(area => area.classList.remove('active', 'dev-section'));
+            // скрываем всё
+            document.getElementById('videos-tab').style.display = 'none';
+            document.getElementById('feed-tab').style.display = 'none';
+            document.getElementById('settings-tab').style.display = 'none';
+
+            // включаем нужную
+            document.getElementById(tabId).style.display = 'block';
+            
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if(el) el.classList.add('active');
+        }
+
+        function showToast(text, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${text}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 50);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Инициализация при загрузке
+        window.onload = () => {
+            switchMainTab('videos-tab', null);
+            renderVideos(videosData);
+        };
     </script>
 </body>
 </html>
