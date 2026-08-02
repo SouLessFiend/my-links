@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLONDBANE WAR MAP - Operation Create</title>
+    <title>ПЕРВЫЙ АПДЕЙТ САЙТА - Карта Войны</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,7 +14,6 @@
             --accent-red: #ff3f34;
             --accent-gold: #ffd32a;
             --text-main: #f1f2f6;
-            --text-muted: #8c7ae6;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,7 +27,7 @@
             min-height: 100vh;
         }
 
-        /* Header */
+        /* Шапка */
         header {
             background: var(--panel-bg);
             border-bottom: 1px solid var(--border-color);
@@ -40,31 +39,31 @@
         .logo {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 800;
-            font-size: 1.4rem;
-            color: var(--accent-blue);
-            letter-spacing: 2px;
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            letter-spacing: 1px;
         }
         .status-badge {
-            background: rgba(255, 63, 52, 0.2);
-            border: 1px solid var(--accent-red);
-            color: var(--accent-red);
-            padding: 5px 12px;
+            background: rgba(0, 168, 255, 0.15);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 6px 14px;
             border-radius: 4px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
         }
 
-        /* Main Layout */
+        /* Основная сетка */
         .main-container {
             display: grid;
-            grid-template-columns: 1fr 380px;
+            grid-template-columns: 1fr 400px;
             gap: 20px;
             padding: 20px;
             flex-grow: 1;
         }
 
-        /* Map Section */
+        /* Карта */
         .map-card {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
@@ -77,7 +76,7 @@
         .canvas-container {
             flex-grow: 1;
             position: relative;
-            background: #080a0d;
+            background: #1b3317; /* Базовый цвет травы */
         }
         canvas {
             width: 100%;
@@ -85,9 +84,9 @@
             display: block;
         }
 
-        /* Timeline Bar */
+        /* Панель таймлайна */
         .timeline-controls {
-            background: rgba(18, 22, 31, 0.95);
+            background: rgba(18, 22, 31, 0.98);
             border-top: 1px solid var(--border-color);
             padding: 15px 20px;
             display: flex;
@@ -95,28 +94,30 @@
             gap: 15px;
         }
         .play-btn {
-            background: var(--accent-blue);
+            background: var(--accent-gold);
             color: #000;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: 4px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
             font-family: 'JetBrains Mono', monospace;
+            transition: 0.2s;
         }
-        .play-btn:hover { opacity: 0.9; }
+        .play-btn:hover { opacity: 0.9; transform: scale(1.02); }
         .slider {
             flex-grow: 1;
-            accent-color: var(--accent-blue);
+            accent-color: var(--accent-gold);
             cursor: pointer;
         }
         .time-display {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: #aaa;
+            font-size: 0.95rem;
+            color: #ccc;
+            font-weight: 700;
         }
 
-        /* Sidebar Tabs */
+        /* Боковая панель */
         .sidebar {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
@@ -130,71 +131,72 @@
         }
         .tab-btn {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             background: none;
             border: none;
             color: #888;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             border-bottom: 2px solid transparent;
+            font-size: 0.9rem;
         }
         .tab-btn.active {
-            color: var(--accent-blue);
-            border-bottom-color: var(--accent-blue);
-            background: rgba(0, 168, 255, 0.05);
+            color: var(--accent-gold);
+            border-bottom-color: var(--accent-gold);
+            background: rgba(255, 211, 42, 0.05);
         }
         .tab-content {
             padding: 20px;
             overflow-y: auto;
             flex-grow: 1;
+            max-height: 650px;
         }
 
-        /* FIFA Cards */
+        /* Карточки игроков (FIFA style) */
         .fifa-card {
             background: linear-gradient(135deg, #1e2430 0%, #0f131a 100%);
             border: 2px solid var(--accent-gold);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
+            border-radius: 8px;
+            padding: 12px 15px;
+            margin-bottom: 12px;
             display: flex;
             gap: 15px;
             align-items: center;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
         .fifa-rating {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 800;
             color: var(--accent-gold);
             text-align: center;
             line-height: 1;
         }
         .fifa-role {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: #aaa;
-            text-transform: uppercase;
+            font-weight: 700;
+            margin-top: 4px;
         }
         .fifa-info { flex-grow: 1; }
-        .fifa-name { font-weight: 800; font-size: 1.1rem; text-transform: uppercase; margin-bottom: 5px; }
+        .fifa-name { font-weight: 800; font-size: 1rem; margin-bottom: 4px; color: #fff; }
         .fifa-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 5px;
-            font-size: 0.8rem;
-            color: #ccc;
+            gap: 4px;
+            font-size: 0.75rem;
+            color: #bbb;
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Vehicles Lost List */
+        /* Список потерь */
         .loss-item {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
+            padding: 12px 0;
             border-bottom: 1px dashed var(--border-color);
-            font-size: 0.9rem;
+            font-size: 0.88rem;
         }
-        .loss-item:last-child { border: none; }
         .tag-red { color: var(--accent-red); font-weight: bold; }
         .tag-blue { color: var(--accent-blue); font-weight: bold; }
 
@@ -204,116 +206,140 @@
 <body>
 
     <header>
-        <div class="logo">BLONDBANE // WAR MAP v1.0</div>
-        <div class="status-badge">● РЕЖИМ РЕПЛЕЯ БОЯ</div>
+        <div class="logo">ПЕРВЫЙ АПДЕЙТ САЙТА v1.0 // КАРТА ФРОНТА</div>
+        <div class="status-badge">● ОБЗОР БОЯ (10 VS 10)</div>
     </header>
 
     <div class="main-container">
-        <!-- Левая колонка: Карта и Таймлайн -->
+        <!-- Левая колонка: Карта Minecraft -->
         <div class="map-card">
             <div class="canvas-container">
                 <canvas id="warMap"></canvas>
             </div>
             <div class="timeline-controls">
-                <button class="play-btn" id="playBtn">▶ ПУСК</button>
+                <button class="play-btn" id="playBtn">▶ ЗАПУСК</button>
                 <input type="range" class="slider" id="timeSlider" min="0" max="100" value="0">
                 <div class="time-display" id="timeLabel">00:00 / 45:00</div>
             </div>
         </div>
 
-        <!-- Правая колонка: Вкладки Статистики -->
+        <!-- Правая колонка: Вкладки -->
         <div class="sidebar">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('cardsTab', this)">Игроки</button>
+                <button class="tab-btn active" onclick="switchTab('cardsTab', this)">Состав (20)</button>
                 <button class="tab-btn" onclick="switchTab('lossesTab', this)">Потери</button>
                 <button class="tab-btn" onclick="switchTab('summaryTab', this)">Сводка</button>
             </div>
 
-            <!-- Таб 1: FIFA Карточки -->
+            <!-- Таб 1: Игроки -->
             <div id="cardsTab" class="tab-content">
-                <div class="fifa-card">
+                <!-- ВЛАДИМИР ПУТИН -->
+                <div class="fifa-card" style="border-color: #ffd32a; background: linear-gradient(135deg, #2a2108 0%, #0f131a 100%);">
                     <div>
-                        <div class="fifa-rating">96</div>
-                        <div class="fifa-role">COMMANDER</div>
+                        <div class="fifa-rating">99</div>
+                        <div class="fifa-role">КОМАНДУЮЩИЙ</div>
+                    </div>
+                    <div class="fifa-info">
+                        <div class="fifa-name" style="color: #ffd32a;">ВЛАДИМИР ПУТИН</div>
+                        <div class="fifa-stats">
+                            <span>У/С: 15.0</span>
+                            <span>УРОН: 35.0K</span>
+                            <span>ТЕХНИКА: 12</span>
+                            <span>ТОЧНОСТЬ: 99%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SouLessFiend -->
+                <div class="fifa-card" style="border-color: var(--accent-blue);">
+                    <div>
+                        <div class="fifa-rating">95</div>
+                        <div class="fifa-role">ГЛАВ. ИНЖЕНЕР</div>
+                    </div>
+                    <div class="fifa-info">
+                        <div class="fifa-name">SouLessFiend</div>
+                        <div class="fifa-stats">
+                            <span>У/С: 4.8</span>
+                            <span>УРОН: 18.2K</span>
+                            <span>ТЕХНИКА: 9</span>
+                            <span>ТОЧНОСТЬ: 89%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIANA -->
+                <div class="fifa-card" style="border-color: var(--accent-blue);">
+                    <div>
+                        <div class="fifa-rating">94</div>
+                        <div class="fifa-role">ШТУРМОВИК</div>
                     </div>
                     <div class="fifa-info">
                         <div class="fifa-name">DIANA</div>
                         <div class="fifa-stats">
-                            <span>K/D: 4.2</span>
-                            <span>DMG: 14.5K</span>
-                            <span>TAKEN: 12</span>
-                            <span>ACC: 88%</span>
+                            <span>У/С: 4.1</span>
+                            <span>УРОН: 15.4K</span>
+                            <span>ТОЧКИ: 5</span>
+                            <span>ТОЧНОСТЬ: 85%</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="fifa-card" style="border-color: var(--accent-blue);">
+                <!-- Другие бойцы -->
+                <div class="fifa-card" style="border-color: #445577;">
                     <div>
-                        <div class="fifa-rating">93</div>
-                        <div class="fifa-role">ENGINEER</div>
+                        <div class="fifa-rating">88</div>
+                        <div class="fifa-role">СНАЙПЕР</div>
                     </div>
                     <div class="fifa-info">
-                        <div class="fifa-name">OPERATOR (YOU)</div>
+                        <div class="fifa-name">Егор_Снайпер</div>
                         <div class="fifa-stats">
-                            <span>K/D: 3.1</span>
-                            <span>TECH: 8 DEST</span>
-                            <span>REPAIR: 100%</span>
-                            <span>ACC: 79%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="fifa-card" style="border-color: #aaa;">
-                    <div>
-                        <div class="fifa-rating">90</div>
-                        <div class="fifa-role">ASSAULT</div>
-                    </div>
-                    <div class="fifa-info">
-                        <div class="fifa-name">ERIK</div>
-                        <div class="fifa-stats">
-                            <span>K/D: 2.8</span>
-                            <span>DMG: 9.8K</span>
-                            <span>CAPS: 4</span>
-                            <span>ACC: 81%</span>
+                            <span>У/С: 3.2</span>
+                            <span>УРОН: 9.1K</span>
+                            <span>ДИСТ: 310м</span>
+                            <span>ТОЧНОСТЬ: 92%</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Таб 2: Потери техники -->
+            <!-- Таб 2: Потери -->
             <div id="lossesTab" class="tab-content hidden">
-                <h3 style="margin-bottom: 15px; font-size: 0.9rem; color: #888;">УНИЧТОЖЕННАЯ ТЕХНИКА</h3>
+                <h3 style="margin-bottom: 15px; font-size: 0.85rem; color: #888;">УНИЧТОЖЕННАЯ ТЕХНИКА ЗА БОЙ</h3>
                 <div class="loss-item">
-                    <span>Танк "Trackwork Heavy"</span>
-                    <span class="tag-red">ВРАГ</span>
+                    <span>Тяжёлый танк "Trackwork"</span>
+                    <span class="tag-red">КРАСНЫЕ</span>
                 </div>
                 <div class="loss-item">
-                    <span>Самолёт Create Aero v2</span>
-                    <span class="tag-blue">BLONDBANE</span>
+                    <span>Истребитель Create Aero v2</span>
+                    <span class="tag-blue">СИНИЕ</span>
                 </div>
                 <div class="loss-item">
-                    <span>Артиллерийская батарея BigCannons</span>
-                    <span class="tag-red">ВРАГ</span>
+                    <span>Батарея гаубиц BigCannons</span>
+                    <span class="tag-red">КРАСНЫЕ</span>
                 </div>
                 <div class="loss-item">
-                    <span>Вертолёт-разведчик</span>
-                    <span class="tag-red">ВРАГ</span>
+                    <span>Ударный вертолёт</span>
+                    <span class="tag-red">КРАСНЫЕ</span>
+                </div>
+                <div class="loss-item">
+                    <span>Бронепоезд снабжения</span>
+                    <span class="tag-blue">СИНИЕ</span>
                 </div>
             </div>
 
-            <!-- Таб 3: Общая сводка -->
+            <!-- Таб 3: Сводка -->
             <div id="summaryTab" class="tab-content hidden">
-                <h3 style="margin-bottom: 10px;">Операция "Сектор Create"</h3>
-                <p style="font-size: 0.85rem; color: #aaa; line-height: 1.4;">
-                    Длительность: 45 минут.<br>
-                    Итог: Полный прорыв линии фронта кланом Blondbane на 32-й минуте.
+                <h3 style="margin-bottom: 10px; color: var(--accent-gold);">Операция "Создание Фронта"</h3>
+                <p style="font-size: 0.85rem; color: #aaa; line-height: 1.5;">
+                    ● Участников: 20 игроков (10 на 10).<br>
+                    ● Ключевой прорыв: Совершен отделением Владимира Путина и SouLessFiend на 28-й минуте.<br>
+                    ● Карта: Скользящий фронт по руслу реки.
                 </p>
             </div>
         </div>
     </div>
 
     <script>
-        // --- Логика карты (Canvas) ---
         const canvas = document.getElementById('warMap');
         const ctx = canvas.getContext('2d');
         const slider = document.getElementById('timeSlider');
@@ -323,6 +349,33 @@
         let isPlaying = false;
         let animationTimer = null;
 
+        // Список 10 Синих и 10 Красных игроков
+        const blueTeam = [
+            { name: "Владимир Путин", xRel: 0.35, yRel: 0.2 },
+            { name: "SouLessFiend", xRel: 0.30, yRel: 0.35 },
+            { name: "DIANA", xRel: 0.28, yRel: 0.5 },
+            { name: "Егор_Снайпер", xRel: 0.15, yRel: 0.15 },
+            { name: "Влад_Танкист", xRel: 0.22, yRel: 0.65 },
+            { name: "Макс_Авиатор", xRel: 0.10, yRel: 0.4 },
+            { name: "Артём_Пехота", xRel: 0.25, yRel: 0.8 },
+            { name: "Дмитрий_Сапёр", xRel: 0.18, yRel: 0.88 },
+            { name: "Илья_Разведчик", xRel: 0.33, yRel: 0.7 },
+            { name: "Олег_Броня", xRel: 0.08, yRel: 0.75 }
+        ];
+
+        const redTeam = [
+            { name: "Враг_Алекс", xRel: 0.65, yRel: 0.2 },
+            { name: "Красный_Лис", xRel: 0.70, yRel: 0.35 },
+            { name: "Медведь_99", xRel: 0.60, yRel: 0.5 },
+            { name: "Джаггернаут", xRel: 0.80, yRel: 0.15 },
+            { name: "Фантом", xRel: 0.75, yRel: 0.65 },
+            { name: "Шторм", xRel: 0.88, yRel: 0.4 },
+            { name: "Враг_Денис", xRel: 0.68, yRel: 0.8 },
+            { name: "Тень_01", xRel: 0.82, yRel: 0.85 },
+            { name: "Титан_Враг", xRel: 0.58, yRel: 0.7 },
+            { name: "Рейдер", xRel: 0.92, yRel: 0.75 }
+        ];
+
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
@@ -330,73 +383,119 @@
         }
         window.addEventListener('resize', resizeCanvas);
 
+        // Рисуем карту Minecraft
+        function drawMinecraftBackground(w, h) {
+            // 1. Зелёные биомы (блоки травы)
+            ctx.fillStyle = '#22441e';
+            ctx.fillRect(0, 0, w, h);
+
+            ctx.fillStyle = '#2a5225';
+            const blockSize = 30;
+            for (let x = 0; x < w; x += blockSize) {
+                for (let y = 0; y < h; y += blockSize) {
+                    if ((x + y) % (blockSize * 2) === 0) {
+                        ctx.fillRect(x, y, blockSize, blockSize);
+                    }
+                }
+            }
+
+            // 2. Река по центру (Minecraft Water)
+            ctx.strokeStyle = '#1b4f72';
+            ctx.lineWidth = 35;
+            ctx.beginPath();
+            ctx.moveTo(w * 0.48, 0);
+            ctx.bezierCurveTo(w * 0.52, h * 0.3, w * 0.44, h * 0.7, w * 0.5, h);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#2e86de';
+            ctx.lineWidth = 15;
+            ctx.stroke();
+
+            // 3. Сетка блоков Minecraft
+            ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < w; x += 20) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+            }
+            for (let y = 0; y < h; y += 20) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+            }
+        }
+
         function drawMap(progress) {
             const w = canvas.width;
             const h = canvas.height;
+            const shift = (progress / 100) * (w * 0.25); // Сдвиг фронта
+
             ctx.clearRect(0, 0, w, h);
 
-            // 1. Сетка сетки координат (Тактическая)
-            ctx.strokeStyle = '#1a2130';
-            ctx.lineWidth = 1;
-            const gridSize = 40;
-            for (let x = 0; x < w; x += gridSize) {
-                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-            }
-            for (let y = 0; y < h; y += gridSize) {
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-            }
+            // 1. Текстура Майнкрафта
+            drawMinecraftBackground(w, h);
 
-            // 2. Расчет сдвига линии фронта от таймлайна
-            const shift = (progress / 100) * (w * 0.3);
-
-            // 3. Синяя Зона (Blondbane)
-            ctx.fillStyle = 'rgba(0, 168, 255, 0.15)';
+            // 2. Синяя территория
+            ctx.fillStyle = 'rgba(0, 168, 255, 0.25)';
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.lineTo(w * 0.4 + shift, 0);
-            ctx.bezierCurveTo(w * 0.45 + shift, h * 0.5, w * 0.35 + shift, h * 0.8, w * 0.4 + shift, h);
+            ctx.lineTo(w * 0.42 + shift, 0);
+            ctx.bezierCurveTo(w * 0.5 + shift, h * 0.35, w * 0.38 + shift, h * 0.7, w * 0.45 + shift, h);
             ctx.lineTo(0, h);
             ctx.closePath();
             ctx.fill();
 
-            // 4. Красная Зона (Враги)
-            ctx.fillStyle = 'rgba(255, 63, 52, 0.15)';
+            // 3. Красная территория
+            ctx.fillStyle = 'rgba(255, 63, 52, 0.25)';
             ctx.beginPath();
             ctx.moveTo(w, 0);
-            ctx.lineTo(w * 0.4 + shift, 0);
-            ctx.bezierCurveTo(w * 0.45 + shift, h * 0.5, w * 0.35 + shift, h * 0.8, w * 0.4 + shift, h);
+            ctx.lineTo(w * 0.42 + shift, 0);
+            ctx.bezierCurveTo(w * 0.5 + shift, h * 0.35, w * 0.38 + shift, h * 0.7, w * 0.45 + shift, h);
             ctx.lineTo(w, h);
             ctx.closePath();
             ctx.fill();
 
-            // 5. Сама ЛИНИЯ ФРОНТА
+            // 4. Линия фронта
             ctx.strokeStyle = '#ffd32a';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([8, 6]);
+            ctx.lineWidth = 4;
+            ctx.setLineDash([10, 6]);
             ctx.beginPath();
-            ctx.moveTo(w * 0.4 + shift, 0);
-            ctx.bezierCurveTo(w * 0.45 + shift, h * 0.5, w * 0.35 + shift, h * 0.8, w * 0.4 + shift, h);
+            ctx.moveTo(w * 0.42 + shift, 0);
+            ctx.bezierCurveTo(w * 0.5 + shift, h * 0.35, w * 0.38 + shift, h * 0.7, w * 0.45 + shift, h);
             ctx.stroke();
-            ctx.setLineDash([]); // Сброс штриха
+            ctx.setLineDash([]);
 
-            // 6. Иконки бойцов (Синие и Красные точки)
-            drawUnit(w * 0.2 + shift * 0.5, h * 0.3, '#00a8ff', 'DIANA');
-            drawUnit(w * 0.3 + shift * 0.8, h * 0.6, '#00a8ff', 'YOU');
-            drawUnit(w * 0.6 + shift * 0.2, h * 0.4, '#ff3f34', 'ENEMY_1');
+            // 5. Отрисовка 10 Синих игроков
+            blueTeam.forEach(p => {
+                const px = (p.xRel * w) + (shift * 0.8);
+                const py = p.yRel * h;
+                const isVova = p.name === "Владимир Путин";
+                drawUnit(px, py, isVova ? '#ffd32a' : '#00a8ff', p.name, isVova);
+            });
+
+            // 6. Отрисовка 10 Красных игроков
+            redTeam.forEach(p => {
+                const px = (p.xRel * w) + (shift * 0.2);
+                const py = p.yRel * h;
+                drawUnit(px, py, '#ff3f34', p.name, false);
+            });
         }
 
-        function drawUnit(x, y, color, label) {
+        function drawUnit(x, y, color, label, isVIP) {
             ctx.fillStyle = color;
             ctx.beginPath();
-            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.arc(x, y, isVIP ? 8 : 5, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.fillStyle = '#fff';
-            ctx.font = '10px JetBrains Mono';
-            ctx.fillText(label, x + 10, y + 3);
+            if (isVIP) {
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            ctx.fillStyle = isVIP ? '#ffd32a' : '#ffffff';
+            ctx.font = isVIP ? 'bold 12px JetBrains Mono' : '10px JetBrains Mono';
+            ctx.fillText(label, x + 8, y + 4);
         }
 
-        // --- Таймлайн Управление ---
+        // Логика слайдера
         slider.addEventListener('input', () => {
             const mins = Math.floor((slider.value / 100) * 45);
             timeLabel.innerText = `${mins < 10 ? '0' : ''}${mins}:00 / 45:00`;
@@ -405,20 +504,19 @@
 
         playBtn.addEventListener('click', () => {
             isPlaying = !isPlaying;
-            playBtn.innerText = isPlaying ? '❚❚ ПАУЗА' : '▶ ПУСК';
+            playBtn.innerText = isPlaying ? '❚❚ ПАУЗА' : '▶ ЗАПУСК';
 
             if (isPlaying) {
                 animationTimer = setInterval(() => {
                     if (parseInt(slider.value) >= 100) slider.value = 0;
                     slider.value = parseInt(slider.value) + 1;
                     slider.dispatchEvent(new Event('input'));
-                }, 200);
+                }, 150);
             } else {
                 clearInterval(animationTimer);
             }
         });
 
-        // --- Переключение вкладок ---
         function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -426,7 +524,6 @@
             btn.classList.add('active');
         }
 
-        // Старт при загрузке
         setTimeout(resizeCanvas, 100);
     </script>
 </body>
