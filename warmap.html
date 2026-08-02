@@ -7,8 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* ==========================================================================
-           1. ДИЗАЙН-СИСТЕМА И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
-           ========================================================================== */
+            1. ДИЗАЙН-СИСТЕМА И ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+            ========================================================================== */
         :root {
             --bg-main: #06080c;
             --panel-bg: #0d1117;
@@ -53,8 +53,8 @@
         }
 
         /* ==========================================================================
-           2. ШАПКА И СТАТУСНЫЕ ПАНЕЛИ
-           ========================================================================== */
+            2. ШАПКА И СТАТУСНЫЕ ПАНЕЛИ
+            ========================================================================== */
         header {
             height: 54px;
             background: var(--panel-bg);
@@ -157,8 +157,8 @@
         }
 
         /* ==========================================================================
-           3. ОСНОВНОЙ РАБОЧИЙ МЕШОК (GRID LAYOUT)
-           ========================================================================== */
+            3. ОСНОВНОЙ РАБОЧИЙ МЕШОК (GRID LAYOUT)
+            ========================================================================== */
         .workspace {
             flex: 1;
             display: grid;
@@ -169,6 +169,7 @@
             position: relative;
         }
 
+        /* Левая часть: Карта + Оверлей HUD */
         .viewport-container {
             background: #020305;
             border: 1px solid var(--border-dark);
@@ -195,6 +196,7 @@
             display: block;
         }
 
+        /* Наложенный элемент интерфейса карты */
         .map-hud-overlay {
             position: absolute;
             top: 12px;
@@ -253,6 +255,7 @@
             background: rgba(0, 168, 255, 0.12);
         }
 
+        /* Нижний таймлайн управления кадрами */
         .timeline-bar {
             height: 56px;
             background: var(--panel-bg);
@@ -311,8 +314,8 @@
         }
 
         /* ==========================================================================
-           4. ПРАВАЯ ПАНЕЛЬ: ВКЛАДКИ, FIFA КАРТОЧКИ И ИНСПЕКТОР
-           ========================================================================== */
+            4. ПРАВАЯ ПАНЕЛЬ: ВКЛАДКИ, FIFA КАРТОЧКИ И ИНСПЕКТОР
+            ========================================================================== */
         .sidebar-container {
             background: var(--panel-bg);
             border: 1px solid var(--border-dark);
@@ -344,7 +347,7 @@
         }
 
         .tab-btn:hover {
-            color: var(--text-secondary);
+            color: var(--text-muted);
         }
 
         .tab-btn.active {
@@ -362,6 +365,7 @@
             gap: 10px;
         }
 
+        /* Стилизация скроллбара */
         .tab-viewport::-webkit-scrollbar {
             width: 4px;
         }
@@ -487,6 +491,7 @@
             font-weight: 700;
         }
 
+        /* Полоса ХП внутри карточки */
         .fifa-hp-bar {
             position: absolute;
             bottom: 0;
@@ -505,11 +510,25 @@
             font-size: 0.75rem;
         }
 
+        .chart-box {
+            height: 120px;
+            background: #080b10;
+            border: 1px solid var(--border-dark);
+            border-radius: 4px;
+            position: relative;
+            padding: 8px;
+        }
+
+        canvas#telemetryChart {
+            width: 100%;
+            height: 100%;
+        }
+
         .log-list {
             display: flex;
             flex-direction: column;
             gap: 6px;
-            max-height: 100%;
+            max-height: 250px;
             overflow-y: auto;
         }
 
@@ -614,10 +633,14 @@
             </div>
 
             <!-- Вкладка Синие -->
-            <div id="tab-blue" class="tab-viewport"></div>
+            <div id="tab-blue" class="tab-viewport">
+                <!-- Карточки генерируются скриптом -->
+            </div>
 
             <!-- Вкладка Красные -->
-            <div id="tab-red" class="tab-viewport hidden"></div>
+            <div id="tab-red" class="tab-viewport hidden">
+                <!-- Карточки генерируются скриптом -->
+            </div>
 
             <!-- Вкладка Инспектор Выбранного Агента -->
             <div id="tab-inspector" class="tab-viewport hidden">
@@ -630,17 +653,21 @@
 
             <!-- Вкладка Логи Боя -->
             <div id="tab-logs" class="tab-viewport hidden">
-                <div class="log-list" id="battleLogList"></div>
+                <div class="log-list" id="battleLogList">
+                    <!-- Записи логов -->
+                </div>
             </div>
         </div>
 
     </div>
 
-    <!-- МОНОЛИТНЫЙ СКРИПТ (ENGINE, SOUND, AI, RENDER, UI) -->
+    <!-- ==========================================================================
+        5. МОНОЛИТНЫЙ СКРИПТ (ENGINE, SOUND, AI, RENDER, UI)
+        ========================================================================== -->
     <script>
         /* ==========================================================================
-           А. МОДУЛЬ ЗВУКОВОГО ДВИЖКА (WEB AUDIO API)
-           ========================================================================== */
+            А. МОДУЛЬ ЗВУКОВОГО ДВИЖКА (WEB AUDIO API)
+            ========================================================================== */
         class SoundEngine {
             constructor() {
                 this.ctx = null;
@@ -732,8 +759,8 @@
         const sounds = new SoundEngine();
 
         /* ==========================================================================
-           Б. БАЗА ДАННЫХ VIP ГЕРОЕВ
-           ========================================================================== */
+            Б. БАЗА ДАННЫХ VIP ГЕРОЕВ И КАРТОЧЕК FIFA
+            ========================================================================== */
         const VIP_DATABASE = [
             // СИНИЕ
             {
@@ -858,8 +885,8 @@
         ];
 
         /* ==========================================================================
-           В. ЧАСТИЦЫ И ВИЗУАЛЬНЫЕ ЭФФЕКТЫ
-           ========================================================================== */
+            В. ЧАСТИЦЫ И ВИЗУАЛЬНЫЕ ЭФФЕКТЫ (PARTICLE SYSTEM)
+            ========================================================================== */
         class Particle {
             constructor(x, y, color, speed, size, life, type = 'pixel') {
                 this.x = x;
@@ -920,17 +947,16 @@
             const vx = (dx / dist) * speed;
             const vy = (dy / dist) * speed;
             
-            const p = new Particle(x1, y1, color, 0, 1.5, 15, 'tracer');
-            p.vx = vx;
-            p.vy = vy;
-            particles.push(p);
+            particles.push(new Particle(x1, y1, color, 0, 1.5, 15, 'tracer'));
+            particles[particles.length-1].vx = vx;
+            particles[particles.length-1].vy = vy;
             
-            if (Math.random() < 0.15) sounds.playGunshot();
+            if (Math.random() < 0.2) sounds.playGunshot();
         }
 
         /* ==========================================================================
-           Г. КЛАСС АГЕНТАИ МОДЕЛИРОВАНИЕ
-           ========================================================================== */
+            Г. КЛАСС АГЕНТА И АГЕНТНАЯ ФИЗИКА
+            ========================================================================== */
         class Agent {
             constructor(config) {
                 this.id = config.id;
@@ -939,87 +965,79 @@
                 this.rating = config.rating || 75;
                 this.role = config.role || 'ПЕХОТА';
                 this.isVip = config.isVip || false;
-                this.zocRadius = config.zocRadius || 30;
-                this.stats = config.stats || { kda: '1.0', damage: '5K', armor: '50', speed: '50' };
+                this.zocRadius = config.zocRadius || 75;
+                this.stats = config.stats || { kda: '1.0', damage: '1K', armor: '50', speed: '50' };
                 this.path = config.path || [];
-
+                this.hp = 100;
+                this.maxHp = 100;
                 this.x = 0;
                 this.y = 0;
-                this.hp = 100;
-                this.status = 'В БОЮ';
             }
 
-            updatePosition(progress) {
-                if (!this.path || this.path.length === 0) return;
-
+            update(progress) {
+                if (this.path.length === 0) return;
+                
                 let p1 = this.path[0];
                 let p2 = this.path[this.path.length - 1];
-
-                if (progress <= p1.t) {
-                    this.x = p1.x;
-                    this.y = p1.y;
-                    return;
-                }
-                if (progress >= p2.t) {
-                    this.x = p2.x;
-                    this.y = p2.y;
-                    return;
-                }
-
+                
                 for (let i = 0; i < this.path.length - 1; i++) {
-                    if (progress >= this.path[i].t && progress <= this.path[i + 1].t) {
+                    if (progress >= this.path[i].t && progress <= this.path[i+1].t) {
                         p1 = this.path[i];
-                        p2 = this.path[i + 1];
+                        p2 = this.path[i+1];
                         break;
+                    } else if (progress > this.path[this.path.length - 1].t) {
+                        p1 = this.path[this.path.length - 1];
+                        p2 = p1;
                     }
                 }
+                
+                const span = p2.t - p1.t;
+                const factor = span === 0 ? 0 : (progress - p1.t) / span;
+                
+                const canvasEl = document.getElementById('mainMap');
+                const targetPixelX = p1.x + (p2.x - p1.x) * factor;
+                const targetPixelY = p1.y + (p2.y - p1.y) * factor;
+                
+                this.x += (targetPixelX * canvasEl.width - this.x) * 0.1;
+                this.y += (targetPixelY * canvasEl.height - this.y) * 0.1;
+            }
 
-                const factor = (progress - p1.t) / (p2.t - p1.t);
-                this.x = p1.x + (p2.x - p1.x) * factor;
-                this.y = p1.y + (p2.y - p1.y) * factor;
-
-                // Небольшие колебания HP в зависимости от прогресса
-                this.hp = Math.max(15, Math.min(100, Math.floor(100 - Math.sin(progress * 0.1 + this.rating) * 30)));
+            draw(ctx) {
+                ctx.save();
+                const isBlue = this.team === 'blue';
+                const color = isBlue ? '#00a8ff' : '#ff3f34';
+                
+                if (activeLayers.zoc) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.zocRadius, 0, Math.PI * 2);
+                    ctx.fillStyle = isBlue ? 'rgba(0, 168, 255, 0.05)' : 'rgba(255, 63, 52, 0.05)';
+                    ctx.fill();
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = isBlue ? 'rgba(0, 168, 255, 0.2)' : 'rgba(255, 63, 52, 0.2)';
+                    ctx.setLineDash([4, 4]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 8, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#ffffff';
+                ctx.stroke();
+                
+                ctx.fillStyle = '#f1f2f6';
+                ctx.font = '10px JetBrains Mono';
+                ctx.fillText(this.name, this.x + 12, this.y + 4);
+                
+                ctx.restore();
             }
         }
 
-        /* ==========================================================================
-           Д. ИНИЦИАЛИЗАЦИЯ И УПРАВЛЕНИЕ СОСТОЯНИЕМ СИМУЛЯЦИИ
-           ========================================================================== */
-        const agents = [];
+        const agents = VIP_DATABASE.map(cfg => new Agent(cfg));
         let selectedAgent = null;
 
-        // Создаем VIP Агентов
-        VIP_DATABASE.forEach(data => {
-            agents.push(new Agent({ ...data, isVip: true }));
-        });
-
-        // Генерируем массовку пехоты (Рядовые агенты)
-        for (let i = 0; i < 110; i++) {
-            const team = i % 2 === 0 ? 'blue' : 'red';
-            const startX = team === 'blue' ? 0.05 + Math.random() * 0.25 : 0.70 + Math.random() * 0.25;
-            const startY = 0.1 + Math.random() * 0.8;
-            const endX = team === 'blue' ? startX + 0.3 + Math.random() * 0.2 : startX - 0.3 - Math.random() * 0.2;
-            const endY = startY + (Math.random() - 0.5) * 0.3;
-
-            agents.push(new Agent({
-                id: `unit_${i}`,
-                name: `Отряд ${team === 'blue' ? 'Альфа' : 'Омега'} #${i + 1}`,
-                team: team,
-                rating: 60 + Math.floor(Math.random() * 25),
-                role: 'ПЕХОТА',
-                isVip: false,
-                zocRadius: 25 + Math.random() * 15,
-                stats: { kda: '1.2', damage: '3K', armor: '40', speed: '60' },
-                path: [
-                    { t: 0, x: startX, y: startY },
-                    { t: 50 + (Math.random() - 0.5) * 20, x: (startX + endX) / 2, y: (startY + endY) / 2 },
-                    { t: 100, x: endX, y: endY }
-                ]
-            }));
-        }
-
-        // Переключатели слоев
         const activeLayers = {
             zoc: true,
             frontline: true,
@@ -1027,353 +1045,214 @@
             grid: false
         };
 
-        let isPlaying = false;
-        let simProgress = 0; // 0..100
-        let animFrameId = null;
-
-        /* ==========================================================================
-           Е. ХОЛСТ CANVAS, КАМЕРА И РЕНДЕРИНГ
-           ========================================================================== */
-        const canvas = document.getElementById('mainMap');
-        const ctx = canvas.getContext('2d');
-        const wrapper = document.getElementById('canvasWrapper');
-
-        let camera = { x: 0, y: 0, zoom: 1 };
-        let isDragging = false;
-        let dragStart = { x: 0, y: 0 };
-
+        const canvasEl = document.getElementById('mainMap');
+        const ctx = canvasEl.getContext('2d');
+        
         function resizeCanvas() {
-            canvas.width = wrapper.clientWidth;
-            canvas.height = wrapper.clientHeight;
+            const wrapper = document.getElementById('canvasWrapper');
+            canvasEl.width = wrapper.clientWidth;
+            canvasEl.height = wrapper.clientHeight;
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        function resetCamera() {
-            camera.x = 0;
-            camera.y = 0;
-            camera.zoom = 1;
-        }
-
-        wrapper.addEventListener('mousedown', (e) => {
-            if (e.button === 0) {
-                isDragging = true;
-                dragStart = { x: e.clientX - camera.x, y: e.clientY - camera.y };
-            }
-        });
-
-        window.addEventListener('mousemove', (e) => {
-            if (isDragging) {
-                camera.x = e.clientX - dragStart.x;
-                camera.y = e.clientY - dragStart.y;
-            }
-        });
-
-        window.addEventListener('mouseup', () => { isDragging = false; });
-
-        wrapper.addEventListener('wheel', (e) => {
-            e.preventDefault();
-            const zoomFactor = e.deltaY < 0 ? 1.1 : 0.9;
-            camera.zoom = Math.max(0.5, Math.min(4, camera.zoom * zoomFactor));
-        });
-
-        // Выбор агента кликом по canvas
-        wrapper.addEventListener('click', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-
-            let found = null;
-            let minDist = Infinity;
-
-            agents.forEach(agent => {
-                const screenX = agent.x * canvas.width * camera.zoom + camera.x;
-                const screenY = agent.y * canvas.height * camera.zoom + camera.y;
-                const dist = Math.hypot(mouseX - screenX, mouseY - screenY);
-
-                if (dist < 20 && dist < minDist) {
-                    minDist = dist;
-                    found = agent;
-                }
-            });
-
-            if (found) {
-                selectAgent(found);
+        document.querySelectorAll('.toggle-chip').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                const layer = btn.getAttribute('data-layer');
+                activeLayers[layer] = btn.classList.contains('active');
                 sounds.playClick();
-            }
+            });
         });
 
-        /* Главный цикл отрисовки */
-        function render() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            ctx.save();
-            ctx.translate(camera.x, camera.y);
-            ctx.scale(camera.zoom, camera.zoom);
-
-            const w = canvas.width;
-            const h = canvas.height;
-
-            // 1. Сетка
-            if (activeLayers.grid) {
-                ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
-                ctx.lineWidth = 1;
-                const step = 40;
-                for (let x = 0; x < w; x += step) {
-                    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-                }
-                for (let y = 0; y < h; y += step) {
-                    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
-                }
-            }
-
-            // Обновление позиций агентов
-            agents.forEach(a => a.updatePosition(simProgress));
-
-            // 2. Зоны ZOC
-            if (activeLayers.zoc) {
-                agents.forEach(a => {
-                    if (!a.isVip) return;
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(a.x * w, a.y * h, a.zocRadius, 0, Math.PI * 2);
-                    ctx.fillStyle = a.team === 'blue' ? 'rgba(0, 168, 255, 0.08)' : 'rgba(255, 63, 52, 0.08)';
-                    ctx.fill();
-                    ctx.strokeStyle = a.team === 'blue' ? 'rgba(0, 168, 255, 0.25)' : 'rgba(255, 63, 52, 0.25)';
-                    ctx.setLineDash([4, 4]);
-                    ctx.stroke();
-                    ctx.restore();
-                });
-            }
-
-            // 3. Линия фронта (соединение передовых агентов)
-            if (activeLayers.frontline) {
-                const blueFront = agents.filter(a => a.team === 'blue').sort((a, b) => b.x - a.x).slice(0, 8);
-                const redFront = agents.filter(a => a.team === 'red').sort((a, b) => a.x - b.x).slice(0, 8);
-
-                ctx.save();
-                ctx.strokeStyle = 'rgba(255, 211, 42, 0.4)';
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                for (let i = 0; i < Math.min(blueFront.length, redFront.length); i++) {
-                    const midX = (blueFront[i].x + redFront[i].x) / 2 * w;
-                    const midY = (blueFront[i].y + redFront[i].y) / 2 * h;
-                    if (i === 0) ctx.moveTo(midX, midY);
-                    else ctx.lineTo(midX, midY);
-                }
-                ctx.stroke();
-                ctx.restore();
-            }
-
-            // 4. Отрисовка стычек и спавн трассеров во время игры
-            if (isPlaying && activeLayers.particles && Math.random() < 0.3) {
-                const blueA = agents[Math.floor(Math.random() * agents.length)];
-                const redA = agents[Math.floor(Math.random() * agents.length)];
-                if (blueA.team !== redA.team) {
-                    const dist = Math.hypot((blueA.x - redA.x) * w, (blueA.y - redA.y) * h);
-                    if (dist < 200) {
-                        spawnTracer(blueA.x * w, blueA.y * h, redA.x * w, redA.y * h, blueA.team === 'blue' ? '#00a8ff' : '#ff3f34');
-                        if (Math.random() < 0.1) spawnExplosion(redA.x * w, redA.y * h, '#ffd32a', 8);
-                    }
-                }
-            }
-
-            // 5. Отрисовка Агентов
-            agents.forEach(a => {
-                const ax = a.x * w;
-                const ay = a.y * h;
-
-                ctx.save();
-                ctx.beginPath();
-                const radius = a.isVip ? 7 : 3.5;
-                ctx.arc(ax, ay, radius, 0, Math.PI * 2);
-                ctx.fillStyle = a.team === 'blue' ? '#00a8ff' : '#ff3f34';
-                ctx.fill();
-
-                if (a.isVip) {
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 1.5;
-                    ctx.stroke();
-
-                    // Имя VIP
-                    ctx.fillStyle = '#ffffff';
-                    ctx.font = '10px "JetBrains Mono"';
-                    ctx.fillText(a.name, ax + 10, ay + 3);
-                }
-
-                if (selectedAgent === a) {
-                    ctx.strokeStyle = '#ffd32a';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.arc(ax, ay, radius + 5, 0, Math.PI * 2);
-                    ctx.stroke();
-                }
-                ctx.restore();
-            });
-
-            // 6. Частицы
-            if (activeLayers.particles) {
-                for (let i = particles.length - 1; i >= 0; i--) {
-                    particles[i].update();
-                    particles[i].draw(ctx);
-                    if (particles[i].life <= 0) particles.splice(i, 1);
-                }
-            }
-
-            ctx.restore();
-
-            if (isPlaying) {
-                simProgress += 0.05;
-                if (simProgress > 100) simProgress = 0;
-                document.getElementById('timeSlider').value = simProgress;
-                updateTimeDisplay();
-            }
-
-            animFrameId = requestAnimationFrame(render);
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-viewport').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            sounds.playClick();
         }
 
-        /* ==========================================================================
-           Ж. ИНТЕРФЕЙС И ВЗАИМОДЕЙСТВИЕ (UI)
-           ========================================================================== */
+        function populateCards() {
+            const blueContainer = document.getElementById('tab-blue');
+            const redContainer = document.getElementById('tab-red');
+            
+            blueContainer.innerHTML = '';
+            redContainer.innerHTML = '';
+            
+            VIP_DATABASE.forEach(hero => {
+                const card = document.createElement('div');
+                card.className = `fifa-card-v2 ${hero.team === 'blue' ? 'blue-side' : 'red-side'}`;
+                card.innerHTML = `
+                    <div class="fifa-badge">
+                        <div class="fifa-score">${hero.rating}</div>
+                        <div class="fifa-pos">${hero.role}</div>
+                    </div>
+                    <div class="fifa-body">
+                        <div class="fifa-header-row">
+                            <span class="fifa-name">${hero.name}</span>
+                            <span class="fifa-status-tag">${hero.team.toUpperCase()}</span>
+                        </div>
+                        <div class="fifa-stats-grid">
+                            <div class="stat-item"><span class="stat-lbl">KDA:</span><span class="stat-val">${hero.stats.kda}</span></div>
+                            <div class="stat-item"><span class="stat-lbl">DMG:</span><span class="stat-val">${hero.stats.damage}</span></div>
+                            <div class="stat-item"><span class="stat-lbl">ARM:</span><span class="stat-val">${hero.stats.armor}</span></div>
+                        </div>
+                    </div>
+                    <div class="fifa-hp-bar" style="width: 100%;"></div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.fifa-card-v2').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedAgent = agents.find(a => a.id === hero.id);
+                    updateInspector(hero);
+                    sounds.playClick();
+                });
+                
+                if (hero.team === 'blue') {
+                    blueContainer.appendChild(card);
+                } else {
+                    redContainer.appendChild(card);
+                }
+            });
+        }
+        populateCards();
+
+        function updateInspector(hero) {
+            const inspector = document.getElementById('inspectorContent');
+            inspector.innerHTML = `
+                <div style="font-weight: 700; color: var(--accent-gold); font-size: 0.9rem; margin-bottom: 4px;">${hero.name}</div>
+                <div style="color: var(--text-muted); margin-bottom: 10px;">Статус: В БОЮ // РОЛЬ: ${hero.role}</div>
+                <div class="chart-box">
+                    <canvas id="telemetryChart"></canvas>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+                    <div>Рейтинг карточки: <b>${hero.rating}</b></div>
+                    <div>Радиус ZOC: <b>${hero.zocRadius}м</b></div>
+                    <div>Нанесенный урон: <b>${hero.stats.damage}</b></div>
+                    <div>Бронезащита: <b>${hero.stats.armor}</b></div>
+                </div>
+            `;
+        }
+
+        let isPlaying = false;
+        let simulationProgress = 0;
+        const totalDuration = 45 * 60;
+
         const playBtn = document.getElementById('playBtn');
         const timeSlider = document.getElementById('timeSlider');
         const timeDisplay = document.getElementById('timeDisplay');
 
         playBtn.addEventListener('click', () => {
-            sounds.init();
             isPlaying = !isPlaying;
-            playBtn.innerText = isPlaying ? '⏸' : '▶';
+            playBtn.textContent = isPlaying ? '❚❚' : '▶';
+            sounds.init();
             sounds.playClick();
         });
 
         timeSlider.addEventListener('input', (e) => {
-            simProgress = parseFloat(e.target.value);
+            simulationProgress = parseFloat(e.target.value);
             updateTimeDisplay();
         });
 
         function updateTimeDisplay() {
-            const totalSec = Math.floor((simProgress / 100) * 2700); // 45 минут
-            const m = String(Math.floor(totalSec / 60)).padStart(2, '0');
-            const s = String(totalSec % 60).padStart(2, '0');
-            timeDisplay.innerText = `${m}:${s} / 45:00`;
-
-            // Фазы боя
-            const phaseTitle = document.getElementById('phaseTitle');
-            if (simProgress < 30) phaseTitle.innerText = 'ФАЗА 1: ПОЗИЦИОННЫЕ БОИ';
-            else if (simProgress < 70) phaseTitle.innerText = 'ФАЗА 2: ВСТРЕЧНЫЙ КОНТАКТ И ПРОРЫВ';
-            else phaseTitle.innerText = 'ФАЗА 3: ДЕБЛОКАДА И ЗАЧИСТКА';
+            const currentSeconds = (simulationProgress / 100) * totalDuration;
+            const mins = Math.floor(currentSeconds / 60).toString().padStart(2, '0');
+            const secs = Math.floor(currentSeconds % 60).toString().padStart(2, '0');
+            timeDisplay.textContent = `${mins}:${secs} / 45:00`;
         }
 
-        // Переключение вкладок
-        window.switchTab = function(tabId, btn) {
-            sounds.playClick();
-            document.querySelectorAll('.tab-viewport').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(tabId).classList.remove('hidden');
-            btn.classList.add('active');
-        };
-
-        // Генерация FIFA Карточек
-        function generateFifaCards() {
-            const blueContainer = document.getElementById('tab-blue');
-            const redContainer = document.getElementById('tab-red');
-
-            blueContainer.innerHTML = '';
-            redContainer.innerHTML = '';
-
-            agents.filter(a => a.isVip).forEach(agent => {
-                const card = document.createElement('div');
-                card.className = `fifa-card-v2 ${agent.team === 'blue' ? 'blue-side' : 'red-side'}`;
-                card.onclick = () => { selectAgent(agent); sounds.playClick(); };
-
-                card.innerHTML = `
-                    <div class="fifa-badge">
-                        <div class="fifa-score" style="color: ${agent.team === 'blue' ? 'var(--accent-blue)' : 'var(--accent-red)'}">${agent.rating}</div>
-                        <div class="fifa-pos">${agent.role}</div>
-                    </div>
-                    <div class="fifa-body">
-                        <div class="fifa-header-row">
-                            <div class="fifa-name">${agent.name}</div>
-                            <div class="fifa-status-tag">${agent.status}</div>
-                        </div>
-                        <div class="fifa-stats-grid">
-                            <div class="stat-item"><span class="stat-lbl">KDA</span><span class="stat-val">${agent.stats.kda}</span></div>
-                            <div class="stat-item"><span class="stat-lbl">DMG</span><span class="stat-val">${agent.stats.damage}</span></div>
-                            <div class="stat-item"><span class="stat-lbl">ARM</span><span class="stat-val">${agent.stats.armor}</span></div>
-                        </div>
-                    </div>
-                    <div class="fifa-hp-bar" style="width: ${agent.hp}%"></div>
-                `;
-
-                if (agent.team === 'blue') blueContainer.appendChild(card);
-                else redContainer.appendChild(card);
-            });
-        }
-
-        function selectAgent(agent) {
-            selectedAgent = agent;
-            const inspector = document.getElementById('inspectorContent');
-            inspector.innerHTML = `
-                <div style="border-bottom: 1px solid var(--border-dark); padding-bottom: 8px;">
-                    <h3 style="color: var(--accent-gold); font-size: 1rem;">${agent.name}</h3>
-                    <div style="color: var(--text-muted); font-size: 0.7rem;">ID: ${agent.id} | КОМАНДА: ${agent.team.toUpperCase()}</div>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
-                    <div>БОЕВОЙ РЕЙТИНГ: <strong>${agent.rating}</strong></div>
-                    <div>РОЛЬ: <strong>${agent.role}</strong></div>
-                    <div>ЗДОРОВЬЕ (HP): <strong style="color: var(--accent-green)">${agent.hp}%</strong></div>
-                    <div>РАДИУС ZOC: <strong>${agent.zocRadius}m</strong></div>
-                </div>
-            `;
-            // Переключаем на вкладку инспектора
-            switchTab('tab-inspector', document.querySelectorAll('.tab-btn')[2]);
-        }
-
-        // Переключатели слоев
-        document.querySelectorAll('.toggle-chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-                sounds.playClick();
-                const layer = chip.getAttribute('data-layer');
-                activeLayers[layer] = !activeLayers[layer];
-                chip.classList.toggle('active', activeLayers[layer]);
-            });
+        const logList = document.getElementById('battleLogList');
+        const dummyLogs = [
+            "00:00 Симуляция 'Контактный Бой V6.0' инициализирована.",
+            "02:15 Синие силы выдвигаются на рубеж развертывания.",
+            "08:30 Зафиксирована активность артиллерии в секторе Папича.",
+            "15:42 Красный клин под командованием Shadowraze пробивает оборону.",
+            "22:10 Котел в центральном секторе: окружение ключевых юнитов.",
+            "31:00 Начата операция по деблокаде ключевых высот.",
+            "40:15 Финальный этап штурма укреплений противника."
+        ];
+        dummyLogs.forEach(log => {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="time">[${log.substring(0, 5)}]</span>${log.substring(6)}`;
+            logList.appendChild(entry);
         });
 
-        // Кнопки шапки
-        document.getElementById('soundToggleBtn').addEventListener('click', function() {
-            sounds.enabled = !sounds.enabled;
-            this.classList.toggle('active', sounds.enabled);
-            this.innerHTML = `<span>🔊</span> ЗВУК: ${sounds.enabled ? 'ВКЛ' : 'ВЫКЛ'}`;
-        });
+        let lastTime = performance.now();
+        function loop(now) {
+            const dt = (now - lastTime) / 1000;
+            lastTime = now;
 
-        document.getElementById('resetCamBtn').addEventListener('click', () => {
-            sounds.playClick();
-            resetCamera();
-        });
+            if (isPlaying) {
+                simulationProgress += dt * 0.5;
+                if (simulationProgress > 100) {
+                    simulationProgress = 0;
+                }
+                timeSlider.value = simulationProgress;
+                updateTimeDisplay();
+            }
 
-        // Логи боя
-        function initLogs() {
-            const list = document.getElementById('battleLogList');
-            const events = [
-                '00:02 - Развертывание подразделений на рубежах ZOC',
-                '05:14 - Соприкосновение разведгрупп в центральном секторе',
-                '12:40 - Артиллерийский налет по позициям фланга',
-                '22:15 - Встречный танковый бой на линии фронта',
-                '35:50 - Попытка глубокого обхода и зачистка сектора'
-            ];
-            events.forEach(evt => {
-                const item = document.createElement('div');
-                item.className = 'log-entry';
-                item.innerHTML = `<span class="time">${evt.slice(0, 5)}</span> ${evt.slice(8)}`;
-                list.appendChild(item);
+            ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+
+            if (activeLayers.grid) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+                ctx.lineWidth = 1;
+                const step = 40;
+                for (let x = 0; x < canvasEl.width; x += step) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvasEl.height);
+                    ctx.stroke();
+                }
+                for (let y = 0; y < canvasEl.height; y += step) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvasEl.width, y);
+                    ctx.stroke();
+                }
+            }
+
+            if (activeLayers.frontline) {
+                ctx.beginPath();
+                ctx.moveTo(canvasEl.width * 0.45, 0);
+                ctx.bezierCurveTo(
+                    canvasEl.width * 0.55, canvasEl.height * 0.3,
+                    canvasEl.width * 0.35, canvasEl.height * 0.7,
+                    canvasEl.width * 0.5, canvasEl.height
+                );
+                ctx.strokeStyle = 'rgba(255, 211, 42, 0.4)';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+
+            agents.forEach(agent => {
+                agent.update(simulationProgress);
+                agent.draw(ctx);
             });
-        }
 
-        // Запуск
-        generateFifaCards();
-        initLogs();
-        render();
+            if (activeLayers.particles) {
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.update();
+                    p.draw(ctx);
+                    if (p.life <= 0) {
+                        particles.splice(i, 1);
+                    }
+                }
+                if (isPlaying && Math.random() < 0.3) {
+                    const a1 = agents[Math.floor(Math.random() * agents.length)];
+                    const a2 = agents[Math.floor(Math.random() * agents.length)];
+                    if (a1 && a2 && a1 !== a2) {
+                        spawnTracer(a1.x, a1.y, a2.x, a2.y, a1.team === 'blue' ? '#00a8ff' : '#ff3f34');
+                    }
+                }
+            }
+
+            requestAnimationFrame(loop);
+        }
+        requestAnimationFrame(loop);
     </script>
 </body>
 </html>
