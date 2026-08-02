@@ -3336,16 +3336,20 @@
             this.innerText = sounds.enabled ? '🔊 ЗВУК: ВКЛ' : '🔇 ЗВУК: ВЫКЛ';
         });
 
-        // --- СТАРТ СИСТЕМЫ ---
-        initSimulationAgents();
-        renderFifaCards();
-        setTimeout(() => {
-            resizeCanvas();
-            // Принудительный первый апдейт
-            slider.dispatchEvent(new Event('input'));
-            addLog("Генштаб запущен. Ожидание команды на начало операции.");
-        }, 150);
+// --- БЕЗОПАСНЫЙ СТАРТ СИСТЕМЫ ---
+if (!window.__GENSHTAB_INITIALIZED__) {
+    window.__GENSHTAB_INITIALIZED__ = true;
 
-    </script>
+    initSimulationAgents();
+    renderFifaCards();
+    
+    setTimeout(() => {
+        resizeCanvas();
+        if (typeof slider !== 'undefined' && slider) {
+            slider.dispatchEvent(new Event('input'));
+        }
+        addLog("Генштаб запущен. Ожидание команды на начало операции.");
+    }, 150);
+}
 </body>
 </html>
