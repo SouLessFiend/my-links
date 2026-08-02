@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ТАКТИЧЕСКАЯ КАРТА: Котлы, Техника и Маневры</title>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>ТАКТИЧЕСКИЙ ГЕНШТАБ // МАСШТАБНАЯ СИМУЛЯЦИЯ ФРОНТА</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0c10;
-            --panel-bg: #12161f;
-            --border-color: #232a3b;
+            --bg-dark: #07090e;
+            --panel-bg: #0d111a;
+            --border-color: #1e2638;
             --accent-blue: #00a8ff;
             --accent-red: #ff3f34;
             --accent-gold: #ffd32a;
-            --text-main: #f1f2f6;
+            --text-main: #e1e8f0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,13 +24,13 @@
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
         }
 
         header {
             background: var(--panel-bg);
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 30px;
+            border-bottom: 2px solid var(--border-color);
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -38,33 +38,42 @@
         .logo {
             font-family: 'JetBrains Mono', monospace;
             font-weight: 800;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--accent-gold);
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .status-badge {
-            background: rgba(255, 63, 52, 0.15);
-            border: 1px solid var(--accent-red);
-            color: var(--accent-red);
-            padding: 6px 14px;
-            border-radius: 4px;
+        .logo-dot { width: 10px; height: 10px; background: var(--accent-red); border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
+        }
+        .stat-badge {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 4px;
         }
 
         .main-container {
             display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: 1fr 360px;
+            gap: 15px;
+            padding: 15px;
             flex-grow: 1;
+            min-height: 0;
         }
 
         .map-card {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 6px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -73,7 +82,8 @@
         .canvas-container {
             flex-grow: 1;
             position: relative;
-            background: #142213;
+            background: #0b120a;
+            cursor: crosshair;
         }
         canvas {
             width: 100%;
@@ -82,9 +92,9 @@
         }
 
         .timeline-controls {
-            background: rgba(18, 22, 31, 0.98);
+            background: rgba(13, 17, 26, 0.95);
             border-top: 1px solid var(--border-color);
-            padding: 15px 20px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -93,14 +103,14 @@
             background: var(--accent-gold);
             color: #000;
             border: none;
-            padding: 10px 18px;
+            padding: 8px 16px;
             border-radius: 4px;
             font-weight: 800;
             cursor: pointer;
             font-family: 'JetBrains Mono', monospace;
-            transition: 0.2s;
+            transition: 0.15s;
         }
-        .play-btn:hover { opacity: 0.9; transform: scale(1.02); }
+        .play-btn:hover { background: #ffe055; transform: scale(1.02); }
         .slider {
             flex-grow: 1;
             accent-color: var(--accent-gold);
@@ -108,77 +118,76 @@
         }
         .time-display {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            color: #ccc;
+            font-size: 0.85rem;
+            color: var(--accent-gold);
             font-weight: 700;
+            min-width: 110px;
+            text-align: right;
         }
 
         .sidebar {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
+            border-radius: 6px;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
-        .tabs {
-            display: flex;
+        .sidebar-header {
+            padding: 12px 15px;
             border-bottom: 1px solid var(--border-color);
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            background: none;
-            border: none;
-            color: #888;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
             font-weight: 700;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            font-size: 0.8rem;
+            color: #88a0c0;
+            background: rgba(0,0,0,0.2);
         }
-        .tab-btn.active {
-            color: var(--accent-gold);
-            border-bottom-color: var(--accent-gold);
-            background: rgba(255, 211, 42, 0.05);
-        }
-        .tab-content {
+        .sidebar-content {
             padding: 15px;
             overflow-y: auto;
             flex-grow: 1;
-            max-height: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .legend-box {
-            background: rgba(0,0,0,0.3);
+        .sector-card {
+            background: rgba(255,255,255,0.02);
             border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-blue);
             padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 0.75rem;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.78rem;
+        }
+        .sector-card.red { border-left-color: var(--accent-red); }
+        .sector-title { font-weight: 700; margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+        .sector-desc { color: #8a99ad; font-size: 0.72rem; line-height: 1.3; }
+
+        .legend-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-        .legend-item { display: flex; align-items: center; gap: 6px; }
-        .icon-symbol { font-weight: bold; font-family: 'JetBrains Mono', monospace; }
-
-        .tactical-event {
-            background: #1a202c;
-            border-left: 3px solid var(--accent-gold);
+            gap: 6px;
+            background: rgba(0,0,0,0.3);
             padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 0 4px 4px 0;
-            font-size: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            font-size: 0.72rem;
+            margin-top: auto;
         }
-        .tactical-event .time { color: var(--accent-gold); font-weight: bold; font-family: 'JetBrains Mono', monospace; }
-
-        .hidden { display: none; }
+        .legend-item { display: flex; align-items: center; gap: 6px; color: #a0b0c5; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">СИМУЛЯЦИЯ ФРОНТА v2.0 // ТАКТИКА И КОТЛЫ</div>
-        <div class="status-badge" id="phaseBadge">ФАЗА 1: ПОЗИЦИОННЫЕ БОИ</div>
+        <div class="logo">
+            <div class="logo-dot"></div>
+            ОПЕРАТИВНО-ТАКТИЧЕСКАЯ КАРТА БОЕВОЙ ОБСТАНОВКИ
+        </div>
+        <div class="status-bar">
+            <div class="stat-badge">АКТИВНЫХ ЮНИТОВ: <span id="unitCount" style="color:var(--accent-gold)">0</span></div>
+            <div class="stat-badge">СЕКТОРОВ ФРОНТА: <span style="color:var(--accent-blue)">120</span></div>
+        </div>
     </header>
 
     <div class="main-container">
@@ -194,30 +203,33 @@
             </div>
         </div>
 
-        <!-- Боковая панель -->
+        <!-- Боковая панель оперативных сводок -->
         <div class="sidebar">
-            <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('tacticsTab', this)">Сводка Боя</button>
-                <button class="tab-btn" onclick="switchTab('unitsTab', this)">Состав Войск</button>
-            </div>
-
-            <div id="tacticsTab" class="tab-content">
-                <div class="legend-box">
-                    <div class="legend-item"><span class="icon-symbol" style="color:#ffd32a;">★</span> Командир</div>
-                    <div class="legend-item"><span class="icon-symbol" style="color:#00a8ff;">■</span> Танковая рота</div>
-                    <div class="legend-item"><span class="icon-symbol" style="color:#ff3f34;">▲</span> Артиллерия</div>
-                    <div class="legend-item"><span class="icon-symbol" style="color:#fff;">●</span> Пехота / Стримеры</div>
+            <div class="sidebar-header">// ОПЕРАТИВНАЯ СВОДКА И СЕКТОРА</div>
+            <div class="sidebar-content">
+                <div id="sectorNorth" class="sector-card">
+                    <div class="sector-title" style="color: var(--accent-blue)">СЕВЕРНЫЙ СЕКТОР</div>
+                    <div class="sector-desc">Позиционные бои, арт-дуэли. Наступление танковых групп В. Путина.</div>
                 </div>
 
-                <h4 style="margin-bottom: 10px; font-size: 0.85rem; color: #888;">ХРОНИКА ОПЕРАЦИИ:</h4>
-                <div id="eventsList">
-                    <!-- Заполняется динамически через JS -->
+                <div id="sectorCenter" class="sector-card red">
+                    <div class="sector-title" style="color: var(--accent-red)">ЦЕНТРАЛЬНЫЙ ВЫСТУП</div>
+                    <div class="sector-desc">Мощный штурмовой кулак Бандеры пробивает оборону. Опасность окружения!</div>
                 </div>
-            </div>
 
-            <div id="unitsTab" class="tab-content hidden">
-                <p style="font-size:0.8rem; color:#aaa; margin-bottom:10px;">Все войска и техника передвигаются в реальном времени по траекториям манёвров.</p>
-                <div id="unitsListStatus"></div>
+                <div id="sectorSouth" class="sector-card">
+                    <div class="sector-title" style="color: var(--accent-blue)">ЮЖНЫЙ ФЛАНГ</div>
+                    <div class="sector-desc">Контрудар группы SouLessFiend и DIANA. Попытка срезать фланги врага.</div>
+                </div>
+
+                <div class="legend-grid">
+                    <div class="legend-item"><span style="color:var(--accent-blue)">●</span> В/Ч Синих (Пехота)</div>
+                    <div class="legend-item"><span style="color:var(--accent-red)">●</span> В/Ч Красных (Пехота)</div>
+                    <div class="legend-item"><span style="color:var(--accent-blue)">■</span> Танковый батальон</div>
+                    <div class="legend-item"><span style="color:var(--accent-red)">▲</span> Арт-дивизион</div>
+                    <div class="legend-item"><span style="color:var(--accent-gold)">★</span> Командный пункт</div>
+                    <div class="legend-item"><span style="color:#ff3f34">☩</span> Зона Котла</div>
+                </div>
             </div>
         </div>
     </div>
@@ -228,124 +240,111 @@
         const slider = document.getElementById('timeSlider');
         const playBtn = document.getElementById('playBtn');
         const timeLabel = document.getElementById('timeLabel');
-        const phaseBadge = document.getElementById('phaseBadge');
-        const eventsList = document.getElementById('eventsList');
+        const unitCountEl = document.getElementById('unitCount');
 
         let isPlaying = false;
         let animationTimer = null;
 
-        // --- БАЗА ЮНИТОВ И ИХ ТРАЕКТОРЯМ (WAYPOINTS: % от ширины X и высоты Y) ---
-        // x, y заданы в пропорциях карты (0.0 - 1.0) на разном % прогресса боя [0%, 30%, 50%, 75%, 100%]
-        const units = [
-            // СИНИЕ (BLUE)
-            {
-                name: "Владимир Путин", team: "blue", type: "commander",
-                path: [
-                    { p: 0, x: 0.15, y: 0.25 },
-                    { p: 30, x: 0.22, y: 0.25 },
-                    { p: 50, x: 0.18, y: 0.20 }, // Откат при прорыве
-                    { p: 75, x: 0.45, y: 0.25 }, // Ответный прорыв!
-                    { p: 100, x: 0.75, y: 0.25 }
-                ]
-            },
-            {
-                name: "Танковая Бригада 'Зубарев'", team: "blue", type: "tank",
-                path: [
-                    { p: 0, x: 0.20, y: 0.45 },
-                    { p: 30, x: 0.35, y: 0.45 },
-                    { p: 50, x: 0.25, y: 0.48 }, 
-                    { p: 75, x: 0.58, y: 0.45 }, // Прорыв центра
-                    { p: 100, x: 0.82, y: 0.45 }
-                ]
-            },
-            {
-                name: "SouLessFiend & DIANA", team: "blue", type: "infantry",
-                path: [
-                    { p: 0, x: 0.25, y: 0.60 },
-                    { p: 30, x: 0.38, y: 0.62 },
-                    { p: 45, x: 0.32, y: 0.68 }, // Зажаты в котел!
-                    { p: 55, x: 0.35, y: 0.68 }, // Оборона в окружении
-                    { p: 75, x: 0.52, y: 0.60 }, // Деблокированы!
-                    { p: 100, x: 0.78, y: 0.60 }
-                ]
-            },
-            {
-                name: "Папич (Арт-Дивизион)", team: "blue", type: "artillery",
-                path: [
-                    { p: 0, x: 0.10, y: 0.75 },
-                    { p: 50, x: 0.12, y: 0.78 },
-                    { p: 100, x: 0.55, y: 0.75 }
-                ]
-            },
-            {
-                name: "Братишкин & zxc_dead", team: "blue", type: "infantry",
-                path: [
-                    { p: 0, x: 0.28, y: 0.82 },
-                    { p: 35, x: 0.35, y: 0.80 },
-                    { p: 48, x: 0.28, y: 0.75 }, // Попадают в котёл
-                    { p: 75, x: 0.50, y: 0.80 },
-                    { p: 100, x: 0.72, y: 0.80 }
-                ]
-            },
+        // --- ГЕНЕРАЦИЯ МАССОВОЙ АРМИИ (Около 600 юнитов) ---
+        const units = [];
+        const NUM_MASS_UNITS = 500;
 
-            // КРАСНЫЕ (RED)
-            {
-                name: "Степан Бандера", team: "red", type: "commander",
-                path: [
-                    { p: 0, x: 0.85, y: 0.30 },
-                    { p: 30, x: 0.70, y: 0.30 },
-                    { p: 50, x: 0.45, y: 0.35 }, // Глубокий охват
-                    { p: 75, x: 0.35, y: 0.20 }, // Разгром
-                    { p: 100, x: 0.15, y: 0.10, dead: true } // Уничтожен в конце
-                ]
-            },
-            {
-                name: "Танковый Клин 'Shadowraze'", team: "red", type: "tank",
-                path: [
-                    { p: 0, x: 0.80, y: 0.65 },
-                    { p: 30, x: 0.60, y: 0.70 },
-                    { p: 48, x: 0.30, y: 0.85 }, // Замыкают КОТЕЛ в тылу синих!
-                    { p: 70, x: 0.45, y: 0.80, dead: true }, // Окружены и уничтожены при контрударе
-                    { p: 100, x: 0.45, y: 0.80, dead: true }
-                ]
-            },
-            {
-                name: "Абузер Мидаса (Артиллерия)", team: "red", type: "artillery",
-                path: [
-                    { p: 0, x: 0.90, y: 0.50 },
-                    { p: 50, x: 0.75, y: 0.50 },
-                    { p: 75, x: 0.85, y: 0.50 },
-                    { p: 100, x: 0.92, y: 0.50 }
-                ]
-            },
-            {
-                name: "Пехота 'Строго & Бумыч'", team: "red", type: "infantry",
-                path: [
-                    { p: 0, x: 0.75, y: 0.85 },
-                    { p: 30, x: 0.55, y: 0.85 },
-                    { p: 50, x: 0.40, y: 0.78 },
-                    { p: 75, x: 0.68, y: 0.85 },
-                    { p: 100, x: 0.88, y: 0.88 }
-                ]
-            }
+        // Именные штурмовые бригады и мем-командиры
+        const namedUnits = [
+            // Синие
+            { name: "ШТАБ: В. Путин", team: "blue", type: "commander", sector: 0.15 },
+            { name: "Танковый Клин: SouLessFiend", team: "blue", type: "tank", sector: 0.35 },
+            { name: "Штурм-Группа: DIANA", team: "blue", type: "tank", sector: 0.42 },
+            { name: "Арт-Бригада: Папич", team: "blue", type: "artillery", sector: 0.60 },
+            { name: "Пехота: Братишкин", team: "blue", type: "infantry", sector: 0.72 },
+            { name: "Мехкорпус: Зубарев", team: "blue", type: "tank", sector: 0.82 },
+            { name: "Снайперы: S1mple", team: "blue", type: "infantry", sector: 0.25 },
+            { name: "Отряд: Golovach_Boss", team: "blue", type: "infantry", sector: 0.90 },
+
+            // Красные
+            { name: "ШТАБ: Степан Бандера", team: "red", type: "commander", sector: 0.48 },
+            { name: "ZXC-Ударная: Shadowraze", team: "red", type: "tank", sector: 0.52 },
+            { name: "Батарея: Абузер_Мидаса", team: "red", type: "artillery", sector: 0.30 },
+            { name: "Штурмовики: Строго", team: "red", type: "infantry", sector: 0.65 },
+            { name: "Спецназ: Бумыч", team: "red", type: "tank", sector: 0.78 },
+            { name: "Дрон-Отряд: Тинкер_0_12", team: "red", type: "artillery", sector: 0.18 }
         ];
 
-        // Интерполяция координат между вейпоинтами
-        function getUnitPos(unit, p) {
-            const path = unit.path;
-            if (p <= path[0].p) return path[0];
-            if (p >= path[path.length - 1].p) return path[path.length - 1];
+        // Инициализация рядовых сил вдоль фронта
+        function initUnits() {
+            units.length = 0;
+            
+            // Добавляем именные юниты
+            namedUnits.forEach(u => {
+                units.push({
+                    ...u,
+                    isNamed: true,
+                    offsetY: u.sector,
+                    depthOffset: (Math.random() - 0.5) * 0.15
+                });
+            });
 
-            for (let i = 0; i < path.length - 1; i++) {
-                if (p >= path[i].p && p <= path[i+1].p) {
-                    const t = (p - path[i].p) / (path[i+1].p - path[i].p);
-                    const curX = path[i].x + t * (path[i+1].x - path[i].x);
-                    const curY = path[i].y + t * (path[i+1].y - path[i].y);
-                    const isDead = path[i+1].dead && p > (path[i+1].p - 5);
-                    return { x: curX, y: curY, dead: isDead };
-                }
+            // Добавляем массовые отряды пехоты и техники для плотности
+            for (let i = 0; i < NUM_MASS_UNITS; i++) {
+                const team = Math.random() > 0.5 ? 'blue' : 'red';
+                const typeRand = Math.random();
+                let type = 'infantry';
+                if (typeRand > 0.8) type = 'tank';
+                else if (typeRand > 0.68) type = 'artillery';
+
+                units.push({
+                    name: "",
+                    team: team,
+                    type: type,
+                    isNamed: false,
+                    offsetY: Math.random(), // По всей высоте фронта (0..1)
+                    depthOffset: (Math.random() * 0.22) + 0.02 // Эшелонирование в тыл
+                });
             }
-            return path[0];
+            unitCountEl.innerText = units.length;
+        }
+
+        // --- МНОГООСЕВАЯ ФУНКЦИЯ ФРОНТА (СЛОЖНЫЙ РЕЕЛЬЕФ И КЛИНЬЯ) ---
+        // Возвращает положение X линии фронта в зависимости от Y (0..1) и Progress (0..100)
+        function getFrontlineX(normY, p) {
+            let base = 0.5; // Исходно река по центру
+
+            // 1. Первичная изрезанность местности (холмы, река)
+            let noise = Math.sin(normY * Math.PI * 8) * 0.03 + Math.cos(normY * Math.PI * 15) * 0.015;
+
+            // 2. СЕКТОРНЫЕ ДИНАМИЧЕСКИЕ ПРОРЫВЫ (СВО-стиль)
+            
+            // А) Северный штурм Синих (normY: 0.1 - 0.3)
+            let northThrust = 0;
+            if (p > 10) {
+                let factor = Math.min((p - 10) / 40, 1);
+                northThrust = Math.exp(-Math.pow(normY - 0.20, 2) / 0.008) * 0.18 * factor;
+            }
+
+            // Б) Центральный глубокий прорыв Красных (Бандера) (normY: 0.45 - 0.6)
+            let centerRedBreakthrough = 0;
+            if (p > 20 && p < 75) {
+                let factor = p <= 50 ? (p - 20) / 30 : 1 - ((p - 50) / 25);
+                centerRedBreakthrough = Math.exp(-Math.pow(normY - 0.52, 2) / 0.012) * 0.28 * factor;
+            }
+
+            // В) Южный контрманевр и срезание фланга Синими (normY: 0.65 - 0.85)
+            let southCounter = 0;
+            if (p > 45) {
+                let factor = Math.min((p - 45) / 45, 1);
+                southCounter = Math.exp(-Math.pow(normY - 0.75, 2) / 0.01) * 0.25 * factor;
+            }
+
+            // Г) Финальный общий разгром и генеральное наступление Синих (p: 65 -> 100)
+            let finalPush = 0;
+            if (p > 65) {
+                finalPush = ((p - 65) / 35) * 0.22;
+            }
+
+            // Итоговое смещение (положительное = движение Синих вправо, отрицательное = Красных влево)
+            let totalShift = northThrust - centerRedBreakthrough + southCounter + finalPush + noise;
+            
+            return Math.max(0.08, Math.min(0.92, base + totalShift));
         }
 
         function resizeCanvas() {
@@ -355,6 +354,7 @@
         }
         window.addEventListener('resize', resizeCanvas);
 
+        // --- ОТРЕСОВКА КАРТЫ И ВОЙСК ---
         function drawMap(progress) {
             const w = canvas.width;
             const h = canvas.height;
@@ -362,215 +362,180 @@
 
             ctx.clearRect(0, 0, w, h);
 
-            // 1. ФОН: Карта местности (Сетка + Река + Высоты)
-            ctx.fillStyle = '#182b16';
+            // 1. ТЕМНЫЙ ТАКТИЧЕСКИЙ ФОН И СЕТКА
+            ctx.fillStyle = '#0a1209';
             ctx.fillRect(0, 0, w, h);
 
-            // Река
-            ctx.strokeStyle = '#1d4e89';
-            ctx.lineWidth = 30;
-            ctx.beginPath();
-            ctx.moveTo(w * 0.5, 0);
-            ctx.bezierCurveTo(w * 0.55, h * 0.3, w * 0.45, h * 0.7, w * 0.52, h);
-            ctx.stroke();
-
-            // Сетка высот
-            ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+            // Топографическая сетка
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
             ctx.lineWidth = 1;
-            for(let x=0; x<w; x+=40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
-            for(let y=0; y<h; y+=40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
-
-            // 2. РАСЧЕТ ЛИНИИ ФРОНТА
-            ctx.beginPath();
-            let frontPoints = [];
-            // Динамический изгиб линии фронта от текущих позиций передовых отрядов
-            for (let yStep = 0; yStep <= h; yStep += 20) {
-                let relY = yStep / h;
-                let baseFrontX = 0.5;
-
-                if (p < 30) {
-                    baseFrontX = 0.5 - (p / 30) * 0.05;
-                } else if (p <= 55) {
-                    // Образуется глубокий дугообразный выступ Красных (Прорыв Бандеры)
-                    let bulge = Math.sin(relY * Math.PI) * 0.28 * ((p - 30) / 25);
-                    baseFrontX = 0.45 - bulge;
-                } else {
-                    // Контрудар Синих и Срезание выструпа
-                    let subP = (p - 55) / 45;
-                    let bulge = 0.28 * (1 - subP);
-                    baseFrontX = 0.2 + (subP * 0.55) - (bulge > 0 ? bulge : 0);
-                }
-                frontPoints.push({ x: baseFrontX * w, y: yStep });
+            const gridSize = 30;
+            for (let x = 0; x < w; x += gridSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+            }
+            for (let y = 0; y < h; y += gridSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
             }
 
-            // Отрисовка закраски захваченных территорий
-            // Синие
-            ctx.fillStyle = 'rgba(0, 168, 255, 0.18)';
+            // 2. ВЫЧИСЛЕНИЕ МАСШТАБНОЙ ЛИНИИ ФРОНТА (120 секторов)
+            const SECTORS = 120;
+            const frontPoints = [];
+            for (let i = 0; i <= SECTORS; i++) {
+                let normY = i / SECTORS;
+                let frontX = getFrontlineX(normY, p) * w;
+                frontPoints.push({ x: frontX, y: normY * h });
+            }
+
+            // 3. ЗАКРАСКА СЕКТОРОВ И ТЕРРИТОРИИ
+            // Синяя зона
+            ctx.fillStyle = 'rgba(0, 168, 255, 0.12)';
             ctx.beginPath();
             ctx.moveTo(0, 0);
             frontPoints.forEach(pt => ctx.lineTo(pt.x, pt.y));
             ctx.lineTo(0, h);
             ctx.fill();
 
-            // Красные
-            ctx.fillStyle = 'rgba(255, 63, 52, 0.18)';
+            // Красная зона
+            ctx.fillStyle = 'rgba(255, 63, 52, 0.12)';
             ctx.beginPath();
             ctx.moveTo(w, 0);
             frontPoints.forEach(pt => ctx.lineTo(pt.x, pt.y));
             ctx.lineTo(w, h);
             ctx.fill();
 
-            // Сама линия фронта
+            // Линия соприкосновения (Основной фронт)
             ctx.strokeStyle = '#ffd32a';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([8, 5]);
+            ctx.lineWidth = 2.5;
             ctx.beginPath();
             frontPoints.forEach((pt, idx) => {
                 if (idx === 0) ctx.moveTo(pt.x, pt.y);
                 else ctx.lineTo(pt.x, pt.y);
             });
             ctx.stroke();
-            ctx.setLineDash([]);
 
-            // 3. ОТРИСОВКА «КОТЛА» (Encirlcement) на 35% - 60%
-            if (p >= 35 && p <= 62) {
-                const cauldronAlpha = p <= 50 ? (p - 35) / 15 : (62 - p) / 12;
-                ctx.strokeStyle = `rgba(255, 63, 52, ${cauldronAlpha})`;
-                ctx.lineWidth = 4;
-                ctx.setLineDash([6, 4]);
+            // 4. ОПИСАНИЕ И ОБОЗНАЧЕНИЕ КАТАСТРОФИЧЕСКИХ КОТЛОВ (ENCIRCLEMENTS)
+            // Котел в центре на 35% - 60%
+            if (p >= 32 && p <= 62) {
+                const alpha = p <= 45 ? (p - 32) / 13 : (62 - p) / 17;
+                const cauldronX = w * 0.30;
+                const cauldronY = h * 0.52;
+
+                // Заштрихованная область окружения
+                ctx.save();
+                ctx.fillStyle = `rgba(255, 63, 52, ${alpha * 0.25})`;
+                ctx.strokeStyle = `rgba(255, 63, 52, ${alpha})`;
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
                 ctx.beginPath();
-                // Окружность вокруг зажатых сил SouLess и Братишкина
-                ctx.ellipse(w * 0.32, h * 0.72, 70, 45, 0, 0, Math.PI * 2);
+                ctx.ellipse(cauldronX, cauldronY, w * 0.08, h * 0.10, 0, 0, Math.PI * 2);
+                ctx.fill();
                 ctx.stroke();
-                ctx.setLineDash([]);
+                ctx.restore();
 
-                ctx.fillStyle = `rgba(255, 63, 52, ${cauldronAlpha * 0.8})`;
-                ctx.font = 'bold 11px JetBrains Mono';
-                ctx.fillText("КОТЁЛ #1 (ОКРУЖЕНИЕ)", w * 0.32 - 60, h * 0.72 - 50);
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.font = '800 11px JetBrains Mono';
+                ctx.fillText("⚠ ЦЕНТРАЛЬНЫЙ КОТЁЛ", cauldronX - 65, cauldronY - 5);
             }
 
-            // 4. ОТРИСОВКА ЮНИТОВ И ТЕХНИКИ
+            // Ответный Котел Красных на Юге (75% - 100%)
+            if (p >= 72) {
+                const alpha = Math.min((p - 72) / 15, 1);
+                const cauldronX = w * 0.68;
+                const cauldronY = h * 0.72;
+
+                ctx.save();
+                ctx.fillStyle = `rgba(0, 168, 255, 0.25)`;
+                ctx.strokeStyle = `rgba(0, 168, 255, ${alpha})`;
+                ctx.lineWidth = 2;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.ellipse(cauldronX, cauldronY, w * 0.09, h * 0.12, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+                ctx.restore();
+
+                ctx.fillStyle = `rgba(255, 211, 42, ${alpha})`;
+                ctx.font = '800 11px JetBrains Mono';
+                ctx.fillText("☠ ЛИКВИДАЦИЯ ГРУППИРОВКИ ВРАГА", cauldronX - 90, cauldronY);
+            }
+
+            // 5. ОТРИСОВКА ВСЕХ 500+ ЮНИТОВ И ТЕХНИКИ
             units.forEach(u => {
-                const pos = getUnitPos(u, p);
-                const realX = pos.x * w;
-                const realY = pos.y * h;
-                const color = u.team === 'blue' ? '#00a8ff' : '#ff3f34';
+                const fx = getFrontlineX(u.offsetY, p) * w;
+                const fy = u.offsetY * h;
 
-                drawTacticalIcon(realX, realY, color, u.type, u.name, pos.dead);
+                // Смещение от линии фронта в зависимости от стороны
+                let ux = 0;
+                if (u.team === 'blue') {
+                    ux = fx - (u.depthOffset * w);
+                } else {
+                    ux = fx + (u.depthOffset * w);
+                }
+
+                drawUnitMarker(ux, fy, u);
             });
-
-            // Обновление текстовой хроники
-            updateChronicle(p);
         }
 
-        // Отрисовка военных значков техники и видов войск
-        function drawTacticalIcon(x, y, color, type, name, isDead) {
+        // Рендер одиночного тактического маркер-символа
+        function drawUnitMarker(x, y, u) {
             ctx.save();
             ctx.translate(x, y);
 
-            if (isDead) {
-                ctx.globalAlpha = 0.3;
-            }
+            const isBlue = u.team === 'blue';
+            const mainColor = isBlue ? '#00a8ff' : '#ff3f34';
 
-            // Иконка
-            if (type === 'commander') {
-                // Звезда / Командир
-                ctx.fillStyle = '#ffd32a';
-                ctx.beginPath();
-                ctx.arc(0, 0, 9, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.strokeStyle = '#000';
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            } else if (type === 'tank') {
-                // Квадрат (Танковая рота)
-                ctx.fillStyle = color;
-                ctx.fillRect(-8, -8, 16, 16);
-                ctx.strokeStyle = '#fff';
-                ctx.lineWidth = 1.5;
-                ctx.strokeRect(-8, -8, 16, 16);
-                // Пушка
-                ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(12, 0); ctx.stroke();
-            } else if (type === 'artillery') {
-                // Ромб (Артиллерия)
-                ctx.fillStyle = color;
-                ctx.beginPath();
-                ctx.moveTo(0, -9); ctx.lineTo(9, 0); ctx.lineTo(0, 9); ctx.lineTo(-9, 0);
-                ctx.closePath();
-                ctx.fill();
-                ctx.strokeStyle = '#fff'; ctx.stroke();
+            if (u.isNamed) {
+                // ИМЕННЫЕ БРИГАДЫ И СТРИМЕРЫ (Крупные иконки)
+                ctx.fillStyle = u.type === 'commander' ? '#ffd32a' : mainColor;
+                
+                if (u.type === 'tank') {
+                    ctx.fillRect(-7, -7, 14, 14);
+                    ctx.strokeStyle = '#fff';
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeRect(-7, -7, 14, 14);
+                } else if (u.type === 'artillery') {
+                    ctx.beginPath();
+                    ctx.moveTo(0, -8); ctx.lineTo(8, 0); ctx.lineTo(0, 8); ctx.lineTo(-8, 0);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.strokeStyle = '#fff'; ctx.stroke();
+                } else {
+                    ctx.beginPath(); ctx.arc(0, 0, 7, 0, Math.PI * 2); ctx.fill();
+                    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke();
+                }
+
+                // Подпись крупного юнита
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 10px JetBrains Mono';
+                ctx.shadowColor = '#000';
+                ctx.shadowBlur = 4;
+                ctx.fillText(u.name, 10, 3);
+
             } else {
-                // Круг (Пехота / Отряды)
-                ctx.fillStyle = color;
-                ctx.beginPath();
-                ctx.arc(0, 0, 6, 0, Math.PI * 2);
-                ctx.fill();
-            }
+                // МАССОВАЯ ПЕХОТА И ТЕХНИКА (Мелкие точки военной карты)
+                ctx.fillStyle = mainColor;
+                ctx.globalAlpha = 0.65;
 
-            // Метка смерти
-            if (isDead) {
-                ctx.strokeStyle = '#ff0000';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.moveTo(-10, -10); ctx.lineTo(10, 10);
-                ctx.moveTo(10, -10); ctx.lineTo(-10, 10);
-                ctx.stroke();
+                if (u.type === 'tank') {
+                    ctx.fillRect(-2.5, -2.5, 5, 5);
+                } else if (u.type === 'artillery') {
+                    ctx.beginPath();
+                    ctx.moveTo(0, -3); ctx.lineTo(3, 0); ctx.lineTo(0, 3); ctx.lineTo(-3, 0);
+                    ctx.fill();
+                } else {
+                    ctx.beginPath(); ctx.arc(0, 0, 2, 0, Math.PI * 2); ctx.fill();
+                }
             }
-
-            // Название юнита
-            ctx.fillStyle = isDead ? '#888' : '#ffffff';
-            ctx.font = '10px JetBrains Mono';
-            ctx.fillText(name, 12, 4);
 
             ctx.restore();
         }
 
-        function updateChronicle(p) {
-            let phase = "ФАЗА 1: ПОЗИЦИОННЫЕ БОИ НА РЕКЕ";
-            let eventsHTML = "";
-
-            if (p < 30) {
-                phase = "ФАЗА 1: ПРИГРАНИЧНЫЕ СТЫЧКИ И РАЗВЕДКА";
-                eventsHTML = `
-                    <div class="tactical-event">
-                        <span class="time">05:00</span> Танковые группы Зубарева выдвигаются к реке.
-                    </div>
-                    <div class="tactical-event">
-                        <span class="time">15:00</span> Арт-обстрел позиций от Папича и Абузера Мидаса.
-                    </div>`;
-            } else if (p < 55) {
-                phase = "ФАЗА 2: ФЛАНГОВЫЙ ПРОРЫВ БАНДЕРЫ И КОТЁЛ";
-                phaseBadge.style.borderColor = "var(--accent-red)";
-                phaseBadge.style.color = "var(--accent-red)";
-                eventsHTML = `
-                    <div class="tactical-event" style="border-color: var(--accent-red)">
-                        <span class="time">35:00</span> <b>ПРОРЫВ!</b> Танковый клин 'Shadowraze' срезает фланги!
-                    </div>
-                    <div class="tactical-event" style="border-color: var(--accent-red)">
-                        <span class="time">45:00</span> <b>ОКРУЖЕНИЕ!</b> Группа SouLessFiend & DIANA зажата в Котёл #1.
-                    </div>`;
-            } else {
-                phase = "ФАЗА 3: КОНТРУДАР ПУТИНА И РАЗГРОМ ВРАГА";
-                phaseBadge.style.borderColor = "var(--accent-blue)";
-                phaseBadge.style.color = "var(--accent-blue)";
-                eventsHTML = `
-                    <div class="tactical-event" style="border-color: var(--accent-blue)">
-                        <span class="time">65:00</span> <b>ДЕБЛОКАДА!</b> Путин и Зубарев пробивают коридор к окружённым!
-                    </div>
-                    <div class="tactical-event" style="border-color: var(--accent-gold)">
-                        <span class="time">85:00</span> Котёл Красных замкнут. Штаб Бандеры уничтожен.
-                    </div>`;
-            }
-
-            phaseBadge.innerText = phase;
-            eventsList.innerHTML = eventsHTML;
-        }
-
-        // Контроллер времени
+        // --- УПРАВЛЕНИЕ И ТАЙМЛАЙН ---
         slider.addEventListener('input', () => {
             const mins = Math.floor((slider.value / 100) * 45);
             timeLabel.innerText = `${mins < 10 ? '0' : ''}${mins}:00 / 45:00`;
             drawMap(slider.value);
+            updateSectorCards(parseInt(slider.value));
         });
 
         playBtn.addEventListener('click', () => {
@@ -582,19 +547,32 @@
                     if (parseInt(slider.value) >= 100) slider.value = 0;
                     slider.value = parseInt(slider.value) + 1;
                     slider.dispatchEvent(new Event('input'));
-                }, 150);
+                }, 120);
             } else {
                 clearInterval(animationTimer);
             }
         });
 
-        function switchTab(tabId, btn) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.remove('hidden');
-            btn.classList.add('active');
+        function updateSectorCards(p) {
+            const sn = document.getElementById('sectorNorth');
+            const sc = document.getElementById('sectorCenter');
+            const ss = document.getElementById('sectorSouth');
+
+            if (p < 30) {
+                sc.className = "sector-card red";
+                sc.querySelector('.sector-desc').innerText = "Штурмовой кулак Бандеры формирует клинья. Готовится прорыв.";
+            } else if (p < 65) {
+                sc.className = "sector-card red";
+                sc.querySelector('.sector-desc').innerText = "⚠ КРИТИЧЕСКАЯ СИТУАЦИЯ! Враг замкнул Центральный Котёл!";
+            } else {
+                sc.className = "sector-card";
+                sc.querySelector('.sector-desc').innerText = "Котёл деблокирован! Танковые группы Путина сминают оборону врага.";
+                ss.querySelector('.sector-desc').innerText = "Южный фланг Красных полностью разгромлен и окружен.";
+            }
         }
 
+        // Старт
+        initUnits();
         setTimeout(resizeCanvas, 100);
     </script>
 </body>
