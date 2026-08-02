@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ПЕРВЫЙ АПДЕЙТ САЙТА - Карта Войны</title>
+    <title>ПЕРВЫЙ АПДЕЙТ САЙТА - Динамический Фронт</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -44,9 +44,9 @@
             letter-spacing: 1px;
         }
         .status-badge {
-            background: rgba(0, 168, 255, 0.15);
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
+            background: rgba(255, 63, 52, 0.15);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
             padding: 6px 14px;
             border-radius: 4px;
             font-size: 0.85rem;
@@ -57,7 +57,7 @@
         /* Основная сетка */
         .main-container {
             display: grid;
-            grid-template-columns: 1fr 400px;
+            grid-template-columns: 1fr 410px;
             gap: 20px;
             padding: 20px;
             flex-grow: 1;
@@ -76,7 +76,7 @@
         .canvas-container {
             flex-grow: 1;
             position: relative;
-            background: #1b3317; /* Базовый цвет травы */
+            background: #1b3317;
         }
         canvas {
             width: 100%;
@@ -84,7 +84,7 @@
             display: block;
         }
 
-        /* Панель таймлайна */
+        /* Панель управления */
         .timeline-controls {
             background: rgba(18, 22, 31, 0.98);
             border-top: 1px solid var(--border-color);
@@ -138,7 +138,7 @@
             font-weight: 700;
             cursor: pointer;
             border-bottom: 2px solid transparent;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
         .tab-btn.active {
             color: var(--accent-gold);
@@ -149,13 +149,13 @@
             padding: 20px;
             overflow-y: auto;
             flex-grow: 1;
-            max-height: 650px;
+            max-height: 680px;
         }
 
-        /* Карточки игроков (FIFA style) */
+        /* Карточки FIFA */
         .fifa-card {
             background: linear-gradient(135deg, #1e2430 0%, #0f131a 100%);
-            border: 2px solid var(--accent-gold);
+            border: 2px solid var(--border-color);
             border-radius: 8px;
             padding: 12px 15px;
             margin-bottom: 12px;
@@ -166,9 +166,8 @@
         }
         .fifa-rating {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 800;
-            color: var(--accent-gold);
             text-align: center;
             line-height: 1;
         }
@@ -177,9 +176,10 @@
             color: #aaa;
             font-weight: 700;
             margin-top: 4px;
+            text-align: center;
         }
         .fifa-info { flex-grow: 1; }
-        .fifa-name { font-weight: 800; font-size: 1rem; margin-bottom: 4px; color: #fff; }
+        .fifa-name { font-weight: 800; font-size: 0.95rem; margin-bottom: 4px; color: #fff; }
         .fifa-stats {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -206,12 +206,12 @@
 <body>
 
     <header>
-        <div class="logo">ПЕРВЫЙ АПДЕЙТ САЙТА v1.0 // КАРТА ФРОНТА</div>
-        <div class="status-badge">● ОБЗОР БОЯ (10 VS 10)</div>
+        <div class="logo">ПЕРВЫЙ АПДЕЙТ САЙТА v1.0 // БОЙ 10 VS 10</div>
+        <div class="status-badge">● ДИНАМИЧЕСКИЙ ФРОНТ С КАМБЭКАМИ</div>
     </header>
 
     <div class="main-container">
-        <!-- Левая колонка: Карта Minecraft -->
+        <!-- Левая колонка: Карта -->
         <div class="map-card">
             <div class="canvas-container">
                 <canvas id="warMap"></canvas>
@@ -223,20 +223,20 @@
             </div>
         </div>
 
-        <!-- Правая колонка: Вкладки -->
+        <!-- Правая колонка: Составы и Мемы -->
         <div class="sidebar">
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('cardsTab', this)">Состав (20)</button>
+                <button class="tab-btn active" onclick="switchTab('cardsTab', this)">Синие (10)</button>
+                <button class="tab-btn" onclick="switchTab('redTab', this)">Красные (10)</button>
                 <button class="tab-btn" onclick="switchTab('lossesTab', this)">Потери</button>
-                <button class="tab-btn" onclick="switchTab('summaryTab', this)">Сводка</button>
             </div>
 
-            <!-- Таб 1: Игроки -->
+            <!-- Таб 1: Синяя Команда -->
             <div id="cardsTab" class="tab-content">
                 <!-- ВЛАДИМИР ПУТИН -->
                 <div class="fifa-card" style="border-color: #ffd32a; background: linear-gradient(135deg, #2a2108 0%, #0f131a 100%);">
                     <div>
-                        <div class="fifa-rating">99</div>
+                        <div class="fifa-rating" style="color: #ffd32a;">99</div>
                         <div class="fifa-role">КОМАНДУЮЩИЙ</div>
                     </div>
                     <div class="fifa-info">
@@ -253,7 +253,7 @@
                 <!-- SouLessFiend -->
                 <div class="fifa-card" style="border-color: var(--accent-blue);">
                     <div>
-                        <div class="fifa-rating">95</div>
+                        <div class="fifa-rating" style="color: var(--accent-blue);">95</div>
                         <div class="fifa-role">ГЛАВ. ИНЖЕНЕР</div>
                     </div>
                     <div class="fifa-info">
@@ -270,7 +270,7 @@
                 <!-- DIANA -->
                 <div class="fifa-card" style="border-color: var(--accent-blue);">
                     <div>
-                        <div class="fifa-rating">94</div>
+                        <div class="fifa-rating" style="color: var(--accent-blue);">94</div>
                         <div class="fifa-role">ШТУРМОВИК</div>
                     </div>
                     <div class="fifa-info">
@@ -284,57 +284,114 @@
                     </div>
                 </div>
 
-                <!-- Другие бойцы -->
-                <div class="fifa-card" style="border-color: #445577;">
+                <!-- Братишкин -->
+                <div class="fifa-card" style="border-color: #00a8ff;">
                     <div>
-                        <div class="fifa-rating">88</div>
-                        <div class="fifa-role">СНАЙПЕР</div>
+                        <div class="fifa-rating" style="color: #00a8ff;">91</div>
+                        <div class="fifa-role">СТРИМЕР / МЕДИА</div>
                     </div>
                     <div class="fifa-info">
-                        <div class="fifa-name">Егор_Снайпер</div>
+                        <div class="fifa-name">Братишкин</div>
                         <div class="fifa-stats">
-                            <span>У/С: 3.2</span>
-                            <span>УРОН: 9.1K</span>
-                            <span>ДИСТ: 310м</span>
-                            <span>ТОЧНОСТЬ: 92%</span>
+                            <span>У/С: 3.5</span>
+                            <span>ДИСКОРД: 100%</span>
+                            <span>ОРАТОР: 100</span>
+                            <span>ТОЧНОСТЬ: 78%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Папич -->
+                <div class="fifa-card" style="border-color: #00a8ff;">
+                    <div>
+                        <div class="fifa-rating" style="color: #00a8ff;">90</div>
+                        <div class="fifa-role">ВЕЛИЧАЙШИЙ</div>
+                    </div>
+                    <div class="fifa-info">
+                        <div class="fifa-name">Папич (Arthas)</div>
+                        <div class="fifa-stats">
+                            <span>ПТС: 5300</span>
+                            <span>УРОН: 12.1K</span>
+                            <span>СОЛО: 100</span>
+                            <span>ТИЛТ: 0%</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Таб 2: Потери -->
-            <div id="lossesTab" class="tab-content hidden">
-                <h3 style="margin-bottom: 15px; font-size: 0.85rem; color: #888;">УНИЧТОЖЕННАЯ ТЕХНИКА ЗА БОЙ</h3>
-                <div class="loss-item">
-                    <span>Тяжёлый танк "Trackwork"</span>
-                    <span class="tag-red">КРАСНЫЕ</span>
+            <!-- Таб 2: Красная Команда -->
+            <div id="redTab" class="tab-content hidden">
+                <!-- СТЕПАН БАНДЕРА -->
+                <div class="fifa-card" style="border-color: var(--accent-red); background: linear-gradient(135deg, #2a0808 0%, #0f131a 100%);">
+                    <div>
+                        <div class="fifa-rating" style="color: var(--accent-red);">97</div>
+                        <div class="fifa-role">КОМАНДИР ВРАГА</div>
+                    </div>
+                    <div class="fifa-info">
+                        <div class="fifa-name" style="color: var(--accent-red);">Степан Бандера</div>
+                        <div class="fifa-stats">
+                            <span>У/С: 6.2</span>
+                            <span>УРОН: 24.1K</span>
+                            <span>РЕЙДЫ: 15</span>
+                            <span>ОСАДА: 92%</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="loss-item">
-                    <span>Истребитель Create Aero v2</span>
-                    <span class="tag-blue">СИНИЕ</span>
+
+                <!-- Shadowraze -->
+                <div class="fifa-card" style="border-color: var(--accent-red);">
+                    <div>
+                        <div class="fifa-rating" style="color: var(--accent-red);">92</div>
+                        <div class="fifa-role">SF MID ONLY</div>
+                    </div>
+                    <div class="fifa-info">
+                        <div class="fifa-name">Shadowraze</div>
+                        <div class="fifa-stats">
+                            <span>КОЙЛЫ: 100%</span>
+                            <span>УРОН: 16.8K</span>
+                            <span>ZXC: 1000-7</span>
+                            <span>ПИНГ: 5ms</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="loss-item">
-                    <span>Батарея гаубиц BigCannons</span>
-                    <span class="tag-red">КРАСНЫЕ</span>
-                </div>
-                <div class="loss-item">
-                    <span>Ударный вертолёт</span>
-                    <span class="tag-red">КРАСНЫЕ</span>
-                </div>
-                <div class="loss-item">
-                    <span>Бронепоезд снабжения</span>
-                    <span class="tag-blue">СИНИЕ</span>
+
+                <!-- Абузер Мидаса -->
+                <div class="fifa-card" style="border-color: var(--accent-red);">
+                    <div>
+                        <div class="fifa-rating" style="color: var(--accent-red);">88</div>
+                        <div class="fifa-role">БАГОЮЗЕР</div>
+                    </div>
+                    <div class="fifa-info">
+                        <div class="fifa-name">Абузер_Мидаса</div>
+                        <div class="fifa-stats">
+                            <span>ГОЛДА: ∞</span>
+                            <span>БАГИ: 14</span>
+                            <span>БАН:Скоро</span>
+                            <span>ЧИТЫ: 50%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Таб 3: Сводка -->
-            <div id="summaryTab" class="tab-content hidden">
-                <h3 style="margin-bottom: 10px; color: var(--accent-gold);">Операция "Создание Фронта"</h3>
-                <p style="font-size: 0.85rem; color: #aaa; line-height: 1.5;">
-                    ● Участников: 20 игроков (10 на 10).<br>
-                    ● Ключевой прорыв: Совершен отделением Владимира Путина и SouLessFiend на 28-й минуте.<br>
-                    ● Карта: Скользящий фронт по руслу реки.
-                </p>
+            <!-- Таб 3: Потери -->
+            <div id="lossesTab" class="tab-content hidden">
+                <h3 style="margin-bottom: 15px; font-size: 0.85rem; color: #888;">УНИЧТОЖЕННАЯ ТЕХНИКА</h3>
+                <div class="loss-item">
+                    <span>Танк "Trackwork Heavy"</span>
+                    <span class="tag-red">КРАСНЫЕ (Бандера)</span>
+                </div>
+                <div class="loss-item">
+                    <span>Истребитель Create Aero v2</span>
+                    <span class="tag-blue">СИНИЕ (SouLess)</span>
+                </div>
+                <div class="loss-item">
+                    <span>Гаубица BigCannons</span>
+                    <span class="tag-red">КРАСНЫЕ (Shadowraze)</span>
+                </div>
+                <div class="loss-item">
+                    <span>Дронопорт БПЛА</span>
+                    <span class="tag-blue">СИНИЕ (Путин)</span>
+                </div>
             </div>
         </div>
     </div>
@@ -349,31 +406,31 @@
         let isPlaying = false;
         let animationTimer = null;
 
-        // Список 10 Синих и 10 Красных игроков
+        // 10 Синих и 10 Красных игроков
         const blueTeam = [
-            { name: "Владимир Путин", xRel: 0.35, yRel: 0.2 },
-            { name: "SouLessFiend", xRel: 0.30, yRel: 0.35 },
-            { name: "DIANA", xRel: 0.28, yRel: 0.5 },
-            { name: "Егор_Снайпер", xRel: 0.15, yRel: 0.15 },
-            { name: "Влад_Танкист", xRel: 0.22, yRel: 0.65 },
-            { name: "Макс_Авиатор", xRel: 0.10, yRel: 0.4 },
-            { name: "Артём_Пехота", xRel: 0.25, yRel: 0.8 },
-            { name: "Дмитрий_Сапёр", xRel: 0.18, yRel: 0.88 },
-            { name: "Илья_Разведчик", xRel: 0.33, yRel: 0.7 },
-            { name: "Олег_Броня", xRel: 0.08, yRel: 0.75 }
+            { name: "Владимир Путин", baseOffsetX: -0.10, yRel: 0.2, vip: true },
+            { name: "SouLessFiend", baseOffsetX: -0.15, yRel: 0.35, vip: false },
+            { name: "DIANA", baseOffsetX: -0.18, yRel: 0.5, vip: false },
+            { name: "Братишкин", baseOffsetX: -0.25, yRel: 0.15, vip: false },
+            { name: "Папич (Arthas)", baseOffsetX: -0.22, yRel: 0.65, vip: false },
+            { name: "zxc_dead_inside", baseOffsetX: -0.30, yRel: 0.4, vip: false },
+            { name: "Пудж_30lvl", baseOffsetX: -0.12, yRel: 0.8, vip: false },
+            { name: "Зубарев", baseOffsetX: -0.32, yRel: 0.88, vip: false },
+            { name: "Golovach_Boss", baseOffsetX: -0.20, yRel: 0.7, vip: false },
+            { name: "S1mple", baseOffsetX: -0.35, yRel: 0.75, vip: false }
         ];
 
         const redTeam = [
-            { name: "Враг_Алекс", xRel: 0.65, yRel: 0.2 },
-            { name: "Красный_Лис", xRel: 0.70, yRel: 0.35 },
-            { name: "Медведь_99", xRel: 0.60, yRel: 0.5 },
-            { name: "Джаггернаут", xRel: 0.80, yRel: 0.15 },
-            { name: "Фантом", xRel: 0.75, yRel: 0.65 },
-            { name: "Шторм", xRel: 0.88, yRel: 0.4 },
-            { name: "Враг_Денис", xRel: 0.68, yRel: 0.8 },
-            { name: "Тень_01", xRel: 0.82, yRel: 0.85 },
-            { name: "Титан_Враг", xRel: 0.58, yRel: 0.7 },
-            { name: "Рейдер", xRel: 0.92, yRel: 0.75 }
+            { name: "Степан Бандера", baseOffsetX: 0.10, yRel: 0.25, vip: true },
+            { name: "Shadowraze", baseOffsetX: 0.15, yRel: 0.4, vip: false },
+            { name: "Абузер_Мидаса", baseOffsetX: 0.20, yRel: 0.55, vip: false },
+            { name: "Токсик_Из_ММ", baseOffsetX: 0.28, yRel: 0.15, vip: false },
+            { name: "Тинкер_0_12", baseOffsetX: 0.22, yRel: 0.68, vip: false },
+            { name: "Бумыч", baseOffsetX: 0.32, yRel: 0.3, vip: false },
+            { name: "Строго", baseOffsetX: 0.18, yRel: 0.82, vip: false },
+            { name: "SF_Mid_Only", baseOffsetX: 0.30, yRel: 0.88, vip: false },
+            { name: "Дед_Илья", baseOffsetX: 0.12, yRel: 0.72, vip: false },
+            { name: "Лил_Дрип", baseOffsetX: 0.35, yRel: 0.78, vip: false }
         ];
 
         function resizeCanvas() {
@@ -383,9 +440,26 @@
         }
         window.addEventListener('resize', resizeCanvas);
 
-        // Рисуем карту Minecraft
+        // Функция волнообразного расчета сдвига фронта (КАМБЭКИ)
+        function getFrontlineShift(p) {
+            // p = 0..100
+            // Возвращает коэффициент сдвига (от -0.25 до +0.25 от ширины)
+            if (p < 30) {
+                // Старт: синие слегка давят
+                return (p / 30) * 0.1;
+            } else if (p < 60) {
+                // Камбэк Красных (Бандера прорывает синих!)
+                const subP = (p - 30) / 30;
+                return 0.1 - (subP * 0.3); // Уходит в -0.2 (глубоко к синим)
+            } else {
+                // Легендарный ответный Камбэк Синих!
+                const subP = (p - 60) / 40;
+                return -0.2 + (subP * 0.45); // Возвращает фронт и побеждает!
+            }
+        }
+
+        // Фон Майнкрафта
         function drawMinecraftBackground(w, h) {
-            // 1. Зелёные биомы (блоки травы)
             ctx.fillStyle = '#22441e';
             ctx.fillRect(0, 0, w, h);
 
@@ -399,7 +473,7 @@
                 }
             }
 
-            // 2. Река по центру (Minecraft Water)
+            // Река
             ctx.strokeStyle = '#1b4f72';
             ctx.lineWidth = 35;
             ctx.beginPath();
@@ -411,13 +485,13 @@
             ctx.lineWidth = 15;
             ctx.stroke();
 
-            // 3. Сетка блоков Minecraft
-            ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+            // Сетка
+            ctx.strokeStyle = 'rgba(0,0,0,0.12)';
             ctx.lineWidth = 1;
-            for (let x = 0; x < w; x += 20) {
+            for (let x = 0; x < w; x += 25) {
                 ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
             }
-            for (let y = 0; y < h; y += 20) {
+            for (let y = 0; y < h; y += 25) {
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
             }
         }
@@ -425,56 +499,57 @@
         function drawMap(progress) {
             const w = canvas.width;
             const h = canvas.height;
-            const shift = (progress / 100) * (w * 0.25); // Сдвиг фронта
+            const shiftFactor = getFrontlineShift(progress);
+            const shiftX = shiftFactor * w;
 
             ctx.clearRect(0, 0, w, h);
-
-            // 1. Текстура Майнкрафта
             drawMinecraftBackground(w, h);
 
-            // 2. Синяя территория
-            ctx.fillStyle = 'rgba(0, 168, 255, 0.25)';
+            // Центр фронта
+            const centerX = (w * 0.5) + shiftX;
+
+            // 1. Синяя Территория
+            ctx.fillStyle = 'rgba(0, 168, 255, 0.22)';
             ctx.beginPath();
             ctx.moveTo(0, 0);
-            ctx.lineTo(w * 0.42 + shift, 0);
-            ctx.bezierCurveTo(w * 0.5 + shift, h * 0.35, w * 0.38 + shift, h * 0.7, w * 0.45 + shift, h);
+            ctx.lineTo(centerX, 0);
+            ctx.bezierCurveTo(centerX + 40, h * 0.35, centerX - 40, h * 0.7, centerX, h);
             ctx.lineTo(0, h);
             ctx.closePath();
             ctx.fill();
 
-            // 3. Красная территория
-            ctx.fillStyle = 'rgba(255, 63, 52, 0.25)';
+            // 2. Красная Территория
+            ctx.fillStyle = 'rgba(255, 63, 52, 0.22)';
             ctx.beginPath();
             ctx.moveTo(w, 0);
-            ctx.lineTo(w * 0.42 + shift, 0);
-            ctx.bezierCurveTo(w * 0.5 + shift, h * 0.35, w * 0.38 + shift, h * 0.7, w * 0.45 + shift, h);
+            ctx.lineTo(centerX, 0);
+            ctx.bezierCurveTo(centerX + 40, h * 0.35, centerX - 40, h * 0.7, centerX, h);
             ctx.lineTo(w, h);
             ctx.closePath();
             ctx.fill();
 
-            // 4. Линия фронта
+            // 3. Динамическая линия фронта
             ctx.strokeStyle = '#ffd32a';
             ctx.lineWidth = 4;
             ctx.setLineDash([10, 6]);
             ctx.beginPath();
-            ctx.moveTo(w * 0.42 + shift, 0);
-            ctx.bezierCurveTo(w * 0.5 + shift, h * 0.35, w * 0.38 + shift, h * 0.7, w * 0.45 + shift, h);
+            ctx.moveTo(centerX, 0);
+            ctx.bezierCurveTo(centerX + 40, h * 0.35, centerX - 40, h * 0.7, centerX, h);
             ctx.stroke();
             ctx.setLineDash([]);
 
-            // 5. Отрисовка 10 Синих игроков
+            // 4. Отрисовка 10 Синих
             blueTeam.forEach(p => {
-                const px = (p.xRel * w) + (shift * 0.8);
+                const px = centerX + (p.baseOffsetX * w);
                 const py = p.yRel * h;
-                const isVova = p.name === "Владимир Путин";
-                drawUnit(px, py, isVova ? '#ffd32a' : '#00a8ff', p.name, isVova);
+                drawUnit(px, py, p.vip ? '#ffd32a' : '#00a8ff', p.name, p.vip);
             });
 
-            // 6. Отрисовка 10 Красных игроков
+            // 5. Отрисовка 10 Красных
             redTeam.forEach(p => {
-                const px = (p.xRel * w) + (shift * 0.2);
+                const px = centerX + (p.baseOffsetX * w);
                 const py = p.yRel * h;
-                drawUnit(px, py, '#ff3f34', p.name, false);
+                drawUnit(px, py, p.vip ? '#ff3f34' : '#ff5555', p.name, p.vip);
             });
         }
 
@@ -491,11 +566,11 @@
             }
 
             ctx.fillStyle = isVIP ? '#ffd32a' : '#ffffff';
-            ctx.font = isVIP ? 'bold 12px JetBrains Mono' : '10px JetBrains Mono';
-            ctx.fillText(label, x + 8, y + 4);
+            ctx.font = isVIP ? 'bold 11px JetBrains Mono' : '9px JetBrains Mono';
+            ctx.fillText(label, x + 8, y + 3);
         }
 
-        // Логика слайдера
+        // Таймлайн
         slider.addEventListener('input', () => {
             const mins = Math.floor((slider.value / 100) * 45);
             timeLabel.innerText = `${mins < 10 ? '0' : ''}${mins}:00 / 45:00`;
