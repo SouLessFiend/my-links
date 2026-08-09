@@ -3,76 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Liga: Season 12 Months Simulator</title>
-    <!-- Подключаем Tailwind CSS -->
+    <title>Global Football Manager Ultimate Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Outfit', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #020617; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-slate-950">
 
-    <!-- Шапка -->
-    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
+    <!-- Верхняя навигационная панель -->
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="bg-indigo-600 text-white font-bold p-2.5 rounded-xl text-xl shadow-lg shadow-indigo-600/20">⚽</div>
-            <div>
-                    <h1 class="text-xl font-bold tracking-tight text-white">LA LIGA: 12 MONTHS EDITION</h1>
-                    <p class="text-xs text-slate-400">Двухкруговой турнир (дома и на выезде)</p>
+                <div class="bg-gradient-to-tr from-indigo-600 via-violet-600 to-purple-600 text-white font-bold p-2.5 rounded-xl text-xl shadow-lg shadow-indigo-600/30">⚽</div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        FOOTBALL MASTER <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">v3.5 Ultimate</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Симулятор Ла Лиги, Еврокубков, Трансферов и Комментариев</p>
                 </div>
             </div>
             
-            <div class="flex items-center gap-3">
-                <div id="season-badge" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-sm font-medium text-indigo-400">
-                    Тур: <span id="current-status-text">1 / 22</span>
+            <div class="flex flex-wrap items-center gap-3">
+                <div id="phase-badge" class="px-3.5 py-2 bg-slate-800/80 border border-slate-700 rounded-xl text-xs font-semibold text-indigo-400 shadow-inner">
+                    Фаза: <span id="current-phase-text">Регулярный сезон (Тур 1/22)</span>
                 </div>
-                <button onclick="nextTour()" id="next-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
-                    Следующий тур ➡️
+                <button onclick="executeNextStep()" id="next-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/25 active:scale-95 text-sm flex items-center gap-2">
+                    <span>Следующий тур</span> ➡️
                 </button>
-                <button onclick="resetSeason()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-4 py-2.5 rounded-xl transition-all border border-slate-700">
+                <button onclick="resetFullSeason()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-4 py-2.5 rounded-xl transition-all border border-slate-700 text-sm hover:text-white">
                     🔄 Сброс
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Основной контент -->
-    <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full flex-grow">
+    <!-- Переключатель вкладок -->
+    <nav class="max-w-7xl mx-auto px-4 mt-6 w-full flex flex-wrap gap-2 border-b border-slate-800 pb-3">
+        <button onclick="switchTab('league')" id="tab-league" class="px-4 py-2 rounded-xl font-semibold text-sm bg-indigo-600 text-white transition-all shadow-md">Ла Лига</button>
+        <button onclick="switchTab('cups')" id="tab-cups" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Еврокубки</button>
+        <button onclick="switchTab('commentary')" id="tab-commentary" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Текстовый Онлайн</button>
+        <button onclick="switchTab('transfers')" id="tab-transfers" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Рынок & Бюджеты</button>
+        <button onclick="switchTab('stats')" id="tab-stats" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Бомбардиры</button>
+    </nav>
+
+    <!-- Основной рабочий контейнер -->
+    <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full flex-grow">
         
-        <!-- Левая колонка: Матчи текущего тура -->
+        <!-- Левая колонка: Матчи / События / Камбэки -->
         <div class="lg:col-span-1 flex flex-col gap-6">
             <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm flex flex-col h-full">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
                         🏟️ Матчи тура
                     </h2>
-                    <span class="text-xs uppercase tracking-wider bg-slate-800 text-indigo-400 px-3 py-1 rounded-full font-semibold">Тур <span id="tour-num">1</span> / 22</span>
+                    <span id="sub-round-badge" class="text-xs uppercase tracking-wider bg-slate-800 text-indigo-400 px-3 py-1 rounded-full font-semibold">Тур 1</span>
                 </div>
 
-                <div id="matches-container" class="space-y-4 flex-grow flex flex-col justify-center">
-                    <!-- Матчи генерируются через JS -->
+                <!-- Уведомления о камбэках -->
+                <div id="comeback-alert-container" class="mb-4 space-y-2"></div>
+
+                <div id="matches-container" class="space-y-4 max-h-[520px] overflow-y-auto custom-scrollbar pr-1">
+                    <div class="text-center text-slate-500 py-12">Нажмите «Следующий тур», чтобы начать сезон.</div>
                 </div>
             </div>
         </div>
 
-        <!-- Правая колонка: Турнирная таблица -->
+        <!-- Правая колонка: Динамические вкладки -->
         <div class="lg:col-span-2">
-            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+            
+            <!-- Вкладка 1: Ла Лига -->
+            <div id="section-league" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        🏆 Турнирная таблица Ла Лиги
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        🏆 Турнирная таблица Ла Лиги (2 круга)
                     </h2>
-                    <p class="text-xs text-slate-400">Редкие события: Дубль (~18%), Хет-трик (~7%), Покер (~3%)</p>
+                    <p class="text-xs text-slate-400">Топ-4 в ЛЧ | 5-8 в ЛЕ | 9-12 в ЛК</p>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                                 <th class="py-3 px-3">М</th>
-                                <th class="py-3 px-3">Команда</th>
+                                <th class="py-3 px-3">Клуб (Месяц)</th>
                                 <th class="py-3 px-2 text-center">И</th>
                                 <th class="py-3 px-2 text-center">В</th>
                                 <th class="py-3 px-2 text-center">Н</th>
@@ -82,72 +101,153 @@
                             </tr>
                         </thead>
                         <tbody id="standings-body" class="divide-y divide-slate-800/50 text-sm">
-                            <!-- Строки таблицы генерируются через JS -->
+                            <!-- Заполняется JS -->
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <!-- Вкладка 2: Еврокубки -->
+            <div id="section-cups" class="hidden space-y-6">
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-sm font-bold text-amber-400 mb-4 flex items-center gap-2">⭐ Лига Чемпионов УЕФА (Топ-4)</h3>
+                    <div id="ucl-container" class="space-y-3 text-sm text-slate-300">
+                        <p class="text-xs text-slate-500">Завершите регулярный сезон Ла Лиги (22 тура).</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-sm font-bold text-indigo-400 mb-4 flex items-center gap-2">🛡️ Лига Европы УЕФА (Места 5-8)</h3>
+                    <div id="uel-container" class="space-y-3 text-sm text-slate-300">
+                        <p class="text-xs text-slate-500">Ожидание завершения Ла Лиги...</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                    <h3 class="text-sm font-bold text-emerald-400 mb-4 flex items-center gap-2">⚽ Лига Конференций УЕФА (Места 9-12)</h3>
+                    <div id="uecl-container" class="space-y-3 text-sm text-slate-300">
+                        <p class="text-xs text-slate-500">Ожидание завершения Ла Лиги...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка 3: Текстовый онлайн-комментатор -->
+            <div id="section-commentary" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">🎙️ Текстовая трансляция тура</h2>
+                    <span class="text-xs text-slate-400">Минута за минутой</span>
+                </div>
+                <div id="commentary-box" class="bg-slate-950/80 border border-slate-800 rounded-xl p-4 h-[420px] overflow-y-auto custom-scrollbar space-y-3 text-xs">
+                    <p class="text-slate-500 text-center italic py-20">События матчей появятся здесь после запуска игрового тура.</p>
+                </div>
+            </div>
+
+            <!-- Вкладка 4: Трансферы и бюджеты -->
+            <div id="section-transfers" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">💼 Финансы и Трансферный рынок клубов</h2>
+                    <p class="text-xs text-slate-400">Бюджеты команд Ла Лиги</p>
+                </div>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                <th class="py-3 px-3">Клуб</th>
+                                <th class="py-3 px-3 text-center">Рейтинг силы</th>
+                                <th class="py-3 px-3 text-center">Трансферный бюджет</th>
+                                <th class="py-3 px-3 text-center">Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transfers-body" class="divide-y divide-slate-800/50 text-sm">
+                            <!-- Заполняется JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Вкладка 5: Статистика бомбардиров -->
+            <div id="section-stats" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+                <h2 class="text-base font-bold text-white mb-6 flex items-center gap-2">👟 Золотая бутса (Топ бомбардиров сезона)</h2>
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                <th class="py-3 px-3">Игрок</th>
+                                <th class="py-3 px-3">Клуб</th>
+                                <th class="py-3 px-3 text-center">Голы</th>
+                                <th class="py-3 px-3 text-center">Дубли</th>
+                                <th class="py-3 px-3 text-center">Хет-трики</th>
+                                <th class="py-3 px-3 text-center">Покеры</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scorers-body" class="divide-y divide-slate-800/50 text-sm">
+                            <!-- Заполняется JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
     </main>
 
     <!-- Футер -->
     <footer class="border-t border-slate-800 bg-slate-900/40 py-6 text-center text-xs text-slate-500">
-        <p>La Liga 12 Months Simulation Engine &bull; Полный календарь (дома и на выезде)</p>
+        <p>Global Football Manager Ultimate Engine &bull; Все права защищены &bull; Сгенерировано автоматически</p>
     </footer>
 
-    <!-- Скрипт симуляции -->
+    <!-- Обширный технический скрипт симулятора (около 300+ строк логики) -->
     <script>
-        // 12 команд-месяцев
+        // Инициализация массивов команд с расширенными параметрами (сила, бюджет)
         let teams = [
-            { id: 1, name: "Январь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 2, name: "Февраль", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 3, name: "Март", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 4, name: "Апрель", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 5, name: "Май", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 6, name: "Июнь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 7, name: "Июль", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 8, name: "Август", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 9, name: "Сентябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 10, name: "Октябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 11, name: "Ноябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 12, name: "Декабрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 }
+            { id: 1, name: "Январь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 45000000 },
+            { id: 2, name: "Февраль", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 78, budget: 32000000 },
+            { id: 3, name: "Март", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 79, budget: 35000000 },
+            { id: 4, name: "Апрель", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 85, budget: 60000000 },
+            { id: 5, name: "Май", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 81, budget: 40000000 },
+            { id: 6, name: "Июнь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 83, budget: 50000000 },
+            { id: 7, name: "Июль", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 80, budget: 38000000 },
+            { id: 8, name: "Август", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 84, budget: 55000000 },
+            { id: 9, name: "Сентябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 77, budget: 30000000 },
+            { id: 10, name: "Октябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 42000000 },
+            { id: 11, name: "Ноябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 76, budget: 28000000 },
+            { id: 12, name: "Декабрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 86, budget: 65000000 }
         ];
 
-        // Пул игроков для каждой команды для фиксации дублей, хет-триков и покеров
-        const playerPools = {
-            "Январь": ["С. Мороз", "А. Январский", "В. Ледяной"],
-            "Февраль": ["М. Вьюгов", "Д. Февральский", "П. Буран"],
-            "Март": ["А. Весенний", "К. Мартовский", "Н. Капель"],
-            "Апрель": ["И. Апрельский", "Р. Ручьев", "Л. Зеленов"],
-            "Май": ["В. Майский", "Е. Цветков", "Д. Май"],
-            "Июнь": ["С. Солнечный", "А. Июньский", "М. Жаркий"],
-            "Июль": ["П. Июльский", "Б. Пляжный", "К. Знойный"],
-            "Август": ["Д. Августовский", "А. Звездный", "Р. Бархатный"],
-            "Сентябрь": ["О. Сентябрьский", "В. Школьный", "И. Листопадов"],
-            "Октябрь": ["Н. Октябрьский", "П. Дождев", "А. Осенний"],
-            "Ноябрь": ["М. Ноябрьский", "С. Пасмурный", "К. Туманов"],
-            "Декабрь": ["Д. Декабрьский", "И. Снежный", "В. Праздничный"]
+        let playersStats = {};
+        teams.forEach(t => {
+            playersStats[t.name] = {
+                [t.name + " Снайпер"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name },
+                [t.name + " Форвард"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name },
+                [t.name + " Полузащитник"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name }
+            };
+        });
+
+        let gameState = {
+            phase: 'league', // league, ucl_sf, ucl_f, finished
+            tourIndex: 0,
+            schedule: [],
+            lastMatches: [],
+            activeComebacks: [],
+            commentaryLog: [],
+            cupStages: {
+                ucl: { status: 'not_started', matches: [] },
+                uel: { status: 'not_started', matches: [] },
+                uecl: { status: 'not_started', matches: [] }
+            }
         };
 
-        let currentTourIndex = 0;
-        let seasonFinished = false;
-        let schedule = [];
-        let lastPlayedMatches = [];
-
-        // Генерация календаря Ла Лиги (круглый турнир в 2 круга: 22 тура для 12 команд)
-        function generateLaLigaSchedule() {
+        // Генерация кругового календаря Бергера (22 тура)
+        function generateSchedule() {
             let n = 12;
             let rounds = [];
             let indices = Array.from({length: n}, (_, i) => i + 1);
 
-            // Первый круг (11 туров)
             for (let r = 0; r < n - 1; r++) {
                 let roundMatches = [];
                 for (let i = 0; i < n / 2; i++) {
                     let home = indices[i];
                     let away = indices[n - 1 - i];
-                    // Чередуем хозяев поля
                     if (r % 2 === 1 && i === 0) {
                         roundMatches.push([away, home]);
                     } else {
@@ -155,199 +255,418 @@
                     }
                 }
                 rounds.push(roundMatches);
-                // Сдвиг по кругу (алгоритм Бергера)
                 let last = indices.pop();
                 indices.splice(1, 0, last);
             }
-
-            // Второй круг (зеркальный, меняем местами хозяев и гостей)
-            let secondHalf = rounds.map(round => {
-                return round.map(match => [match[1], match[0]]);
-            });
-
-            return [...rounds, ...secondHalf]; // Всего 22 тура
+            let secondHalf = rounds.map(round => round.map(match => [match[1], match[0]]));
+            return [...rounds, ...secondHalf];
         }
 
-        function simulateGoals() {
-            const rand = Math.random() * 100;
-            if (rand < 34) return 0;       // ~34%
-            if (rand < 68) return 1;       // ~34%
-            if (rand < 86) return 2;       // ~18%
-            if (rand < 94) return 3;       // ~8%
-            if (rand < 98) return 4;       // ~4%
-            return 5;                      // ~2% (разгром)
+        // Симуляция количества голов с учетом силы команд
+        function simulateGoalCount(teamRating, opponentRating) {
+            let diff = (teamRating - opponentRating) * 0.03;
+            let r = Math.random() * 100;
+            // Шансы сбалансированы, редкие события редки
+            if (r < (40 - diff * 5)) return 0;
+            if (r < (72 - diff * 3)) return 1;
+            if (r < (89 - diff)) return 2; // Дубль
+            if (r < 97.5) return 3;       // Хет-трик
+            if (r < 99.4) return 4;       // Покер
+            return 5;                     // Разгром
         }
 
-        // Распределение голов по игрокам и поиск дублей/хет-триков/покеров
-        function processTeamMatch(teamName, goals) {
-            let roster = playerPools[teamName];
-            let playerGoals = { [roster[0]]: 0, [roster[1]]: 0, [roster[2]]: 0 };
+        // Распределение голов по игрокам
+        function distributeGoals(clubName, totalGoals) {
+            let roster = Object.keys(playersStats[clubName]);
             let events = [];
+            let pGoals = { [roster[0]]: 0, [roster[1]]: 0, [roster[2]]: 0 };
 
-            for (let i = 0; i < goals; i++) {
+            for (let i = 0; i < totalGoals; i++) {
                 let p = roster[Math.floor(Math.random() * roster.length)];
-                playerGoals[p]++;
+                pGoals[p]++;
             }
 
-            for (let p in playerGoals) {
-                let g = playerGoals[p];
-                if (g >= 4) {
-                    events.push({ text: `🔥 ПОКЕР (${p} — ${g} гол.)`, style: 'bg-purple-500/10 text-purple-400 border-purple-500/20' });
-                } else if (g === 3) {
-                    events.push({ text: `⚽ ХЕТ-ТРИК (${p})`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20' });
-                } else if (g === 2) {
-                    events.push({ text: `⚡ ДУБЛЬ (${p})`, style: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' });
+            for (let p in pGoals) {
+                let g = pGoals[p];
+                if (g > 0) {
+                    playersStats[clubName][p].goals += g;
+                    if (g >= 4) {
+                        playersStats[clubName][p].pokers++;
+                        events.push({ text: `🔥 ПОКЕР (${p} — ${g} гол.)`, style: 'bg-purple-500/10 text-purple-400 border-purple-500/20' });
+                    } else if (g === 3) {
+                        playersStats[clubName][p].hattricks++;
+                        events.push({ text: `⚽ ХЕТ-ТРИК (${p})`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20' });
+                    } else if (g === 2) {
+                        playersStats[clubName][p].braces++;
+                        events.push({ text: `⚡ ДУБЛЬ (${p})`, style: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' });
+                    }
                 }
             }
             return events;
         }
 
+        // Генерация текстовых комментариев матча
+        function generateCommentary(homeName, awayName, sh, sa) {
+            let logs = [];
+            logs.push(`[1 мин] Матч начался между ${homeName} и ${awayName}! Трибуны ревут.`);
+            if (sh > 0) logs.push(`[18 мин] Опасная атака хозяев (${homeName}), и это гол! Счёт открыт.`);
+            if (sa > 0) logs.push(`[34 мин] Ответный выпад гостей (${awayName}) завершается точным ударом в сетку!`);
+            if (sh > 1) logs.push(`[55 мин] Фантастическая комбинация, ${homeName} забивает второй мяч!`);
+            if (sa > 1) logs.push(`[72 мин] Ошибка в обороне, ${awayName} сравнивает счёт в матче!`);
+            if (sh > 2 || sa > 2) logs.push(`[88 мин] Развязка матча! Команды идут ва-банк в концовке встречи.`);
+            logs.push(`[90 мин] Финальный свисток арбитра. Итоговый счёт: ${sh}:${sa}.`);
+            return logs;
+        }
+
+        // Проверка на камбэк
+        function checkComeback(homeName, awayName, sh, sa) {
+            if (sh > sa && Math.random() < 0.12) {
+                return { is: true, text: `⚡ ЭПИЧЕСКИЙ КАМБЭК: ${homeName} проигрывали по ходу матча, но вырвали победу ${sh}:${sa}!` };
+            } else if (sa > sh && Math.random() < 0.12) {
+                return { is: true, text: `⚡ ЭПИЧЕСКИЙ КАМБЭК: ${awayName} переломили ход игры и победили ${sh}:${sa}!` };
+            }
+            return { is: false, text: "" };
+        }
+
         function initSeason() {
-            schedule = generateLaLigaSchedule();
-            resetSeasonData();
+            gameState.schedule = generateSchedule();
+            resetData();
             updateUI();
         }
 
-        function resetSeasonData() {
-            currentTourIndex = 0;
-            seasonFinished = false;
-            lastPlayedMatches = [];
-            teams.forEach(team => {
-                team.p = 0; team.w = 0; team.d = 0; team.l = 0;
-                team.gf = 0; team.ga = 0; team.pts = 0;
+        function resetData() {
+            gameState.phase = 'league';
+            gameState.tourIndex = 0;
+            gameState.lastMatches = [];
+            gameState.activeComebacks = [];
+            gameState.commentaryLog = [];
+            gameState.cupStages = {
+                ucl: { status: 'not_started', matches: [] },
+                uel: { status: 'not_started', matches: [] },
+                uecl: { status: 'not_started', matches: [] }
+            };
+            teams.forEach(t => {
+                t.p = 0; t.w = 0; t.d = 0; t.l = 0; t.gf = 0; t.ga = 0; t.pts = 0;
+            });
+            Object.keys(playersStats).forEach(club => {
+                Object.keys(playersStats[club]).forEach(p => {
+                    playersStats[club][p].goals = 0;
+                    playersStats[club][p].braces = 0;
+                    playersStats[club][p].hattricks = 0;
+                    playersStats[club][p].pokers = 0;
+                });
             });
         }
 
-        function resetSeason() {
-            resetSeasonData();
-            updateUI();
+        function resetFullSeason() {
+            initSeason();
         }
 
-        function nextTour() {
-            if (seasonFinished) {
-                alert("Сезон Ла Лиги завершен! Нажмите «Сброс» для нового розыгрыша.");
+        // Управление трансферным бюджетом (инвестиции в рейтинг команды)
+        function investInClub(teamId) {
+            let club = teams.find(t => t.id === teamId);
+            if (club.budget >= 10000000) {
+                club.budget -= 10000000;
+                club.rating += 2;
+                alert(`Успешно! Клуб ${club.name} усилил состав на трансферном рынке. Новый рейтинг силы: ${club.rating}`);
+                updateUI();
+            } else {
+                alert("Недостаточно средств в бюджете клуба!");
+            }
+        }
+
+        // Шаг симуляции
+        function executeNextStep() {
+            gameState.activeComebacks = [];
+            gameState.commentaryLog = [];
+
+            if (gameState.phase === 'league') {
+                if (gameState.tourIndex >= 22) {
+                    startEuropeanCups();
+                    return;
+                }
+
+                let currentPairings = gameState.schedule[gameState.tourIndex];
+                gameState.lastMatches = [];
+
+                currentPairings.forEach(pair => {
+                    let th = teams.find(t => t.id === pair[0]);
+                    let ta = teams.find(t => t.id === pair[1]);
+
+                    let sh = simulateGoalCount(th.rating, ta.rating);
+                    let sa = simulateGoalCount(ta.rating, th.rating);
+
+                    let evH = distributeGoals(th.name, sh);
+                    let evA = distributeGoals(ta.name, sa);
+                    let cb = checkComeback(th.name, ta.name, sh, sa);
+
+                    if (cb.is) gameState.activeComebacks.push(cb.text);
+
+                    let matchComments = generateCommentary(th.name, ta.name, sh, sa);
+                    gameState.commentaryLog.push(`--- Тур ${gameState.tourIndex + 1}: ${th.name} vs ${ta.name} ---`, ...matchComments);
+
+                    th.p++; th.gf += sh; th.ga += sa;
+                    ta.p++; ta.ga += sh; ta.gf += sa;
+
+                    if (sh > sa) { th.w++; th.pts += 3; ta.l++; }
+                    else if (sh < sa) { ta.w++; ta.pts += 3; th.l++; }
+                    else { th.d++; th.pts += 1; ta.d++; }
+
+                    gameState.lastMatches.push({
+                        home: th.name, away: ta.name, sh, sa, events: [...evH, ...evA]
+                    });
+                });
+
+                gameState.tourIndex++;
+
+            } else if (gameState.phase === 'ucl_sf') {
+                simulateCupRound('ucl');
+                simulateCupRound('uel');
+                simulateCupRound('uecl');
+                gameState.phase = 'ucl_f';
+            } else if (gameState.phase === 'ucl_f') {
+                simulateCupFinals('ucl');
+                simulateCupFinals('uel');
+                simulateCupFinals('uecl');
+                gameState.phase = 'finished';
+            } else if (gameState.phase === 'finished') {
+                alert("Сезон завершен! Нажмите кнопку сброса для нового года.");
                 return;
             }
 
-            let currentPairings = schedule[currentTourIndex];
-            lastPlayedMatches = [];
-
-            currentPairings.forEach(pair => {
-                let teamHome = teams.find(t => t.id === pair[0]);
-                let teamAway = teams.find(t => t.id === pair[1]);
-
-                let goalsHome = simulateGoals();
-                let goalsAway = simulateGoals();
-
-                let homeEvents = processTeamMatch(teamHome.name, goalsHome);
-                let awayEvents = processTeamMatch(teamAway.name, goalsAway);
-
-                // Статистика Дома
-                teamHome.p += 1;
-                teamHome.gf += goalsHome;
-                teamHome.ga += goalsAway;
-
-                // Статистика Гостей
-                teamAway.p += 1;
-                teamAway.gf += goalsAway;
-                teamAway.ga += goalsHome;
-
-                if (goalsHome > goalsAway) {
-                    teamHome.w += 1; teamHome.pts += 3;
-                    teamAway.l += 1;
-                } else if (goalsHome < goalsAway) {
-                    teamAway.w += 1; teamAway.pts += 3;
-                    teamHome.l += 1;
-                } else {
-                    teamHome.d += 1; teamHome.pts += 1;
-                    teamAway.d += 1; teamAway.pts += 1;
-                }
-
-                lastPlayedMatches.push({
-                    home: teamHome.name,
-                    away: teamAway.name,
-                    scoreHome: goalsHome,
-                    scoreAway: goalsAway,
-                    events: [...homeEvents, ...awayEvents]
-                });
-            });
-
-            currentTourIndex++;
-            if (currentTourIndex >= 22) {
-                seasonFinished = true;
-            }
-
             updateUI();
         }
 
-        function updateUI() {
-            document.getElementById('tour-num').innerText = currentTourIndex === 0 ? "1" : currentTourIndex;
-            
-            if (seasonFinished) {
-                document.getElementById('current-status-text').innerText = "Сезон завершен 🏆";
-                document.getElementById('next-btn').innerText = "Сезон окончен";
-                document.getElementById('next-btn').classList.add('opacity-50', 'cursor-not-allowed');
-            } else {
-                document.getElementById('current-status-text').innerText = `${currentTourIndex} / 22`;
-                document.getElementById('next-btn').innerText = currentTourIndex === 0 ? "Начать сезон ➡️" : "Следующий тур ➡️";
-            }
+        function startEuropeanCups() {
+            let sorted = getSortedStandings();
+            let uclTeams = [sorted[0], sorted[1], sorted[2], sorted[3]];
+            let uelTeams = [sorted[4], sorted[5], sorted[6], sorted[7]];
+            let ueclTeams = [sorted[8], sorted[9], sorted[10], sorted[11]];
 
-            // Рендер матчей текущего тура
-            let matchesHTML = "";
-            if (currentTourIndex === 0) {
-                matchesHTML = `<div class="text-center text-slate-500 py-12">Нажмите «Начать сезон», чтобы запустить 1-й тур чемпионата Ла Лиги.</div>`;
-            } else {
-                lastPlayedMatches.forEach(match => {
-                    let eventsHTML = match.events.map(ev => `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold border ${ev.style}">${ev.text}</span>`).join('');
-                    
-                    matchesHTML += `
-                        <div class="bg-slate-950/50 border border-slate-800/80 p-4 rounded-xl flex flex-col gap-2">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="font-medium text-slate-200 w-2/5 truncate">${match.home}</span>
-                                <div class="bg-slate-800 px-3 py-1 rounded-lg font-bold text-indigo-400 tracking-wider">
-                                    ${match.scoreHome} : ${match.scoreAway}
-                                </div>
-                                <span class="font-medium text-slate-200 w-2/5 truncate text-right">${match.away}</span>
-                            </div>
-                            ${match.events.length > 0 ? `<div class="flex flex-wrap gap-1.5 justify-center mt-1">${eventsHTML}</div>` : ""}
-                        </div>
-                    `;
+            gameState.cupStages.ucl = { status: 'semifinals', matches: [{ t1: uclTeams[0], t2: uclTeams[3] }, { t1: uclTeams[1], t2: uclTeams[2] }] };
+            gameState.cupStages.uel = { status: 'semifinals', matches: [{ t1: uelTeams[0], t2: uelTeams[3] }, { t1: uelTeams[1], t2: uelTeams[2] }] };
+            gameState.cupStages.uecl = { status: 'semifinals', matches: [{ t1: ueclTeams[0], t2: ueclTeams[3] }, { t1: ueclTeams[1], t2: ueclTeams[2] }] };
+
+            gameState.phase = 'ucl_sf';
+            gameState.lastMatches = [];
+            gameState.activeComebacks.push("🌟 Регулярный сезон завершен! Жеребьевка еврокубков проведена успешно.");
+        }
+
+        function simulateCupRound(cupKey) {
+            let cup = gameState.cupStages[cupKey];
+            cup.winners = [];
+            gameState.lastMatches = [];
+
+            cup.matches.forEach(m => {
+                let sh = simulateGoalCount(m.t1.rating, m.t2.rating) + 1;
+                let sa = simulateGoalCount(m.t2.rating, m.t1.rating);
+                if (sh === sa) sh++;
+
+                m.sh = sh; m.sa = sa;
+                let winner = sh > sa ? m.t1 : m.t2;
+                cup.winners.push(winner);
+
+                gameState.lastMatches.push({
+                    home: m.t1.name, away: m.t2.name, sh, sa, events: [{text: `🏆 Плей-офф (${winner.name} проходит в финал)`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20'}]
                 });
-            }
-            document.getElementById('matches-container').innerHTML = matchesHTML;
+            });
+        }
 
-            // Сортировка таблицы: Очки -> Разница мячей -> Забитые голы
-            let sortedTeams = [...teams].sort((a, b) => {
+        function simulateCupFinals(cupKey) {
+            let cup = gameState.cupStages[cupKey];
+            let f1 = cup.winners[0];
+            let f2 = cup.winners[1];
+
+            let sh = simulateGoalCount(f1.rating, f2.rating) + 1;
+            let sa = simulateGoalCount(f2.rating, f1.rating);
+            if (sh === sa) sa++;
+
+            let cupWinner = sh > sa ? f1 : f2;
+            cup.finalMatch = { t1: f1, t2: f2, sh, sa, winner: cupWinner };
+            cup.status = 'finished';
+
+            gameState.activeComebacks.push(`👑 ОБЛАДАТЕЛЬ КУБКА ${cupKey.toUpperCase()}: Клуб "${cupWinner.name}" выигрывает трофей!`);
+            gameState.lastMatches.push({
+                home: f1.name, away: f2.name, sh, sa, events: [{text: `🌟 ФИНАЛ: ЧЕМПИОН ${cupKey.toUpperCase()} — ${cupWinner.name}!`, style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}]
+            });
+        }
+
+        function getSortedStandings() {
+            return [...teams].sort((a, b) => {
                 if (b.pts !== a.pts) return b.pts - a.pts;
                 let diffB = b.gf - b.ga;
                 let diffA = a.gf - a.ga;
                 if (diffB !== diffA) return diffB - diffA;
                 return b.gf - a.gf;
             });
+        }
 
-            // Рендер таблицы
+        function switchTab(tabName) {
+            ['league', 'cups', 'commentary', 'transfers', 'stats'].forEach(tab => {
+                document.getElementById('section-' + tab).classList.add('hidden');
+                document.getElementById('tab-' + tab).className = "px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800";
+            });
+            document.getElementById('section-' + tabName).classList.remove('hidden');
+            document.getElementById('tab-' + tabName).className = "px-4 py-2 rounded-xl font-semibold text-sm bg-indigo-600 text-white transition-all shadow-md";
+        }
+
+        function updateUI() {
+            let phaseText = "";
+            if (gameState.phase === 'league') {
+                phaseText = `Регулярный сезон (Тур ${gameState.tourIndex}/22)`;
+                if (gameState.tourIndex >= 22) document.getElementById('next-btn').innerText = "Жеребьевка еврокубков 🏆";
+            } else if (gameState.phase === 'ucl_sf') {
+                phaseText = "Еврокубки: Полуфиналы";
+                document.getElementById('next-btn').innerText = "Финалы еврокубков ⚽";
+            } else if (gameState.phase === 'ucl_f') {
+                phaseText = "Еврокубки: Финалы";
+                document.getElementById('next-btn').innerText = "Завершить сезон 🏁";
+            } else {
+                phaseText = "Сезон завершен 🏆";
+                document.getElementById('next-btn').innerText = "Сезон окончен";
+                document.getElementById('next-btn').classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            document.getElementById('current-phase-text').innerText = phaseText;
+            document.getElementById('sub-round-badge').innerText = gameState.phase === 'league' ? `Тур ${gameState.tourIndex === 0 ? 1 : gameState.tourIndex}` : gameState.phase.toUpperCase();
+
+            // Камбэки
+            let alertHTML = "";
+            gameState.activeComebacks.forEach(msg => {
+                alertHTML += `<div class="bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs p-3 rounded-xl font-medium animate-pulse">${msg}</div>`;
+            });
+            document.getElementById('comeback-alert-container').innerHTML = alertHTML;
+
+            // Матчи
+            let matchesHTML = "";
+            if (gameState.tourIndex === 0 && gameState.phase === 'league') {
+                matchesHTML = `<div class="text-center text-slate-500 py-12">Нажмите «Следующий тур» для старта чемпионата.</div>`;
+            } else {
+                gameState.lastMatches.forEach(m => {
+                    let evHTML = m.events.map(e => `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold border ${e.style}">${e.text}</span>`).join('');
+                    matchesHTML += `
+                        <div class="bg-slate-950/60 border border-slate-800/80 p-3.5 rounded-xl flex flex-col gap-2">
+                            <div class="flex justify-between items-center text-sm">
+                                <span class="font-medium text-slate-200 w-2/5 truncate">${m.home}</span>
+                                <div class="bg-slate-800 px-3 py-1 rounded-lg font-bold text-indigo-400 tracking-wider">
+                                    ${m.sh} : ${m.sa}
+                                </div>
+                                <span class="font-medium text-slate-200 w-2/5 truncate text-right">${m.away}</span>
+                            </div>
+                            ${m.events.length > 0 ? `<div class="flex flex-wrap gap-1 justify-center mt-1">${evHTML}</div>` : ""}
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('matches-container').innerHTML = matchesHTML;
+
+            // Таблица Ла Лиги
+            let sorted = getSortedStandings();
             let tableHTML = "";
-            sortedTeams.forEach((team, index) => {
-                let rankStyle = index === 0 ? "text-amber-400 font-bold" : index < 4 ? "text-indigo-400 font-semibold" : "text-slate-300";
-                let rowBg = index === 0 ? "bg-amber-500/5" : index % 2 === 0 ? "bg-slate-900/40" : "";
-                
+            sorted.forEach((t, i) => {
+                let rankStyle = i === 0 ? "text-amber-400 font-bold" : i < 4 ? "text-indigo-400 font-semibold" : i < 8 ? "text-blue-400" : i < 12 ? "text-emerald-400" : "text-slate-300";
+                let rowBg = i === 0 ? "bg-amber-500/5" : i % 2 === 0 ? "bg-slate-900/40" : "";
                 tableHTML += `
                     <tr class="${rowBg} hover:bg-slate-800/40 transition-colors">
-                        <td class="py-3 px-3 ${rankStyle}">${index + 1}</td>
-                        <td class="py-3 px-3 font-medium text-white">${team.name}</td>
-                        <td class="py-3 px-2 text-center text-slate-400">${team.p}</td>
-                        <td class="py-3 px-2 text-center text-slate-300">${team.w}</td>
-                        <td class="py-3 px-2 text-center text-slate-300">${team.d}</td>
-                        <td class="py-3 px-2 text-center text-slate-300">${team.l}</td>
-                        <td class="py-3 px-2 text-center text-slate-400">${team.gf}:${team.ga}</td>
-                        <td class="py-3 px-2 text-center font-bold text-indigo-400">${team.pts}</td>
+                        <td class="py-3 px-3 ${rankStyle}">${i + 1}</td>
+                        <td class="py-3 px-3 font-medium text-white">${t.name}</td>
+                        <td class="py-3 px-2 text-center text-slate-400">${t.p}</td>
+                        <td class="py-3 px-2 text-center text-slate-300">${t.w}</td>
+                        <td class="py-3 px-2 text-center text-slate-300">${t.d}</td>
+                        <td class="py-3 px-2 text-center text-slate-300">${t.l}</td>
+                        <td class="py-3 px-2 text-center text-slate-400">${t.gf}:${t.ga}</td>
+                        <td class="py-3 px-2 text-center font-bold text-indigo-400">${t.pts}</td>
                     </tr>
                 `;
             });
             document.getElementById('standings-body').innerHTML = tableHTML;
+
+            // Еврокубки
+            renderCup('ucl', 'ucl-container');
+            renderCup('uel', 'uel-container');
+            renderCup('uecl', 'uecl-container');
+
+            // Комментарии
+            let commHTML = "";
+            if (gameState.commentaryLog.length === 0) {
+                commHTML = `<p class="text-slate-500 text-center italic py-20">События матчей появятся здесь после запуска игрового тура.</p>`;
+            } else {
+                gameState.commentaryLog.forEach(line => {
+                    commHTML += `<p class="text-slate-300 border-b border-slate-900 pb-1">${line}</p>`;
+                });
+            }
+            document.getElementById('commentary-box').innerHTML = commHTML;
+
+            // Трансферы
+            let transHTML = "";
+            teams.forEach(t => {
+                transHTML += `
+                    <tr class="hover:bg-slate-800/40 transition-colors">
+                        <td class="py-3 px-3 font-medium text-white">${t.name}</td>
+                        <td class="py-3 px-3 text-center text-indigo-400 font-bold">${t.rating}</td>
+                        <td class="py-3 px-3 text-center text-emerald-400">${t.budget.toLocaleString()} €</td>
+                        <td class="py-3 px-3 text-center">
+                            <button onclick="investInClub(${t.id})" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1 rounded-lg text-xs font-semibold shadow-md transition-all">Купить игрока (-10M €)</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            document.getElementById('transfers-body').innerHTML = transHTML;
+
+            // Бомбардиры
+            renderScorers();
         }
 
-        // Инициализация при загрузке
+        function renderCup(key, elId) {
+            let cup = gameState.cupStages[key];
+            let container = document.getElementById(elId);
+            if (cup.status === 'not_started') {
+                container.innerHTML = `<p class="text-xs text-slate-500">Ожидание завершения регулярного чемпионата...</p>`;
+                return;
+            }
+            let html = `<div class="space-y-2 text-xs">`;
+            if (cup.status === 'semifinals') {
+                html += `<p class="font-semibold text-slate-400 uppercase tracking-wider mb-2">Полуфиналы:</p>`;
+                cup.matches.forEach(m => {
+                    html += `<div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+                        <span>${m.t1.name} vs ${m.t2.name}</span>
+                        <span class="font-bold text-indigo-400">${m.sh !== undefined && m.sh !== null ? `${m.sh}:${m.sa}` : 'Ожидание'}</span>
+                    </div>`;
+                });
+            } else if (cup.status === 'finished') {
+                html += `<p class="font-semibold text-emerald-400 uppercase tracking-wider mb-2">🏆 Победитель: ${cup.finalMatch.winner.name}</p>`;
+                html += `<div class="bg-emerald-500/10 p-2.5 rounded-lg border border-emerald-500/20 flex justify-between items-center font-medium">
+                    <span>Финал: ${cup.finalMatch.t1.name} — ${cup.finalMatch.t2.name}</span>
+                    <span class="font-bold text-emerald-400">${cup.finalMatch.sh}:${cup.finalMatch.sa}</span>
+                </div>`;
+            }
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderScorers() {
+            let all = [];
+            Object.keys(playersStats).forEach(club => {
+                Object.keys(playersStats[club]).forEach(pName => {
+                    all.push({ name: pName, ...playersStats[club][pName] });
+                });
+            });
+            all.sort((a, b) => b.goals - a.goals);
+            let html = "";
+            all.slice(0, 10).forEach(p => {
+                html += `
+                    <tr class="hover:bg-slate-800/40 transition-colors">
+                        <td class="py-3 px-3 font-medium text-white">${p.name}</td>
+                        <td class="py-3 px-3 text-slate-400">${p.club}</td>
+                        <td class="py-3 px-3 text-center font-bold text-amber-400">${p.goals}</td>
+                        <td class="py-3 px-3 text-center text-slate-300">${p.braces}</td>
+                        <td class="py-3 px-3 text-center text-slate-300">${p.hattricks}</td>
+                        <td class="py-3 px-3 text-center text-purple-400 font-semibold">${p.pokers}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('scorers-body').innerHTML = html;
+        }
+
         initSeason();
     </script>
 </body>
