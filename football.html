@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Football Manager Ultimate Edition</title>
+    <title>Global Football Manager Ultimate Edition with FLIP Animations & Avatars</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
@@ -12,20 +12,23 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #020617; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
+        .table-row-transition {
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-slate-950">
 
-    <!-- Верхняя навигационная панель -->
+    <!-- Шапка -->
     <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
                 <div class="bg-gradient-to-tr from-indigo-600 via-violet-600 to-purple-600 text-white font-bold p-2.5 rounded-xl text-xl shadow-lg shadow-indigo-600/30">⚽</div>
                 <div>
                     <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                        FOOTBALL MASTER <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">v3.5 Ultimate</span>
+                        FOOTBALL MASTER <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">v4.0 Animated</span>
                     </h1>
-                    <p class="text-xs text-slate-400">Симулятор Ла Лиги, Еврокубков, Трансферов и Комментариев</p>
+                    <p class="text-xs text-slate-400">Плавные переходы позиций, аватарки месяцев, еврокубки и трансферы</p>
                 </div>
             </div>
             
@@ -43,7 +46,7 @@
         </div>
     </header>
 
-    <!-- Переключатель вкладок -->
+    <!-- Вкладки -->
     <nav class="max-w-7xl mx-auto px-4 mt-6 w-full flex flex-wrap gap-2 border-b border-slate-800 pb-3">
         <button onclick="switchTab('league')" id="tab-league" class="px-4 py-2 rounded-xl font-semibold text-sm bg-indigo-600 text-white transition-all shadow-md">Ла Лига</button>
         <button onclick="switchTab('cups')" id="tab-cups" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Еврокубки</button>
@@ -52,10 +55,10 @@
         <button onclick="switchTab('stats')" id="tab-stats" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Бомбардиры</button>
     </nav>
 
-    <!-- Основной рабочий контейнер -->
+    <!-- Основной контент -->
     <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full flex-grow">
         
-        <!-- Левая колонка: Матчи / События / Камбэки -->
+        <!-- Левая колонка: Матчи и камбэки -->
         <div class="lg:col-span-1 flex flex-col gap-6">
             <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm flex flex-col h-full">
                 <div class="flex justify-between items-center mb-4">
@@ -65,23 +68,22 @@
                     <span id="sub-round-badge" class="text-xs uppercase tracking-wider bg-slate-800 text-indigo-400 px-3 py-1 rounded-full font-semibold">Тур 1</span>
                 </div>
 
-                <!-- Уведомления о камбэках -->
                 <div id="comeback-alert-container" class="mb-4 space-y-2"></div>
 
                 <div id="matches-container" class="space-y-4 max-h-[520px] overflow-y-auto custom-scrollbar pr-1">
-                    <div class="text-center text-slate-500 py-12">Нажмите «Следующий тур», чтобы начать сезон.</div>
+                    <div class="text-center text-slate-500 py-12">Нажмите «Следующий тур» для старта сезона.</div>
                 </div>
             </div>
         </div>
 
-        <!-- Правая колонка: Динамические вкладки -->
+        <!-- Правая колонка -->
         <div class="lg:col-span-2">
             
-            <!-- Вкладка 1: Ла Лига -->
+            <!-- Вкладка 1: Ла Лига с плавной анимацией строк -->
             <div id="section-league" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        🏆 Турнирная таблица Ла Лиги (2 круга)
+                        🏆 Турнирная таблица Ла Лиги
                     </h2>
                     <p class="text-xs text-slate-400">Топ-4 в ЛЧ | 5-8 в ЛЕ | 9-12 в ЛК</p>
                 </div>
@@ -91,7 +93,7 @@
                         <thead>
                             <tr class="border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                                 <th class="py-3 px-3">М</th>
-                                <th class="py-3 px-3">Клуб (Месяц)</th>
+                                <th class="py-3 px-3">Клуб</th>
                                 <th class="py-3 px-2 text-center">И</th>
                                 <th class="py-3 px-2 text-center">В</th>
                                 <th class="py-3 px-2 text-center">Н</th>
@@ -100,8 +102,8 @@
                                 <th class="py-3 px-2 text-center">О</th>
                             </tr>
                         </thead>
-                        <tbody id="standings-body" class="divide-y divide-slate-800/50 text-sm">
-                            <!-- Заполняется JS -->
+                        <tbody id="standings-body" class="divide-y divide-slate-800/50 text-sm relative">
+                            <!-- Заполняется JS с FLIP анимацией -->
                         </tbody>
                     </table>
                 </div>
@@ -131,7 +133,7 @@
                 </div>
             </div>
 
-            <!-- Вкладка 3: Текстовый онлайн-комментатор -->
+            <!-- Вкладка 3: Текстовый онлайн -->
             <div id="section-commentary" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-base font-bold text-white flex items-center gap-2">🎙️ Текстовая трансляция тура</h2>
@@ -142,7 +144,7 @@
                 </div>
             </div>
 
-            <!-- Вкладка 4: Трансферы и бюджеты -->
+            <!-- Вкладка 4: Рынок и бюджеты -->
             <div id="section-transfers" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-base font-bold text-white flex items-center gap-2">💼 Финансы и Трансферный рынок клубов</h2>
@@ -165,7 +167,7 @@
                 </div>
             </div>
 
-            <!-- Вкладка 5: Статистика бомбардиров -->
+            <!-- Вкладка 5: Бомбардиры -->
             <div id="section-stats" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
                 <h2 class="text-base font-bold text-white mb-6 flex items-center gap-2">👟 Золотая бутса (Топ бомбардиров сезона)</h2>
                 <div class="overflow-x-auto custom-scrollbar">
@@ -193,38 +195,38 @@
 
     <!-- Футер -->
     <footer class="border-t border-slate-800 bg-slate-900/40 py-6 text-center text-xs text-slate-500">
-        <p>Global Football Manager Ultimate Engine &bull; Все права защищены &bull; Сгенерировано автоматически</p>
+        <p>Global Football Manager Ultimate Engine &bull; Плавные анимации & Аватарки месяцев</p>
     </footer>
 
-    <!-- Обширный технический скрипт симулятора (около 300+ строк логики) -->
+    <!-- Скрипт -->
     <script>
-        // Инициализация массивов команд с расширенными параметрами (сила, бюджет)
+        // Клубы с уникальными аватарками и характеристиками
         let teams = [
-            { id: 1, name: "Январь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 45000000 },
-            { id: 2, name: "Февраль", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 78, budget: 32000000 },
-            { id: 3, name: "Март", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 79, budget: 35000000 },
-            { id: 4, name: "Апрель", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 85, budget: 60000000 },
-            { id: 5, name: "Май", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 81, budget: 40000000 },
-            { id: 6, name: "Июнь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 83, budget: 50000000 },
-            { id: 7, name: "Июль", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 80, budget: 38000000 },
-            { id: 8, name: "Август", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 84, budget: 55000000 },
-            { id: 9, name: "Сентябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 77, budget: 30000000 },
-            { id: 10, name: "Октябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 42000000 },
-            { id: 11, name: "Ноябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 76, budget: 28000000 },
-            { id: 12, name: "Декабрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 86, budget: 65000000 }
+            { id: 1, name: "Январь", avatar: "❄️", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 45000000 },
+            { id: 2, name: "Февраль", avatar: "🌨️", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 78, budget: 32000000 },
+            { id: 3, name: "Март", avatar: "🌱", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 79, budget: 35000000 },
+            { id: 4, name: "Апрель", avatar: "🌸", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 85, budget: 60000000 },
+            { id: 5, name: "Май", avatar: "☀️", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 81, budget: 40000000 },
+            { id: 6, name: "Июнь", avatar: "🌊", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 83, budget: 50000000 },
+            { id: 7, name: "Июль", avatar: "🔥", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 80, budget: 38000000 },
+            { id: 8, name: "Август", avatar: "🌴", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 84, budget: 55000000 },
+            { id: 9, name: "Сентябрь", avatar: "🍂", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 77, budget: 30000000 },
+            { id: 10, name: "Октябрь", avatar: "🍁", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 42000000 },
+            { id: 11, name: "Ноябрь", avatar: "🌧️", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 76, budget: 28000000 },
+            { id: 12, name: "Декабрь", avatar: "🎄", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 86, budget: 65000000 }
         ];
 
         let playersStats = {};
         teams.forEach(t => {
             playersStats[t.name] = {
-                [t.name + " Снайпер"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name },
-                [t.name + " Форвард"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name },
-                [t.name + " Полузащитник"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name }
+                [t.avatar + " " + t.name + " Снайпер"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar },
+                [t.avatar + " " + t.name + " Форвард"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar },
+                [t.avatar + " " + t.name + " Хавбек"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar }
             };
         });
 
         let gameState = {
-            phase: 'league', // league, ucl_sf, ucl_f, finished
+            phase: 'league',
             tourIndex: 0,
             schedule: [],
             lastMatches: [],
@@ -237,7 +239,6 @@
             }
         };
 
-        // Генерация кругового календаря Бергера (22 тура)
         function generateSchedule() {
             let n = 12;
             let rounds = [];
@@ -262,20 +263,18 @@
             return [...rounds, ...secondHalf];
         }
 
-        // Симуляция количества голов с учетом силы команд
+        // Шансы голов (редкие события редки)
         function simulateGoalCount(teamRating, opponentRating) {
             let diff = (teamRating - opponentRating) * 0.03;
             let r = Math.random() * 100;
-            // Шансы сбалансированы, редкие события редки
             if (r < (40 - diff * 5)) return 0;
             if (r < (72 - diff * 3)) return 1;
-            if (r < (89 - diff)) return 2; // Дубль
-            if (r < 97.5) return 3;       // Хет-трик
-            if (r < 99.4) return 4;       // Покер
-            return 5;                     // Разгром
+            if (r < (89 - diff)) return 2;
+            if (r < 97.5) return 3;
+            if (r < 99.4) return 4;
+            return 5;
         }
 
-        // Распределение голов по игрокам
         function distributeGoals(clubName, totalGoals) {
             let roster = Object.keys(playersStats[clubName]);
             let events = [];
@@ -305,25 +304,23 @@
             return events;
         }
 
-        // Генерация текстовых комментариев матча
-        function generateCommentary(homeName, awayName, sh, sa) {
+        function generateCommentary(home, away, sh, sa) {
             let logs = [];
-            logs.push(`[1 мин] Матч начался между ${homeName} и ${awayName}! Трибуны ревут.`);
-            if (sh > 0) logs.push(`[18 мин] Опасная атака хозяев (${homeName}), и это гол! Счёт открыт.`);
-            if (sa > 0) logs.push(`[34 мин] Ответный выпад гостей (${awayName}) завершается точным ударом в сетку!`);
-            if (sh > 1) logs.push(`[55 мин] Фантастическая комбинация, ${homeName} забивает второй мяч!`);
-            if (sa > 1) logs.push(`[72 мин] Ошибка в обороне, ${awayName} сравнивает счёт в матче!`);
-            if (sh > 2 || sa > 2) logs.push(`[88 мин] Развязка матча! Команды идут ва-банк в концовке встречи.`);
-            logs.push(`[90 мин] Финальный свисток арбитра. Итоговый счёт: ${sh}:${sa}.`);
+            logs.push(`[1 мин] Стартовый свисток! ${home.avatar} ${home.name} против ${away.avatar} ${away.name}.`);
+            if (sh > 0) logs.push(`[19 мин] ГОЛ! Хозяева поля (${home.name}) открывают счет мощным ударом.`);
+            if (sa > 0) logs.push(`[35 мин] Ответный гол от ${away.name}! Трибуны гостей ликуют.`);
+            if (sh > 1) logs.push(`[58 мин] Оформляют второй мяч! ${home.name} увеличивают преимущество.`);
+            if (sa > 1) logs.push(`[74 мин] Невероятно! ${away.name} сравнивают цифры на табло.`);
+            if (sh > 2 || sa > 2) logs.push(`[89 мин] Безумная концовка матча, команды сражаются за каждый метр газона!`);
+            logs.push(`[90 мин] Матч окончен со счетом ${sh}:${sa}.`);
             return logs;
         }
 
-        // Проверка на камбэк
-        function checkComeback(homeName, awayName, sh, sa) {
+        function checkComeback(home, away, sh, sa) {
             if (sh > sa && Math.random() < 0.12) {
-                return { is: true, text: `⚡ ЭПИЧЕСКИЙ КАМБЭК: ${homeName} проигрывали по ходу матча, но вырвали победу ${sh}:${sa}!` };
+                return { is: true, text: `⚡ ЭПИЧЕСКИЙ КАМБЭК: ${home.avatar} ${home.name} переломили ход встречи и победили ${sh}:${sa}!` };
             } else if (sa > sh && Math.random() < 0.12) {
-                return { is: true, text: `⚡ ЭПИЧЕСКИЙ КАМБЭК: ${awayName} переломили ход игры и победили ${sh}:${sa}!` };
+                return { is: true, text: `⚡ ЭПИЧЕСКИЙ КАМБЭК: ${away.avatar} ${away.name} совершили камбэк и вырвали победу ${sh}:${sa}!` };
             }
             return { is: false, text: "" };
         }
@@ -362,20 +359,18 @@
             initSeason();
         }
 
-        // Управление трансферным бюджетом (инвестиции в рейтинг команды)
         function investInClub(teamId) {
             let club = teams.find(t => t.id === teamId);
             if (club.budget >= 10000000) {
                 club.budget -= 10000000;
                 club.rating += 2;
-                alert(`Успешно! Клуб ${club.name} усилил состав на трансферном рынке. Новый рейтинг силы: ${club.rating}`);
+                alert(`Успешно! ${club.avatar} ${club.name} усилил состав. Новый рейтинг: ${club.rating}`);
                 updateUI();
             } else {
                 alert("Недостаточно средств в бюджете клуба!");
             }
         }
 
-        // Шаг симуляции
         function executeNextStep() {
             gameState.activeComebacks = [];
             gameState.commentaryLog = [];
@@ -398,22 +393,22 @@
 
                     let evH = distributeGoals(th.name, sh);
                     let evA = distributeGoals(ta.name, sa);
-                    let cb = checkComeback(th.name, ta.name, sh, sa);
+                    let cb = checkComeback(th, ta, sh, sa);
 
                     if (cb.is) gameState.activeComebacks.push(cb.text);
 
-                    let matchComments = generateCommentary(th.name, ta.name, sh, sa);
-                    gameState.commentaryLog.push(`--- Тур ${gameState.tourIndex + 1}: ${th.name} vs ${ta.name} ---`, ...matchComments);
+                    let matchComments = generateCommentary(th, ta, sh, sa);
+                    gameState.commentaryLog.push(`--- Тур ${gameState.tourIndex + 1}: ${th.avatar} ${th.name} vs ${ta.avatar} ${ta.name} ---`, ...matchComments);
 
                     th.p++; th.gf += sh; th.ga += sa;
                     ta.p++; ta.ga += sh; ta.gf += sa;
 
                     if (sh > sa) { th.w++; th.pts += 3; ta.l++; }
-                    else if (sh < sa) { ta.w++; ta.pts += 3; th.l++; }
+                    else if (sh < sa) { ta.w++; th.l++; ta.pts += 3; }
                     else { th.d++; th.pts += 1; ta.d++; }
 
                     gameState.lastMatches.push({
-                        home: th.name, away: ta.name, sh, sa, events: [...evH, ...evA]
+                        home: th.name, homeAvatar: th.avatar, away: ta.name, awayAvatar: ta.avatar, sh, sa, events: [...evH, ...evA]
                     });
                 });
 
@@ -430,7 +425,7 @@
                 simulateCupFinals('uecl');
                 gameState.phase = 'finished';
             } else if (gameState.phase === 'finished') {
-                alert("Сезон завершен! Нажмите кнопку сброса для нового года.");
+                alert("Сезон завершен! Нажмите сброс для нового года.");
                 return;
             }
 
@@ -449,7 +444,7 @@
 
             gameState.phase = 'ucl_sf';
             gameState.lastMatches = [];
-            gameState.activeComebacks.push("🌟 Регулярный сезон завершен! Жеребьевка еврокубков проведена успешно.");
+            gameState.activeComebacks.push("🌟 Регулярный сезон завершен! Команды распределены по еврокубкам.");
         }
 
         function simulateCupRound(cupKey) {
@@ -467,7 +462,7 @@
                 cup.winners.push(winner);
 
                 gameState.lastMatches.push({
-                    home: m.t1.name, away: m.t2.name, sh, sa, events: [{text: `🏆 Плей-офф (${winner.name} проходит в финал)`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20'}]
+                    home: m.t1.name, homeAvatar: m.t1.avatar, away: m.t2.name, awayAvatar: m.t2.avatar, sh, sa, events: [{text: `🏆 Плей-офф (${winner.avatar} ${winner.name} в финале)`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20'}]
                 });
             });
         }
@@ -485,9 +480,9 @@
             cup.finalMatch = { t1: f1, t2: f2, sh, sa, winner: cupWinner };
             cup.status = 'finished';
 
-            gameState.activeComebacks.push(`👑 ОБЛАДАТЕЛЬ КУБКА ${cupKey.toUpperCase()}: Клуб "${cupWinner.name}" выигрывает трофей!`);
+            gameState.activeComebacks.push(`👑 ПОБЕДИТЕЛЬ ${cupKey.toUpperCase()}: Клуб "${cupWinner.avatar} ${cupWinner.name}" завоевал трофей!`);
             gameState.lastMatches.push({
-                home: f1.name, away: f2.name, sh, sa, events: [{text: `🌟 ФИНАЛ: ЧЕМПИОН ${cupKey.toUpperCase()} — ${cupWinner.name}!`, style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}]
+                home: f1.name, homeAvatar: f1.avatar, away: f2.name, awayAvatar: f2.avatar, sh, sa, events: [{text: `🌟 ФИНАЛ: ТРИУМФАТОР ${cupKey.toUpperCase()} — ${cupWinner.avatar} ${cupWinner.name}!`, style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}]
             });
         }
 
@@ -508,6 +503,61 @@
             });
             document.getElementById('section-' + tabName).classList.remove('hidden');
             document.getElementById('tab-' + tabName).className = "px-4 py-2 rounded-xl font-semibold text-sm bg-indigo-600 text-white transition-all shadow-md";
+        }
+
+        // FLIP анимация турнирной таблицы
+        function updateStandingsWithFLIP() {
+            const tbody = document.getElementById('standings-body');
+            
+            // 1. FIRST: запоминаем текущие позиции старых строк
+            const prevRects = new Map();
+            Array.from(tbody.children).forEach(tr => {
+                const id = tr.dataset.teamId;
+                if (id) prevRects.set(id, tr.getBoundingClientRect());
+            });
+
+            // 2. Генерация нового содержимого таблиц
+            let sorted = getSortedStandings();
+            let tableHTML = "";
+            sorted.forEach((t, i) => {
+                let rankStyle = i === 0 ? "text-amber-400 font-bold" : i < 4 ? "text-indigo-400 font-semibold" : i < 8 ? "text-blue-400" : i < 12 ? "text-emerald-400" : "text-slate-300";
+                let rowBg = i === 0 ? "bg-amber-500/5" : i % 2 === 0 ? "bg-slate-900/40" : "";
+                tableHTML += `
+                    <tr data-team-id="${t.id}" class="table-row-transition ${rowBg} hover:bg-slate-800/40">
+                        <td class="py-3 px-3 ${rankStyle}">${i + 1}</td>
+                        <td class="py-3 px-3 font-medium text-white flex items-center gap-2.5">
+                            <span class="text-xl">${t.avatar}</span> <span>${t.name}</span>
+                        </td>
+                        <td class="py-3 px-2 text-center text-slate-400">${t.p}</td>
+                        <td class="py-3 px-2 text-center text-slate-300">${t.w}</td>
+                        <td class="py-3 px-2 text-center text-slate-300">${t.d}</td>
+                        <td class="py-3 px-2 text-center text-slate-300">${t.l}</td>
+                        <td class="py-3 px-2 text-center text-slate-400">${t.gf}:${t.ga}</td>
+                        <td class="py-3 px-2 text-center font-bold text-indigo-400">${t.pts}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = tableHTML;
+
+            // 3. LAST, INVERT, PLAY: рассчитываем смещение и запускаем анимацию
+            Array.from(tbody.children).forEach(tr => {
+                const id = tr.dataset.teamId;
+                if (prevRects.has(id)) {
+                    const oldRect = prevRects.get(id);
+                    const newRect = tr.getBoundingClientRect();
+                    const deltaY = oldRect.top - newRect.top;
+
+                    if (deltaY !== 0) {
+                        tr.style.transform = `translateY(${deltaY}px)`;
+                        tr.style.transition = 'none';
+
+                        requestAnimationFrame(() => {
+                            tr.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                            tr.style.transform = 'translateY(0)';
+                        });
+                    }
+                }
+            });
         }
 
         function updateUI() {
@@ -536,7 +586,7 @@
             });
             document.getElementById('comeback-alert-container').innerHTML = alertHTML;
 
-            // Матчи
+            // Матчи с аватарками
             let matchesHTML = "";
             if (gameState.tourIndex === 0 && gameState.phase === 'league') {
                 matchesHTML = `<div class="text-center text-slate-500 py-12">Нажмите «Следующий тур» для старта чемпионата.</div>`;
@@ -546,11 +596,11 @@
                     matchesHTML += `
                         <div class="bg-slate-950/60 border border-slate-800/80 p-3.5 rounded-xl flex flex-col gap-2">
                             <div class="flex justify-between items-center text-sm">
-                                <span class="font-medium text-slate-200 w-2/5 truncate">${m.home}</span>
+                                <span class="font-medium text-slate-200 w-2/5 truncate flex items-center gap-1.5"><span>${m.homeAvatar}</span> ${m.home}</span>
                                 <div class="bg-slate-800 px-3 py-1 rounded-lg font-bold text-indigo-400 tracking-wider">
                                     ${m.sh} : ${m.sa}
                                 </div>
-                                <span class="font-medium text-slate-200 w-2/5 truncate text-right">${m.away}</span>
+                                <span class="font-medium text-slate-200 w-2/5 truncate text-right flex items-center justify-end gap-1.5">${m.away} <span>${m.awayAvatar}</span></span>
                             </div>
                             ${m.events.length > 0 ? `<div class="flex flex-wrap gap-1 justify-center mt-1">${evHTML}</div>` : ""}
                         </div>
@@ -559,33 +609,15 @@
             }
             document.getElementById('matches-container').innerHTML = matchesHTML;
 
-            // Таблица Ла Лиги
-            let sorted = getSortedStandings();
-            let tableHTML = "";
-            sorted.forEach((t, i) => {
-                let rankStyle = i === 0 ? "text-amber-400 font-bold" : i < 4 ? "text-indigo-400 font-semibold" : i < 8 ? "text-blue-400" : i < 12 ? "text-emerald-400" : "text-slate-300";
-                let rowBg = i === 0 ? "bg-amber-500/5" : i % 2 === 0 ? "bg-slate-900/40" : "";
-                tableHTML += `
-                    <tr class="${rowBg} hover:bg-slate-800/40 transition-colors">
-                        <td class="py-3 px-3 ${rankStyle}">${i + 1}</td>
-                        <td class="py-3 px-3 font-medium text-white">${t.name}</td>
-                        <td class="py-3 px-2 text-center text-slate-400">${t.p}</td>
-                        <td class="py-3 px-2 text-center text-slate-300">${t.w}</td>
-                        <td class="py-3 px-2 text-center text-slate-300">${t.d}</td>
-                        <td class="py-3 px-2 text-center text-slate-300">${t.l}</td>
-                        <td class="py-3 px-2 text-center text-slate-400">${t.gf}:${t.ga}</td>
-                        <td class="py-3 px-2 text-center font-bold text-indigo-400">${t.pts}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('standings-body').innerHTML = tableHTML;
+            // Плавное обновление таблицы
+            updateStandingsWithFLIP();
 
             // Еврокубки
             renderCup('ucl', 'ucl-container');
             renderCup('uel', 'uel-container');
             renderCup('uecl', 'uecl-container');
 
-            // Комментарии
+            // Текстовый онлайн
             let commHTML = "";
             if (gameState.commentaryLog.length === 0) {
                 commHTML = `<p class="text-slate-500 text-center italic py-20">События матчей появятся здесь после запуска игрового тура.</p>`;
@@ -601,7 +633,7 @@
             teams.forEach(t => {
                 transHTML += `
                     <tr class="hover:bg-slate-800/40 transition-colors">
-                        <td class="py-3 px-3 font-medium text-white">${t.name}</td>
+                        <td class="py-3 px-3 font-medium text-white flex items-center gap-2"><span class="text-lg">${t.avatar}</span> ${t.name}</td>
                         <td class="py-3 px-3 text-center text-indigo-400 font-bold">${t.rating}</td>
                         <td class="py-3 px-3 text-center text-emerald-400">${t.budget.toLocaleString()} €</td>
                         <td class="py-3 px-3 text-center">
@@ -628,14 +660,14 @@
                 html += `<p class="font-semibold text-slate-400 uppercase tracking-wider mb-2">Полуфиналы:</p>`;
                 cup.matches.forEach(m => {
                     html += `<div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
-                        <span>${m.t1.name} vs ${m.t2.name}</span>
+                        <span>${m.t1.avatar} ${m.t1.name} vs ${m.t2.avatar} ${m.t2.name}</span>
                         <span class="font-bold text-indigo-400">${m.sh !== undefined && m.sh !== null ? `${m.sh}:${m.sa}` : 'Ожидание'}</span>
                     </div>`;
                 });
             } else if (cup.status === 'finished') {
-                html += `<p class="font-semibold text-emerald-400 uppercase tracking-wider mb-2">🏆 Победитель: ${cup.finalMatch.winner.name}</p>`;
+                html += `<p class="font-semibold text-emerald-400 uppercase tracking-wider mb-2">🏆 Победитель: ${cup.finalMatch.winner.avatar} ${cup.finalMatch.winner.name}</p>`;
                 html += `<div class="bg-emerald-500/10 p-2.5 rounded-lg border border-emerald-500/20 flex justify-between items-center font-medium">
-                    <span>Финал: ${cup.finalMatch.t1.name} — ${cup.finalMatch.t2.name}</span>
+                    <span>Финал: ${cup.finalMatch.t1.avatar} ${cup.finalMatch.t1.name} — ${cup.finalMatch.t2.avatar} ${cup.finalMatch.t2.name}</span>
                     <span class="font-bold text-emerald-400">${cup.finalMatch.sh}:${cup.finalMatch.sa}</span>
                 </div>`;
             }
@@ -655,7 +687,7 @@
             all.slice(0, 10).forEach(p => {
                 html += `
                     <tr class="hover:bg-slate-800/40 transition-colors">
-                        <td class="py-3 px-3 font-medium text-white">${p.name}</td>
+                        <td class="py-3 px-3 font-medium text-white flex items-center gap-2"><span class="text-base">${p.avatar}</span> ${p.name}</td>
                         <td class="py-3 px-3 text-slate-400">${p.club}</td>
                         <td class="py-3 px-3 text-center font-bold text-amber-400">${p.goals}</td>
                         <td class="py-3 px-3 text-center text-slate-300">${p.braces}</td>
