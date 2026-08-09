@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Football Manager Ultimate Edition with FLIP Animations & Avatars</title>
+    <title>Global Football Manager Ultimate Edition with True FLIP & Custom Avatars</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
@@ -13,7 +13,7 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
         .table-row-transition {
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.3s ease;
+            will-change: transform;
         }
     </style>
 </head>
@@ -26,9 +26,9 @@
                 <div class="bg-gradient-to-tr from-indigo-600 via-violet-600 to-purple-600 text-white font-bold p-2.5 rounded-xl text-xl shadow-lg shadow-indigo-600/30">⚽</div>
                 <div>
                     <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                        FOOTBALL MASTER <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">v4.0 Animated</span>
+                        FOOTBALL MASTER <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">v5.0 Pro FLIP</span>
                     </h1>
-                    <p class="text-xs text-slate-400">Плавные переходы позиций, аватарки месяцев, еврокубки и трансферы</p>
+                    <p class="text-xs text-slate-400">Плавные анимации перемещений, премиальные аватарки месяцев и еврокубки</p>
                 </div>
             </div>
             
@@ -79,7 +79,7 @@
         <!-- Правая колонка -->
         <div class="lg:col-span-2">
             
-            <!-- Вкладка 1: Ла Лига с плавной анимацией строк -->
+            <!-- Вкладка 1: Ла Лига с FLIP анимацией -->
             <div id="section-league" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-base font-bold text-white flex items-center gap-2">
@@ -103,7 +103,7 @@
                             </tr>
                         </thead>
                         <tbody id="standings-body" class="divide-y divide-slate-800/50 text-sm relative">
-                            <!-- Заполняется JS с FLIP анимацией -->
+                            <!-- Заполняется JS -->
                         </tbody>
                     </table>
                 </div>
@@ -195,33 +195,33 @@
 
     <!-- Футер -->
     <footer class="border-t border-slate-800 bg-slate-900/40 py-6 text-center text-xs text-slate-500">
-        <p>Global Football Manager Ultimate Engine &bull; Плавные анимации & Аватарки месяцев</p>
+        <p>Global Football Manager Ultimate Engine &bull; Плавные FLIP анимации & Премиальные аватарки месяцев</p>
     </footer>
 
     <!-- Скрипт -->
     <script>
-        // Клубы с уникальными аватарками и характеристиками
+        // Клубы-месяцы с уникальными кастомными аватарами (иконками/градиентами)
         let teams = [
-            { id: 1, name: "Январь", avatar: "❄️", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 45000000 },
-            { id: 2, name: "Февраль", avatar: "🌨️", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 78, budget: 32000000 },
-            { id: 3, name: "Март", avatar: "🌱", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 79, budget: 35000000 },
-            { id: 4, name: "Апрель", avatar: "🌸", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 85, budget: 60000000 },
-            { id: 5, name: "Май", avatar: "☀️", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 81, budget: 40000000 },
-            { id: 6, name: "Июнь", avatar: "🌊", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 83, budget: 50000000 },
-            { id: 7, name: "Июль", avatar: "🔥", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 80, budget: 38000000 },
-            { id: 8, name: "Август", avatar: "🌴", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 84, budget: 55000000 },
-            { id: 9, name: "Сентябрь", avatar: "🍂", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 77, budget: 30000000 },
-            { id: 10, name: "Октябрь", avatar: "🍁", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 42000000 },
-            { id: 11, name: "Ноябрь", avatar: "🌧️", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 76, budget: 28000000 },
-            { id: 12, name: "Декабрь", avatar: "🎄", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 86, budget: 65000000 }
+            { id: 1, name: "Январь", avatar: "❄️", bgBadge: "from-blue-600/30 to-cyan-600/30 border-cyan-500/40 text-cyan-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 45000000 },
+            { id: 2, name: "Февраль", avatar: "🌨️", bgBadge: "from-sky-600/30 to-blue-700/30 border-sky-500/40 text-sky-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 78, budget: 32000000 },
+            { id: 3, name: "Март", avatar: "🌱", bgBadge: "from-emerald-600/30 to-teal-600/30 border-emerald-500/40 text-emerald-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 79, budget: 35000000 },
+            { id: 4, name: "Апрель", avatar: "🌸", bgBadge: "from-pink-600/30 to-rose-600/30 border-pink-500/40 text-pink-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 85, budget: 60000000 },
+            { id: 5, name: "Май", avatar: "☀️", bgBadge: "from-amber-600/30 to-yellow-600/30 border-amber-500/40 text-amber-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 81, budget: 40000000 },
+            { id: 6, name: "Июнь", avatar: "🌊", bgBadge: "from-blue-500/30 to-indigo-600/30 border-blue-400/40 text-blue-200", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 83, budget: 50000000 },
+            { id: 7, name: "Июль", avatar: "🔥", bgBadge: "from-orange-600/30 to-red-600/30 border-orange-500/40 text-orange-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 80, budget: 38000000 },
+            { id: 8, name: "Август", avatar: "🌴", bgBadge: "from-emerald-500/30 to-green-600/30 border-emerald-400/40 text-emerald-200", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 84, budget: 55000000 },
+            { id: 9, name: "Сентябрь", avatar: "🍂", bgBadge: "from-amber-700/30 to-yellow-800/30 border-amber-600/40 text-amber-200", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 77, budget: 30000000 },
+            { id: 10, name: "Октябрь", avatar: "🍁", bgBadge: "from-yellow-600/30 to-amber-700/30 border-yellow-500/40 text-yellow-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 42000000 },
+            { id: 11, name: "Ноябрь", avatar: "🌧️", bgBadge: "from-slate-600/30 to-zinc-700/30 border-slate-500/40 text-slate-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 76, budget: 28000000 },
+            { id: 12, name: "Декабрь", avatar: "🎄", bgBadge: "from-red-600/30 to-emerald-700/30 border-red-500/40 text-red-200", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 86, budget: 65000000 }
         ];
 
         let playersStats = {};
         teams.forEach(t => {
             playersStats[t.name] = {
-                [t.avatar + " " + t.name + " Снайпер"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar },
-                [t.avatar + " " + t.name + " Форвард"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar },
-                [t.avatar + " " + t.name + " Хавбек"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar }
+                [t.name + " Снайпер"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar },
+                [t.name + " Форвард"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar },
+                [t.name + " Хавбек"]: { goals: 0, braces: 0, hattricks: 0, pokers: 0, club: t.name, avatar: t.avatar }
             };
         });
 
@@ -238,6 +238,14 @@
                 uecl: { status: 'not_started', matches: [] }
             }
         };
+
+        function renderAvatar(team) {
+            return `
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr ${team.bgBadge} border flex items-center justify-center text-lg shadow-md shrink-0">
+                    ${team.avatar}
+                </div>
+            `;
+        }
 
         function generateSchedule() {
             let n = 12;
@@ -263,7 +271,6 @@
             return [...rounds, ...secondHalf];
         }
 
-        // Шансы голов (редкие события редки)
         function simulateGoalCount(teamRating, opponentRating) {
             let diff = (teamRating - opponentRating) * 0.03;
             let r = Math.random() * 100;
@@ -306,12 +313,12 @@
 
         function generateCommentary(home, away, sh, sa) {
             let logs = [];
-            logs.push(`[1 мин] Стартовый свисток! ${home.avatar} ${home.name} против ${away.avatar} ${away.name}.`);
+            logs.push(`[1 мин] Стартовый свисток! ${home.avatar} ${home.name} принимает ${away.avatar} ${away.name}.`);
             if (sh > 0) logs.push(`[19 мин] ГОЛ! Хозяева поля (${home.name}) открывают счет мощным ударом.`);
-            if (sa > 0) logs.push(`[35 мин] Ответный гол от ${away.name}! Трибуны гостей ликуют.`);
+            if (sa > 0) logs.push(`[35 мин] Ответный мяч от ${away.name}! Трибуны гостей ликуют.`);
             if (sh > 1) logs.push(`[58 мин] Оформляют второй мяч! ${home.name} увеличивают преимущество.`);
             if (sa > 1) logs.push(`[74 мин] Невероятно! ${away.name} сравнивают цифры на табло.`);
-            if (sh > 2 || sa > 2) logs.push(`[89 мин] Безумная концовка матча, команды сражаются за каждый метр газона!`);
+            if (sh > 2 || sa > 2) logs.push(`[89 мин] Безумная концовка матча, команды сражаются за каждый сантиметр газона!`);
             logs.push(`[90 мин] Матч окончен со счетом ${sh}:${sa}.`);
             return logs;
         }
@@ -328,7 +335,7 @@
         function initSeason() {
             gameState.schedule = generateSchedule();
             resetData();
-            updateUI();
+            updateUI(false);
         }
 
         function resetData() {
@@ -365,7 +372,7 @@
                 club.budget -= 10000000;
                 club.rating += 2;
                 alert(`Успешно! ${club.avatar} ${club.name} усилил состав. Новый рейтинг: ${club.rating}`);
-                updateUI();
+                updateUI(false);
             } else {
                 alert("Недостаточно средств в бюджете клуба!");
             }
@@ -408,7 +415,7 @@
                     else { th.d++; th.pts += 1; ta.d++; }
 
                     gameState.lastMatches.push({
-                        home: th.name, homeAvatar: th.avatar, away: ta.name, awayAvatar: ta.avatar, sh, sa, events: [...evH, ...evA]
+                        home: th.name, homeAvatar: th.avatar, homeBg: th.bgBadge, away: ta.name, awayAvatar: ta.avatar, awayBg: ta.bgBadge, sh, sa, events: [...evH, ...evA]
                     });
                 });
 
@@ -429,7 +436,7 @@
                 return;
             }
 
-            updateUI();
+            updateUI(true);
         }
 
         function startEuropeanCups() {
@@ -462,7 +469,7 @@
                 cup.winners.push(winner);
 
                 gameState.lastMatches.push({
-                    home: m.t1.name, homeAvatar: m.t1.avatar, away: m.t2.name, awayAvatar: m.t2.avatar, sh, sa, events: [{text: `🏆 Плей-офф (${winner.avatar} ${winner.name} в финале)`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20'}]
+                    home: m.t1.name, homeAvatar: m.t1.avatar, homeBg: m.t1.bgBadge, away: m.t2.name, awayAvatar: m.t2.avatar, awayBg: m.t2.bgBadge, sh, sa, events: [{text: `🏆 Плей-офф (${winner.avatar} ${winner.name} в финале)`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20'}]
                 });
             });
         }
@@ -482,7 +489,7 @@
 
             gameState.activeComebacks.push(`👑 ПОБЕДИТЕЛЬ ${cupKey.toUpperCase()}: Клуб "${cupWinner.avatar} ${cupWinner.name}" завоевал трофей!`);
             gameState.lastMatches.push({
-                home: f1.name, homeAvatar: f1.avatar, away: f2.name, awayAvatar: f2.avatar, sh, sa, events: [{text: `🌟 ФИНАЛ: ТРИУМФАТОР ${cupKey.toUpperCase()} — ${cupWinner.avatar} ${cupWinner.name}!`, style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}]
+                home: f1.name, homeAvatar: f1.avatar, homeBg: f1.bgBadge, away: f2.name, awayAvatar: f2.avatar, awayBg: f2.bgBadge, sh, sa, events: [{text: `🌟 ФИНАЛ: ТРИУМФАТОР ${cupKey.toUpperCase()} — ${cupWinner.avatar} ${cupWinner.name}!`, style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}]
             });
         }
 
@@ -505,28 +512,34 @@
             document.getElementById('tab-' + tabName).className = "px-4 py-2 rounded-xl font-semibold text-sm bg-indigo-600 text-white transition-all shadow-md";
         }
 
-        // FLIP анимация турнирной таблицы
-        function updateStandingsWithFLIP() {
+        // True FLIP Animation Algorithm for Standings Table
+        function updateStandingsTable(animate = true) {
             const tbody = document.getElementById('standings-body');
-            
-            // 1. FIRST: запоминаем текущие позиции старых строк
-            const prevRects = new Map();
-            Array.from(tbody.children).forEach(tr => {
-                const id = tr.dataset.teamId;
-                if (id) prevRects.set(id, tr.getBoundingClientRect());
-            });
+            const sorted = getSortedStandings();
 
-            // 2. Генерация нового содержимого таблиц
-            let sorted = getSortedStandings();
+            // 1. FIRST: Запоминаем текущие вертикальные позиции существующих строк
+            const firstRects = new Map();
+            if (animate) {
+                Array.from(tbody.children).forEach(tr => {
+                    const id = tr.dataset.teamId;
+                    if (id) {
+                        firstRects.set(id, tr.getBoundingClientRect().top);
+                    }
+                });
+            }
+
+            // 2. BUILD NEW HTML / DOM STRUCTURE
             let tableHTML = "";
             sorted.forEach((t, i) => {
                 let rankStyle = i === 0 ? "text-amber-400 font-bold" : i < 4 ? "text-indigo-400 font-semibold" : i < 8 ? "text-blue-400" : i < 12 ? "text-emerald-400" : "text-slate-300";
                 let rowBg = i === 0 ? "bg-amber-500/5" : i % 2 === 0 ? "bg-slate-900/40" : "";
+                
                 tableHTML += `
                     <tr data-team-id="${t.id}" class="table-row-transition ${rowBg} hover:bg-slate-800/40">
                         <td class="py-3 px-3 ${rankStyle}">${i + 1}</td>
-                        <td class="py-3 px-3 font-medium text-white flex items-center gap-2.5">
-                            <span class="text-xl">${t.avatar}</span> <span>${t.name}</span>
+                        <td class="py-3 px-3 font-medium text-white flex items-center gap-3">
+                            ${renderAvatar(t)}
+                            <span class="font-semibold tracking-tight">${t.name}</span>
                         </td>
                         <td class="py-3 px-2 text-center text-slate-400">${t.p}</td>
                         <td class="py-3 px-2 text-center text-slate-300">${t.w}</td>
@@ -539,28 +552,31 @@
             });
             tbody.innerHTML = tableHTML;
 
-            // 3. LAST, INVERT, PLAY: рассчитываем смещение и запускаем анимацию
-            Array.from(tbody.children).forEach(tr => {
-                const id = tr.dataset.teamId;
-                if (prevRects.has(id)) {
-                    const oldRect = prevRects.get(id);
-                    const newRect = tr.getBoundingClientRect();
-                    const deltaY = oldRect.top - newRect.top;
+            // 3. INVERT & PLAY: Рассчитываем дельту и запускаем плавное скольжение
+            if (animate) {
+                Array.from(tbody.children).forEach(tr => {
+                    const id = tr.dataset.teamId;
+                    if (firstRects.has(id)) {
+                        const oldTop = firstRects.get(id);
+                        const newTop = tr.getBoundingClientRect().top;
+                        const deltaY = oldTop - newTop;
 
-                    if (deltaY !== 0) {
-                        tr.style.transform = `translateY(${deltaY}px)`;
-                        tr.style.transition = 'none';
-
-                        requestAnimationFrame(() => {
-                            tr.style.transition = 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
-                            tr.style.transform = 'translateY(0)';
-                        });
+                        if (deltaY !== 0) {
+                            tr.style.transition = 'none';
+                            tr.style.transform = `translateY(${deltaY}px)`;
+                            
+                            // Запуск анимации в следующем кадре
+                            requestAnimationFrame(() => {
+                                tr.style.transition = 'transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s ease';
+                                tr.style.transform = 'translateY(0)';
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
-        function updateUI() {
+        function updateUI(animateTable = true) {
             let phaseText = "";
             if (gameState.phase === 'league') {
                 phaseText = `Регулярный сезон (Тур ${gameState.tourIndex}/22)`;
@@ -596,11 +612,17 @@
                     matchesHTML += `
                         <div class="bg-slate-950/60 border border-slate-800/80 p-3.5 rounded-xl flex flex-col gap-2">
                             <div class="flex justify-between items-center text-sm">
-                                <span class="font-medium text-slate-200 w-2/5 truncate flex items-center gap-1.5"><span>${m.homeAvatar}</span> ${m.home}</span>
+                                <span class="font-medium text-slate-200 w-2/5 truncate flex items-center gap-2">
+                                    <div class="w-7 h-7 rounded-lg bg-gradient-to-tr ${m.homeBg} border flex items-center justify-center text-sm shadow-sm shrink-0">${m.homeAvatar}</div>
+                                    <span class="truncate">${m.home}</span>
+                                </span>
                                 <div class="bg-slate-800 px-3 py-1 rounded-lg font-bold text-indigo-400 tracking-wider">
                                     ${m.sh} : ${m.sa}
                                 </div>
-                                <span class="font-medium text-slate-200 w-2/5 truncate text-right flex items-center justify-end gap-1.5">${m.away} <span>${m.awayAvatar}</span></span>
+                                <span class="font-medium text-slate-200 w-2/5 truncate text-right flex items-center justify-end gap-2">
+                                    <span class="truncate">${m.away}</span>
+                                    <div class="w-7 h-7 rounded-lg bg-gradient-to-tr ${m.awayBg} border flex items-center justify-center text-sm shadow-sm shrink-0">${m.awayAvatar}</div>
+                                </span>
                             </div>
                             ${m.events.length > 0 ? `<div class="flex flex-wrap gap-1 justify-center mt-1">${evHTML}</div>` : ""}
                         </div>
@@ -610,7 +632,7 @@
             document.getElementById('matches-container').innerHTML = matchesHTML;
 
             // Плавное обновление таблицы
-            updateStandingsWithFLIP();
+            updateStandingsTable(animateTable);
 
             // Еврокубки
             renderCup('ucl', 'ucl-container');
@@ -628,12 +650,15 @@
             }
             document.getElementById('commentary-box').innerHTML = commHTML;
 
-            // Трансферы
+            // Трансферы с аватарами
             let transHTML = "";
             teams.forEach(t => {
                 transHTML += `
                     <tr class="hover:bg-slate-800/40 transition-colors">
-                        <td class="py-3 px-3 font-medium text-white flex items-center gap-2"><span class="text-lg">${t.avatar}</span> ${t.name}</td>
+                        <td class="py-3 px-3 font-medium text-white flex items-center gap-3">
+                            ${renderAvatar(t)}
+                            <span class="font-semibold">${t.name}</span>
+                        </td>
                         <td class="py-3 px-3 text-center text-indigo-400 font-bold">${t.rating}</td>
                         <td class="py-3 px-3 text-center text-emerald-400">${t.budget.toLocaleString()} €</td>
                         <td class="py-3 px-3 text-center">
@@ -660,14 +685,14 @@
                 html += `<p class="font-semibold text-slate-400 uppercase tracking-wider mb-2">Полуфиналы:</p>`;
                 cup.matches.forEach(m => {
                     html += `<div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
-                        <span>${m.t1.avatar} ${m.t1.name} vs ${m.t2.avatar} ${m.t2.name}</span>
+                        <span class="flex items-center gap-2">${renderAvatar(m.t1)} ${m.t1.name} vs ${renderAvatar(m.t2)} ${m.t2.name}</span>
                         <span class="font-bold text-indigo-400">${m.sh !== undefined && m.sh !== null ? `${m.sh}:${m.sa}` : 'Ожидание'}</span>
                     </div>`;
                 });
             } else if (cup.status === 'finished') {
-                html += `<p class="font-semibold text-emerald-400 uppercase tracking-wider mb-2">🏆 Победитель: ${cup.finalMatch.winner.avatar} ${cup.finalMatch.winner.name}</p>`;
+                html += `<p class="font-semibold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">🏆 Победитель: ${renderAvatar(cup.finalMatch.winner)} ${cup.finalMatch.winner.name}</p>`;
                 html += `<div class="bg-emerald-500/10 p-2.5 rounded-lg border border-emerald-500/20 flex justify-between items-center font-medium">
-                    <span>Финал: ${cup.finalMatch.t1.avatar} ${cup.finalMatch.t1.name} — ${cup.finalMatch.t2.avatar} ${cup.finalMatch.t2.name}</span>
+                    <span class="flex items-center gap-2">Финал: ${renderAvatar(cup.finalMatch.t1)} ${cup.finalMatch.t1.name} — ${renderAvatar(cup.finalMatch.t2)} ${cup.finalMatch.t2.name}</span>
                     <span class="font-bold text-emerald-400">${cup.finalMatch.sh}:${cup.finalMatch.sa}</span>
                 </div>`;
             }
@@ -677,9 +702,10 @@
 
         function renderScorers() {
             let all = [];
-            Object.keys(playersStats).forEach(club => {
-                Object.keys(playersStats[club]).forEach(pName => {
-                    all.push({ name: pName, ...playersStats[club][pName] });
+            Object.keys(playersStats).forEach(clubName => {
+                let teamObj = teams.find(t => t.name === clubName);
+                Object.keys(playersStats[clubName]).forEach(pName => {
+                    all.push({ name: pName, clubTeam: teamObj, ...playersStats[clubName][pName] });
                 });
             });
             all.sort((a, b) => b.goals - a.goals);
@@ -687,7 +713,10 @@
             all.slice(0, 10).forEach(p => {
                 html += `
                     <tr class="hover:bg-slate-800/40 transition-colors">
-                        <td class="py-3 px-3 font-medium text-white flex items-center gap-2"><span class="text-base">${p.avatar}</span> ${p.name}</td>
+                        <td class="py-3 px-3 font-medium text-white flex items-center gap-3">
+                            ${renderAvatar(p.clubTeam)}
+                            <span>${p.name}</span>
+                        </td>
                         <td class="py-3 px-3 text-slate-400">${p.club}</td>
                         <td class="py-3 px-3 text-center font-bold text-amber-400">${p.goals}</td>
                         <td class="py-3 px-3 text-center text-slate-300">${p.braces}</td>
