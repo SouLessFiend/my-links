@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Football League Simulator</title>
-    <!-- Подключаем Tailwind CSS для элитного дизайна -->
+    <title>La Liga: Season 12 Months Simulator</title>
+    <!-- Подключаем Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Outfit', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-slate-950">
 
     <!-- Шапка -->
     <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="bg-emerald-500 text-slate-950 font-bold p-2.5 rounded-xl text-xl shadow-lg shadow-emerald-500/20">⚽</div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-tight text-white">GLOBAL SUPER LEAGUE</h1>
-                    <p class="text-xs text-slate-400">Официальный симулятор сезона на 12 месяцев</p>
+                <div class="bg-indigo-600 text-white font-bold p-2.5 rounded-xl text-xl shadow-lg shadow-indigo-600/20">⚽</div>
+            <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">LA LIGA: 12 MONTHS EDITION</h1>
+                    <p class="text-xs text-slate-400">Двухкруговой турнир (дома и на выезде)</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-3">
-                <div id="season-badge" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-sm font-medium text-emerald-400">
-                    Статус: <span id="current-status-text">Месяц 1 / 12</span>
+                <div id="season-badge" class="px-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-sm font-medium text-indigo-400">
+                    Тур: <span id="current-status-text">1 / 22</span>
                 </div>
-                <button onclick="nextTour()" id="next-btn" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-emerald-500/20 active:scale-95">
-                    Следующий месяц ➡️
+                <button onclick="nextTour()" id="next-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/20 active:scale-95">
+                    Следующий тур ➡️
                 </button>
                 <button onclick="resetSeason()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-4 py-2.5 rounded-xl transition-all border border-slate-700">
                     🔄 Сброс
@@ -41,14 +41,14 @@
     <!-- Основной контент -->
     <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full flex-grow">
         
-        <!-- Левая колонка: Матчи текущего месяца (Тура) -->
+        <!-- Левая колонка: Матчи текущего тура -->
         <div class="lg:col-span-1 flex flex-col gap-6">
             <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm flex flex-col h-full">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        📅 <span id="month-title">Апрель</span>
+                        🏟️ Матчи тура
                     </h2>
-                    <span class="text-xs uppercase tracking-wider bg-slate-800 text-slate-400 px-3 py-1 rounded-full font-semibold">Тур <span id="tour-num">1</span></span>
+                    <span class="text-xs uppercase tracking-wider bg-slate-800 text-indigo-400 px-3 py-1 rounded-full font-semibold">Тур <span id="tour-num">1</span> / 22</span>
                 </div>
 
                 <div id="matches-container" class="space-y-4 flex-grow flex flex-col justify-center">
@@ -62,9 +62,9 @@
             <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        🏆 Турнирная таблица
+                        🏆 Турнирная таблица Ла Лиги
                     </h2>
-                    <p class="text-xs text-slate-400">* Шанс хет-трика (3+ голов): 7%</p>
+                    <p class="text-xs text-slate-400">Редкие события: Дубль (~18%), Хет-трик (~7%), Покер (~3%)</p>
                 </div>
 
                 <div class="overflow-x-auto">
@@ -93,73 +93,123 @@
 
     <!-- Футер -->
     <footer class="border-t border-slate-800 bg-slate-900/40 py-6 text-center text-xs text-slate-500">
-        <p>Global Football League Simulation Engine &bull; Все данные генерируются рандомно при каждом запуске</p>
+        <p>La Liga 12 Months Simulation Engine &bull; Полный календарь (дома и на выезде)</p>
     </footer>
 
     <!-- Скрипт симуляции -->
     <script>
-        // 12 месяцев сезона по порядку
-        const monthsList = [
-            "Апрель", "Май", "Июнь", "Июль", 
-            "Август", "Сентябрь", "Октябрь", "Ноябрь", 
-            "Декабрь", "Январь", "Февраль", "Март"
-        ];
-
-        // 8 команд-участниц
+        // 12 команд-месяцев
         let teams = [
-            { id: 1, name: "FC Lightning", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 2, name: "Storm FC", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 3, name: "Dynamo Apex", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 4, name: "Titan SC", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 5, name: "Phoenix United", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 6, name: "Vanguard", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 7, name: "Eclipse", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
-            { id: 8, name: "Galaxy CF", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 }
+            { id: 1, name: "Январь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 2, name: "Февраль", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 3, name: "Март", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 4, name: "Апрель", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 5, name: "Май", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 6, name: "Июнь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 7, name: "Июль", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 8, name: "Август", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 9, name: "Сентябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 10, name: "Октябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 11, name: "Ноябрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 },
+            { id: 12, name: "Декабрь", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 }
         ];
 
-        let currentMonthIndex = 0;
+        // Пул игроков для каждой команды для фиксации дублей, хет-триков и покеров
+        const playerPools = {
+            "Январь": ["С. Мороз", "А. Январский", "В. Ледяной"],
+            "Февраль": ["М. Вьюгов", "Д. Февральский", "П. Буран"],
+            "Март": ["А. Весенний", "К. Мартовский", "Н. Капель"],
+            "Апрель": ["И. Апрельский", "Р. Ручьев", "Л. Зеленов"],
+            "Май": ["В. Майский", "Е. Цветков", "Д. Май"],
+            "Июнь": ["С. Солнечный", "А. Июньский", "М. Жаркий"],
+            "Июль": ["П. Июльский", "Б. Пляжный", "К. Знойный"],
+            "Август": ["Д. Августовский", "А. Звездный", "Р. Бархатный"],
+            "Сентябрь": ["О. Сентябрьский", "В. Школьный", "И. Листопадов"],
+            "Октябрь": ["Н. Октябрьский", "П. Дождев", "А. Осенний"],
+            "Ноябрь": ["М. Ноябрьский", "С. Пасмурный", "К. Туманов"],
+            "Декабрь": ["Д. Декабрьский", "И. Снежный", "В. Праздничный"]
+        };
+
+        let currentTourIndex = 0;
         let seasonFinished = false;
+        let schedule = [];
         let lastPlayedMatches = [];
 
-        // Календарь матчей (парные игры по турам, круговая система на 12 туров)
-        // Для 8 команд за 12 месяцев расписание генерируется циклически
-        function getPairingsForTour(tour) {
-            // Фиксированный алгоритм распределения соперников
-            const t = (tour - 1) % 7;
-            const indices = [0, 1, 2, 3, 4, 5, 6, 7];
-            // Сдвигаем команды для каждого тура
-            let rotated = [indices[0]];
-            for(let i=1; i<indices.length; i++) {
-                let idx = 1 + ((i - 1 + t) % 7);
-                rotated.push(idx);
+        // Генерация календаря Ла Лиги (круглый турнир в 2 круга: 22 тура для 12 команд)
+        function generateLaLigaSchedule() {
+            let n = 12;
+            let rounds = [];
+            let indices = Array.from({length: n}, (_, i) => i + 1);
+
+            // Первый круг (11 туров)
+            for (let r = 0; r < n - 1; r++) {
+                let roundMatches = [];
+                for (let i = 0; i < n / 2; i++) {
+                    let home = indices[i];
+                    let away = indices[n - 1 - i];
+                    // Чередуем хозяев поля
+                    if (r % 2 === 1 && i === 0) {
+                        roundMatches.push([away, home]);
+                    } else {
+                        roundMatches.push([home, away]);
+                    }
+                }
+                rounds.push(roundMatches);
+                // Сдвиг по кругу (алгоритм Бергера)
+                let last = indices.pop();
+                indices.splice(1, 0, last);
             }
-            
-            return [
-                [rotated[0], rotated[7]],
-                [rotated[1], rotated[6]],
-                [rotated[2], rotated[5]],
-                [rotated[3], rotated[4]]
-            ];
+
+            // Второй круг (зеркальный, меняем местами хозяев и гостей)
+            let secondHalf = rounds.map(round => {
+                return round.map(match => [match[1], match[0]]);
+            });
+
+            return [...rounds, ...secondHalf]; // Всего 22 тура
         }
 
-        // Система генерации голов с кастомными шансами (включая хет-трик ~7% шанс забить 3+ гола)
         function simulateGoals() {
             const rand = Math.random() * 100;
-            if (rand < 32) return 0;       // 32% шанс 0 голов
-            if (rand < 68) return 1;       // 36% шанс 1 гол
-            if (rand < 88) return 2;       // 20% шанс 2 гола
-            if (rand < 95) return 3;       // 7% шанс хет-трика (3 гола)
-            return 4 + Math.floor(Math.random() * 2); // 5% шанс разгрома (4-5 голов)
+            if (rand < 34) return 0;       // ~34%
+            if (rand < 68) return 1;       // ~34%
+            if (rand < 86) return 2;       // ~18%
+            if (rand < 94) return 3;       // ~8%
+            if (rand < 98) return 4;       // ~4%
+            return 5;                      // ~2% (разгром)
         }
 
-        // Инициализация при загрузке
+        // Распределение голов по игрокам и поиск дублей/хет-триков/покеров
+        function processTeamMatch(teamName, goals) {
+            let roster = playerPools[teamName];
+            let playerGoals = { [roster[0]]: 0, [roster[1]]: 0, [roster[2]]: 0 };
+            let events = [];
+
+            for (let i = 0; i < goals; i++) {
+                let p = roster[Math.floor(Math.random() * roster.length)];
+                playerGoals[p]++;
+            }
+
+            for (let p in playerGoals) {
+                let g = playerGoals[p];
+                if (g >= 4) {
+                    events.push({ text: `🔥 ПОКЕР (${p} — ${g} гол.)`, style: 'bg-purple-500/10 text-purple-400 border-purple-500/20' });
+                } else if (g === 3) {
+                    events.push({ text: `⚽ ХЕТ-ТРИК (${p})`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20' });
+                } else if (g === 2) {
+                    events.push({ text: `⚡ ДУБЛЬ (${p})`, style: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' });
+                }
+            }
+            return events;
+        }
+
         function initSeason() {
+            schedule = generateLaLigaSchedule();
             resetSeasonData();
             updateUI();
         }
 
         function resetSeasonData() {
-            currentMonthIndex = 0;
+            currentTourIndex = 0;
             seasonFinished = false;
             lastPlayedMatches = [];
             teams.forEach(team => {
@@ -173,95 +223,93 @@
             updateUI();
         }
 
-        // Симуляция следующего тура (месяца)
         function nextTour() {
             if (seasonFinished) {
-                alert("Сезон завершен! Нажмите «Сброс» для нового сезона.");
+                alert("Сезон Ла Лиги завершен! Нажмите «Сброс» для нового розыгрыша.");
                 return;
             }
 
-            currentMonthIndex++;
-            let tourNumber = currentMonthIndex;
-            let pairings = getPairingsForTour(tourNumber);
+            let currentPairings = schedule[currentTourIndex];
             lastPlayedMatches = [];
 
-            pairings.forEach(pair => {
-                let teamA = teams.find(t => t.id === pair[0] + 1);
-                let teamB = teams.find(t => t.id === pair[1] + 1);
+            currentPairings.forEach(pair => {
+                let teamHome = teams.find(t => t.id === pair[0]);
+                let teamAway = teams.find(t => t.id === pair[1]);
 
-                let goalsA = simulateGoals();
-                let goalsB = simulateGoals();
+                let goalsHome = simulateGoals();
+                let goalsAway = simulateGoals();
 
-                // Обновляем статистику команды A
-                teamA.p += 1;
-                teamA.gf += goalsA;
-                teamA.ga += goalsB;
+                let homeEvents = processTeamMatch(teamHome.name, goalsHome);
+                let awayEvents = processTeamMatch(teamAway.name, goalsAway);
 
-                // Обновляем статистику команды B
-                teamB.p += 1;
-                teamB.gf += goalsB;
-                teamB.ga += goalsA;
+                // Статистика Дома
+                teamHome.p += 1;
+                teamHome.gf += goalsHome;
+                teamHome.ga += goalsAway;
 
-                if (goalsA > goalsB) {
-                    teamA.w += 1; teamA.pts += 3;
-                    teamB.l += 1;
-                } else if (goalsA < goalsB) {
-                    teamB.w += 1; teamB.pts += 3;
-                    teamA.l += 1;
+                // Статистика Гостей
+                teamAway.p += 1;
+                teamAway.gf += goalsAway;
+                teamAway.ga += goalsHome;
+
+                if (goalsHome > goalsAway) {
+                    teamHome.w += 1; teamHome.pts += 3;
+                    teamAway.l += 1;
+                } else if (goalsHome < goalsAway) {
+                    teamAway.w += 1; teamAway.pts += 3;
+                    teamHome.l += 1;
                 } else {
-                    teamA.d += 1; teamA.pts += 1;
-                    teamB.d += 1; teamB.pts += 1;
+                    teamHome.d += 1; teamHome.pts += 1;
+                    teamAway.d += 1; teamAway.pts += 1;
                 }
 
                 lastPlayedMatches.push({
-                    home: teamA.name,
-                    away: teamB.name,
-                    scoreA: goalsA,
-                    scoreB: goalsB,
-                    isHattrick: (goalsA >= 3 || goalsB >= 3)
+                    home: teamHome.name,
+                    away: teamAway.name,
+                    scoreHome: goalsHome,
+                    scoreAway: goalsAway,
+                    events: [...homeEvents, ...awayEvents]
                 });
             });
 
-            if (currentMonthIndex >= 12) {
+            currentTourIndex++;
+            if (currentTourIndex >= 22) {
                 seasonFinished = true;
             }
 
             updateUI();
         }
 
-        // Рендеринг интерфейса
         function updateUI() {
-            // Месяц и тур
-            let activeMonthName = monthsList[currentMonthIndex % 12];
-            document.getElementById('month-title').innerText = activeMonthName;
-            document.getElementById('tour-num').innerText = currentMonthIndex === 0 ? "1 (Ожидание)" : currentMonthIndex;
+            document.getElementById('tour-num').innerText = currentTourIndex === 0 ? "1" : currentTourIndex;
             
             if (seasonFinished) {
                 document.getElementById('current-status-text').innerText = "Сезон завершен 🏆";
                 document.getElementById('next-btn').innerText = "Сезон окончен";
                 document.getElementById('next-btn').classList.add('opacity-50', 'cursor-not-allowed');
             } else {
-                document.getElementById('current-status-text').innerText = `Месяц ${currentMonthIndex + 1} / 12`;
-                document.getElementById('next-btn').innerText = currentMonthIndex === 0 ? "Начать сезон ➡️" : "Следующий месяц ➡️";
+                document.getElementById('current-status-text').innerText = `${currentTourIndex} / 22`;
+                document.getElementById('next-btn').innerText = currentTourIndex === 0 ? "Начать сезон ➡️" : "Следующий тур ➡️";
             }
 
-            // Рендер матчей
+            // Рендер матчей текущего тура
             let matchesHTML = "";
-            if (currentMonthIndex === 0) {
-                matchesHTML = `<div class="text-center text-slate-500 py-12">Нажмите кнопку «Начать сезон», чтобы запустить первый месяц (Апрель) и сыграть матчи тура.</div>`;
+            if (currentTourIndex === 0) {
+                matchesHTML = `<div class="text-center text-slate-500 py-12">Нажмите «Начать сезон», чтобы запустить 1-й тур чемпионата Ла Лиги.</div>`;
             } else {
                 lastPlayedMatches.forEach(match => {
-                    let hattrickBadge = match.isHattrick ? `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] px-2 py-0.5 rounded-full font-bold animate-pulse">🔥 ХЕТ-ТРИК</span>` : "";
+                    let eventsHTML = match.events.map(ev => `<span class="text-[10px] px-2 py-0.5 rounded-full font-bold border ${ev.style}">${ev.text}</span>`).join('');
+                    
                     matchesHTML += `
                         <div class="bg-slate-950/50 border border-slate-800/80 p-4 rounded-xl flex flex-col gap-2">
                             <div class="flex justify-between items-center text-sm">
                                 <span class="font-medium text-slate-200 w-2/5 truncate">${match.home}</span>
-                                <div class="bg-slate-800 px-3 py-1 rounded-lg font-bold text-emerald-400 tracking-wider">
-                                    ${match.scoreA} : ${match.scoreB}
+                                <div class="bg-slate-800 px-3 py-1 rounded-lg font-bold text-indigo-400 tracking-wider">
+                                    ${match.scoreHome} : ${match.scoreAway}
                                 </div>
                                 <span class="font-medium text-slate-200 w-2/5 truncate text-right">${match.away}</span>
                             </div>
-                            ${hattrickBadge ? `<div class="flex justify-center">${hattrickBadge}</div>` : ""}
+                            ${match.events.length > 0 ? `<div class="flex flex-wrap gap-1.5 justify-center mt-1">${eventsHTML}</div>` : ""}
                         </div>
                     `;
                 });
@@ -280,7 +328,7 @@
             // Рендер таблицы
             let tableHTML = "";
             sortedTeams.forEach((team, index) => {
-                let rankStyle = index === 0 ? "text-amber-400 font-bold" : index < 3 ? "text-emerald-400 font-semibold" : "text-slate-300";
+                let rankStyle = index === 0 ? "text-amber-400 font-bold" : index < 4 ? "text-indigo-400 font-semibold" : "text-slate-300";
                 let rowBg = index === 0 ? "bg-amber-500/5" : index % 2 === 0 ? "bg-slate-900/40" : "";
                 
                 tableHTML += `
@@ -292,18 +340,15 @@
                         <td class="py-3 px-2 text-center text-slate-300">${team.d}</td>
                         <td class="py-3 px-2 text-center text-slate-300">${team.l}</td>
                         <td class="py-3 px-2 text-center text-slate-400">${team.gf}:${team.ga}</td>
-                        <td class="py-3 px-2 text-center font-bold text-emerald-400">${team.pts}</td>
+                        <td class="py-3 px-2 text-center font-bold text-indigo-400">${team.pts}</td>
                     </tr>
                 `;
             });
             document.getElementById('standings-body').innerHTML = tableHTML;
         }
 
-        // Запуск при старте
-        init();
-        function init() {
-            updateUI();
-        }
+        // Инициализация при загрузке
+        initSeason();
     </script>
 </body>
 </html>
