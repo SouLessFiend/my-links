@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Football Manager Ultimate Edition with True FLIP & Custom Avatars</title>
+    <title>Global Football Manager Ultimate Edition - Top 5 Leagues System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
@@ -12,9 +12,7 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #020617; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
-        .table-row-transition {
-            will-change: transform;
-        }
+        .table-row-transition { will-change: transform; }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-slate-950">
@@ -26,9 +24,9 @@
                 <div class="bg-gradient-to-tr from-indigo-600 via-violet-600 to-purple-600 text-white font-bold p-2.5 rounded-xl text-xl shadow-lg shadow-indigo-600/30">⚽</div>
                 <div>
                     <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-                        FOOTBALL MASTER <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">v5.0 Pro FLIP</span>
+                        FOOTBALL MASTER <span class="text-xs bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">Top-5 Leagues Rule</span>
                     </h1>
-                    <p class="text-xs text-slate-400">Плавные анимации перемещений, премиальные аватарки месяцев и еврокубки</p>
+                    <p class="text-xs text-slate-400">Система топ-лиг (3 очка за победу, еврокубки, зона вылета)</p>
                 </div>
             </div>
             
@@ -48,7 +46,7 @@
 
     <!-- Вкладки -->
     <nav class="max-w-7xl mx-auto px-4 mt-6 w-full flex flex-wrap gap-2 border-b border-slate-800 pb-3">
-        <button onclick="switchTab('league')" id="tab-league" class="px-4 py-2 rounded-xl font-semibold text-sm bg-indigo-600 text-white transition-all shadow-md">Ла Лига</button>
+        <button onclick="switchTab('league')" id="tab-league" class="px-4 py-2 rounded-xl font-semibold text-sm bg-indigo-600 text-white transition-all shadow-md">Турнирная таблица</button>
         <button onclick="switchTab('cups')" id="tab-cups" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Еврокубки</button>
         <button onclick="switchTab('commentary')" id="tab-commentary" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Текстовый Онлайн</button>
         <button onclick="switchTab('transfers')" id="tab-transfers" class="px-4 py-2 rounded-xl font-semibold text-sm bg-slate-900 text-slate-400 hover:bg-slate-800 transition-all border border-slate-800">Рынок & Бюджеты</button>
@@ -58,7 +56,7 @@
     <!-- Основной контент -->
     <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-3 gap-8 w-full flex-grow">
         
-        <!-- Левая колонка: Матчи и камбэки -->
+        <!-- Левая колонка: Матчи -->
         <div class="lg:col-span-1 flex flex-col gap-6">
             <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm flex flex-col h-full">
                 <div class="flex justify-between items-center mb-4">
@@ -79,13 +77,18 @@
         <!-- Правая колонка -->
         <div class="lg:col-span-2">
             
-            <!-- Вкладка 1: Ла Лига с FLIP анимацией -->
+            <!-- Вкладка 1: Таблица -->
             <div id="section-league" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-2">
                     <h2 class="text-base font-bold text-white flex items-center gap-2">
-                        🏆 Турнирная таблица Ла Лиги
+                        🏆 Таблица чемпионата (Система топ-5 лиг)
                     </h2>
-                    <p class="text-xs text-slate-400">Топ-4 в ЛЧ | 5-8 в ЛЕ | 9-12 в ЛК</p>
+                    <div class="flex flex-wrap gap-2 text-[11px]">
+                        <span class="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/30 text-amber-300">1-4: ЛЧ</span>
+                        <span class="px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/30 text-indigo-300">5: ЛЕ</span>
+                        <span class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300">6: ЛК</span>
+                        <span class="px-2 py-0.5 rounded bg-red-500/10 border border-red-500/30 text-red-300">10-12: Вылет</span>
+                    </div>
                 </div>
 
                 <div class="overflow-x-auto custom-scrollbar">
@@ -112,23 +115,23 @@
             <!-- Вкладка 2: Еврокубки -->
             <div id="section-cups" class="hidden space-y-6">
                 <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-sm font-bold text-amber-400 mb-4 flex items-center gap-2">⭐ Лига Чемпионов УЕФА (Топ-4)</h3>
+                    <h3 class="text-sm font-bold text-amber-400 mb-4 flex items-center gap-2">⭐ Лига Чемпионов УЕФА (Топ-4 команды)</h3>
                     <div id="ucl-container" class="space-y-3 text-sm text-slate-300">
-                        <p class="text-xs text-slate-500">Завершите регулярный сезон Ла Лиги (22 тура).</p>
+                        <p class="text-xs text-slate-500">Завершите регулярный сезон (22 тура).</p>
                     </div>
                 </div>
 
                 <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-sm font-bold text-indigo-400 mb-4 flex items-center gap-2">🛡️ Лига Европы УЕФА (Места 5-8)</h3>
+                    <h3 class="text-sm font-bold text-indigo-400 mb-4 flex items-center gap-2">🛡️ Лига Европы УЕФА (5-е место)</h3>
                     <div id="uel-container" class="space-y-3 text-sm text-slate-300">
-                        <p class="text-xs text-slate-500">Ожидание завершения Ла Лиги...</p>
+                        <p class="text-xs text-slate-500">Ожидание завершения сезона...</p>
                     </div>
                 </div>
 
                 <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                    <h3 class="text-sm font-bold text-emerald-400 mb-4 flex items-center gap-2">⚽ Лига Конференций УЕФА (Места 9-12)</h3>
+                    <h3 class="text-sm font-bold text-emerald-400 mb-4 flex items-center gap-2">⚽ Лига Конференций УЕФА (6-е место)</h3>
                     <div id="uecl-container" class="space-y-3 text-sm text-slate-300">
-                        <p class="text-xs text-slate-500">Ожидание завершения Ла Лиги...</p>
+                        <p class="text-xs text-slate-500">Ожидание завершения сезона...</p>
                     </div>
                 </div>
             </div>
@@ -148,7 +151,7 @@
             <div id="section-transfers" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-base font-bold text-white flex items-center gap-2">💼 Финансы и Трансферный рынок клубов</h2>
-                    <p class="text-xs text-slate-400">Бюджеты команд Ла Лиги</p>
+                    <p class="text-xs text-slate-400">Усиление состава за деньги</p>
                 </div>
                 <div class="overflow-x-auto custom-scrollbar">
                     <table class="w-full text-left border-collapse">
@@ -195,12 +198,11 @@
 
     <!-- Футер -->
     <footer class="border-t border-slate-800 bg-slate-900/40 py-6 text-center text-xs text-slate-500">
-        <p>Global Football Manager Ultimate Engine &bull; Плавные FLIP анимации & Премиальные аватарки месяцев</p>
+        <p>Global Football Manager Ultimate Engine &bull; Система топ-5 европейских лиг & Плавные FLIP анимации</p>
     </footer>
 
     <!-- Скрипт -->
     <script>
-        // Клубы-месяцы с уникальными кастомными аватарами (иконками/градиентами)
         let teams = [
             { id: 1, name: "Январь", avatar: "❄️", bgBadge: "from-blue-600/30 to-cyan-600/30 border-cyan-500/40 text-cyan-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 82, budget: 45000000 },
             { id: 2, name: "Февраль", avatar: "🌨️", bgBadge: "from-sky-600/30 to-blue-700/30 border-sky-500/40 text-sky-300", p: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0, rating: 78, budget: 32000000 },
@@ -314,20 +316,20 @@
         function generateCommentary(home, away, sh, sa) {
             let logs = [];
             logs.push(`[1 мин] Стартовый свисток! ${home.avatar} ${home.name} принимает ${away.avatar} ${away.name}.`);
-            if (sh > 0) logs.push(`[19 мин] ГОЛ! Хозяева поля (${home.name}) открывают счет мощным ударом.`);
-            if (sa > 0) logs.push(`[35 мин] Ответный мяч от ${away.name}! Трибуны гостей ликуют.`);
-            if (sh > 1) logs.push(`[58 мин] Оформляют второй мяч! ${home.name} увеличивают преимущество.`);
-            if (sa > 1) logs.push(`[74 мин] Невероятно! ${away.name} сравнивают цифры на табло.`);
-            if (sh > 2 || sa > 2) logs.push(`[89 мин] Безумная концовка матча, команды сражаются за каждый сантиметр газона!`);
-            logs.push(`[90 мин] Матч окончен со счетом ${sh}:${sa}.`);
+            if (sh > 0) logs.push(`[19 мин] ГОЛ! Хозяева (${home.name}) открывают счет точным ударом.`);
+            if (sa > 0) logs.push(`[35 мин] Ответный мяч от ${away.name}! Опасно и результативно.`);
+            if (sh > 1) logs.push(`[58 мин] Второй мяч влетает в сетку ворот ${away.name}!`);
+            if (sa > 1) logs.push(`[74 мин] Гости сравнивают счет! Напряжение на поле нарастает.`);
+            if (sh > 2 || sa > 2) logs.push(`[89 мин] Сумасшедшая концовка матча в стиле топ-чемпионатов!`);
+            logs.push(`[90 мин] Финальный свисток. Итог матча: ${sh}:${sa}.`);
             return logs;
         }
 
         function checkComeback(home, away, sh, sa) {
             if (sh > sa && Math.random() < 0.12) {
-                return { is: true, text: `⚡ ЭПИЧЕСКИЙ КАМБЭК: ${home.avatar} ${home.name} переломили ход встречи и победили ${sh}:${sa}!` };
+                return { is: true, text: `⚡ ВОЛЕВАЯ ПОБЕДА: ${home.avatar} ${home.name} вырвали победу со счетом ${sh}:${sa}!` };
             } else if (sa > sh && Math.random() < 0.12) {
-                return { is: true, text: `⚡ ЭПИЧЕСКИЙ КАМБЭК: ${away.avatar} ${away.name} совершили камбэк и вырвали победу ${sh}:${sa}!` };
+                return { is: true, text: `⚡ ВОЛЕВАЯ ПОБЕДА: ${away.avatar} ${away.name} переломили ход игры и победили ${sh}:${sa}!` };
             }
             return { is: false, text: "" };
         }
@@ -428,8 +430,6 @@
                 gameState.phase = 'ucl_f';
             } else if (gameState.phase === 'ucl_f') {
                 simulateCupFinals('ucl');
-                simulateCupFinals('uel');
-                simulateCupFinals('uecl');
                 gameState.phase = 'finished';
             } else if (gameState.phase === 'finished') {
                 alert("Сезон завершен! Нажмите сброс для нового года.");
@@ -441,20 +441,22 @@
 
         function startEuropeanCups() {
             let sorted = getSortedStandings();
+            // Топ-5 лиг: 1-4 в ЛЧ, 5 в ЛЕ, 6 в ЛК, 10-12 вылет
             let uclTeams = [sorted[0], sorted[1], sorted[2], sorted[3]];
-            let uelTeams = [sorted[4], sorted[5], sorted[6], sorted[7]];
-            let ueclTeams = [sorted[8], sorted[9], sorted[10], sorted[11]];
+            let uelTeam = sorted[4];
+            let ueclTeam = sorted[5];
 
             gameState.cupStages.ucl = { status: 'semifinals', matches: [{ t1: uclTeams[0], t2: uclTeams[3] }, { t1: uclTeams[1], t2: uclTeams[2] }] };
-            gameState.cupStages.uel = { status: 'semifinals', matches: [{ t1: uelTeams[0], t2: uelTeams[3] }, { t1: uelTeams[1], t2: uelTeams[2] }] };
-            gameState.cupStages.uecl = { status: 'semifinals', matches: [{ t1: ueclTeams[0], t2: ueclTeams[3] }, { t1: ueclTeams[1], t2: ueclTeams[2] }] };
+            gameState.cupStages.uel = { status: 'direct', team: uelTeam };
+            gameState.cupStages.uecl = { status: 'direct', team: ueclTeam };
 
             gameState.phase = 'ucl_sf';
             gameState.lastMatches = [];
-            gameState.activeComebacks.push("🌟 Регулярный сезон завершен! Команды распределены по еврокубкам.");
+            gameState.activeComebacks.push("🌟 Сезон завершен! Распределение путевок по системе топ-5 лиг выполнено.");
         }
 
         function simulateCupRound(cupKey) {
+            if (cupKey !== 'ucl') return;
             let cup = gameState.cupStages[cupKey];
             cup.winners = [];
             gameState.lastMatches = [];
@@ -469,12 +471,13 @@
                 cup.winners.push(winner);
 
                 gameState.lastMatches.push({
-                    home: m.t1.name, homeAvatar: m.t1.avatar, homeBg: m.t1.bgBadge, away: m.t2.name, awayAvatar: m.t2.avatar, awayBg: m.t2.bgBadge, sh, sa, events: [{text: `🏆 Плей-офф (${winner.avatar} ${winner.name} в финале)`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20'}]
+                    home: m.t1.name, homeAvatar: m.t1.avatar, homeBg: m.t1.bgBadge, away: m.t2.name, awayAvatar: m.t2.avatar, awayBg: m.t2.bgBadge, sh, sa, events: [{text: `🏆 Плей-офф ЛЧ (${winner.avatar} ${winner.name} в финале)`, style: 'bg-amber-500/10 text-amber-400 border-amber-500/20'}]
                 });
             });
         }
 
         function simulateCupFinals(cupKey) {
+            if (cupKey !== 'ucl') return;
             let cup = gameState.cupStages[cupKey];
             let f1 = cup.winners[0];
             let f2 = cup.winners[1];
@@ -487,9 +490,9 @@
             cup.finalMatch = { t1: f1, t2: f2, sh, sa, winner: cupWinner };
             cup.status = 'finished';
 
-            gameState.activeComebacks.push(`👑 ПОБЕДИТЕЛЬ ${cupKey.toUpperCase()}: Клуб "${cupWinner.avatar} ${cupWinner.name}" завоевал трофей!`);
+            gameState.activeComebacks.push(`👑 ПОБЕДИТЕЛЬ ЛИГИ ЧЕМПИОНОВ: Клуб "${cupWinner.avatar} ${cupWinner.name}" завоевал главный трофей!`);
             gameState.lastMatches.push({
-                home: f1.name, homeAvatar: f1.avatar, homeBg: f1.bgBadge, away: f2.name, awayAvatar: f2.avatar, awayBg: f2.bgBadge, sh, sa, events: [{text: `🌟 ФИНАЛ: ТРИУМФАТОР ${cupKey.toUpperCase()} — ${cupWinner.avatar} ${cupWinner.name}!`, style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}]
+                home: f1.name, homeAvatar: f1.avatar, homeBg: f1.bgBadge, away: f2.name, awayAvatar: f2.avatar, awayBg: f2.bgBadge, sh, sa, events: [{text: `🌟 ФИНАЛ ЛЧ: ТРИУМФАТОР — ${cupWinner.avatar} ${cupWinner.name}!`, style: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}]
             });
         }
 
@@ -517,22 +520,18 @@
             const tbody = document.getElementById('standings-body');
             const sorted = getSortedStandings();
 
-            // 1. FIRST: Запоминаем текущие вертикальные позиции существующих строк
             const firstRects = new Map();
             if (animate) {
                 Array.from(tbody.children).forEach(tr => {
                     const id = tr.dataset.teamId;
-                    if (id) {
-                        firstRects.set(id, tr.getBoundingClientRect().top);
-                    }
+                    if (id) firstRects.set(id, tr.getBoundingClientRect().top);
                 });
             }
 
-            // 2. BUILD NEW HTML / DOM STRUCTURE
             let tableHTML = "";
             sorted.forEach((t, i) => {
-                let rankStyle = i === 0 ? "text-amber-400 font-bold" : i < 4 ? "text-indigo-400 font-semibold" : i < 8 ? "text-blue-400" : i < 12 ? "text-emerald-400" : "text-slate-300";
-                let rowBg = i === 0 ? "bg-amber-500/5" : i % 2 === 0 ? "bg-slate-900/40" : "";
+                let rankStyle = i < 4 ? "text-amber-400 font-bold" : i === 4 ? "text-indigo-400 font-semibold" : i === 5 ? "text-emerald-400 font-semibold" : i >= 9 ? "text-red-400 font-semibold" : "text-slate-300";
+                let rowBg = i < 4 ? "bg-amber-500/5" : i >= 9 ? "bg-red-500/5" : i % 2 === 0 ? "bg-slate-900/40" : "";
                 
                 tableHTML += `
                     <tr data-team-id="${t.id}" class="table-row-transition ${rowBg} hover:bg-slate-800/40">
@@ -552,7 +551,6 @@
             });
             tbody.innerHTML = tableHTML;
 
-            // 3. INVERT & PLAY: Рассчитываем дельту и запускаем плавное скольжение
             if (animate) {
                 Array.from(tbody.children).forEach(tr => {
                     const id = tr.dataset.teamId;
@@ -565,7 +563,6 @@
                             tr.style.transition = 'none';
                             tr.style.transform = `translateY(${deltaY}px)`;
                             
-                            // Запуск анимации в следующем кадре
                             requestAnimationFrame(() => {
                                 tr.style.transition = 'transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s ease';
                                 tr.style.transform = 'translateY(0)';
@@ -580,12 +577,12 @@
             let phaseText = "";
             if (gameState.phase === 'league') {
                 phaseText = `Регулярный сезон (Тур ${gameState.tourIndex}/22)`;
-                if (gameState.tourIndex >= 22) document.getElementById('next-btn').innerText = "Жеребьевка еврокубков 🏆";
+                if (gameState.tourIndex >= 22) document.getElementById('next-btn').innerText = "Итоги сезона и еврокубки 🏆";
             } else if (gameState.phase === 'ucl_sf') {
-                phaseText = "Еврокубки: Полуфиналы";
-                document.getElementById('next-btn').innerText = "Финалы еврокубков ⚽";
+                phaseText = "Лига Чемпионов: Полуфиналы";
+                document.getElementById('next-btn').innerText = "Финал Лиги Чемпионов ⚽";
             } else if (gameState.phase === 'ucl_f') {
-                phaseText = "Еврокубки: Финалы";
+                phaseText = "Лига Чемпионов: Финал";
                 document.getElementById('next-btn').innerText = "Завершить сезон 🏁";
             } else {
                 phaseText = "Сезон завершен 🏆";
@@ -595,14 +592,12 @@
             document.getElementById('current-phase-text').innerText = phaseText;
             document.getElementById('sub-round-badge').innerText = gameState.phase === 'league' ? `Тур ${gameState.tourIndex === 0 ? 1 : gameState.tourIndex}` : gameState.phase.toUpperCase();
 
-            // Камбэки
             let alertHTML = "";
             gameState.activeComebacks.forEach(msg => {
                 alertHTML += `<div class="bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs p-3 rounded-xl font-medium animate-pulse">${msg}</div>`;
             });
             document.getElementById('comeback-alert-container').innerHTML = alertHTML;
 
-            // Матчи с аватарками
             let matchesHTML = "";
             if (gameState.tourIndex === 0 && gameState.phase === 'league') {
                 matchesHTML = `<div class="text-center text-slate-500 py-12">Нажмите «Следующий тур» для старта чемпионата.</div>`;
@@ -631,15 +626,10 @@
             }
             document.getElementById('matches-container').innerHTML = matchesHTML;
 
-            // Плавное обновление таблицы
             updateStandingsTable(animateTable);
 
-            // Еврокубки
-            renderCup('ucl', 'ucl-container');
-            renderCup('uel', 'uel-container');
-            renderCup('uecl', 'uecl-container');
+            renderCupInfo();
 
-            // Текстовый онлайн
             let commHTML = "";
             if (gameState.commentaryLog.length === 0) {
                 commHTML = `<p class="text-slate-500 text-center italic py-20">События матчей появятся здесь после запуска игрового тура.</p>`;
@@ -650,7 +640,6 @@
             }
             document.getElementById('commentary-box').innerHTML = commHTML;
 
-            // Трансферы с аватарами
             let transHTML = "";
             teams.forEach(t => {
                 transHTML += `
@@ -669,35 +658,60 @@
             });
             document.getElementById('transfers-body').innerHTML = transHTML;
 
-            // Бомбардиры
             renderScorers();
         }
 
-        function renderCup(key, elId) {
-            let cup = gameState.cupStages[key];
-            let container = document.getElementById(elId);
-            if (cup.status === 'not_started') {
-                container.innerHTML = `<p class="text-xs text-slate-500">Ожидание завершения регулярного чемпионата...</p>`;
+        function renderCupInfo() {
+            let ucl = gameState.cupStages.ucl;
+            let uel = gameState.cupStages.uel;
+            let uecl = gameState.cupStages.uecl;
+
+            let uclContainer = document.getElementById('ucl-container');
+            let uelContainer = document.getElementById('uel-container');
+            let ueclContainer = document.getElementById('uecl-container');
+
+            if (ucl.status === 'not_started') {
+                uclContainer.innerHTML = `<p class="text-xs text-slate-500">Ожидание завершения регулярного чемпионата...</p>`;
+                uelContainer.innerHTML = `<p class="text-xs text-slate-500">Ожидание завершения регулярного чемпионата...</p>`;
+                ueclContainer.innerHTML = `<p class="text-xs text-slate-500">Ожидание завершения регулярного чемпионата...</p>`;
                 return;
             }
-            let html = `<div class="space-y-2 text-xs">`;
-            if (cup.status === 'semifinals') {
-                html += `<p class="font-semibold text-slate-400 uppercase tracking-wider mb-2">Полуфиналы:</p>`;
-                cup.matches.forEach(m => {
-                    html += `<div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
+
+            // UCL
+            let uclHtml = `<div class="space-y-2 text-xs">`;
+            if (ucl.status === 'semifinals') {
+                uclHtml += `<p class="font-semibold text-slate-400 uppercase tracking-wider mb-2">Полуфиналы:</p>`;
+                ucl.matches.forEach(m => {
+                    uclHtml += `<div class="bg-slate-950/50 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center">
                         <span class="flex items-center gap-2">${renderAvatar(m.t1)} ${m.t1.name} vs ${renderAvatar(m.t2)} ${m.t2.name}</span>
-                        <span class="font-bold text-indigo-400">${m.sh !== undefined && m.sh !== null ? `${m.sh}:${m.sa}` : 'Ожидание'}</span>
+                        <span class="font-bold text-indigo-400">${m.sh !== undefined ? `${m.sh}:${m.sa}` : 'Ожидание'}</span>
                     </div>`;
                 });
-            } else if (cup.status === 'finished') {
-                html += `<p class="font-semibold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">🏆 Победитель: ${renderAvatar(cup.finalMatch.winner)} ${cup.finalMatch.winner.name}</p>`;
-                html += `<div class="bg-emerald-500/10 p-2.5 rounded-lg border border-emerald-500/20 flex justify-between items-center font-medium">
-                    <span class="flex items-center gap-2">Финал: ${renderAvatar(cup.finalMatch.t1)} ${cup.finalMatch.t1.name} — ${renderAvatar(cup.finalMatch.t2)} ${cup.finalMatch.t2.name}</span>
-                    <span class="font-bold text-emerald-400">${cup.finalMatch.sh}:${cup.finalMatch.sa}</span>
+            } else if (ucl.status === 'finished') {
+                uclHtml += `<p class="font-semibold text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-2">🏆 Победитель ЛЧ: ${renderAvatar(ucl.finalMatch.winner)} ${ucl.finalMatch.winner.name}</p>`;
+                uclHtml += `<div class="bg-emerald-500/10 p-2.5 rounded-lg border border-emerald-500/20 flex justify-between items-center font-medium">
+                    <span class="flex items-center gap-2">Финал: ${renderAvatar(ucl.finalMatch.t1)} ${ucl.finalMatch.t1.name} — ${renderAvatar(ucl.finalMatch.t2)} ${ucl.finalMatch.t2.name}</span>
+                    <span class="font-bold text-emerald-400">${ucl.finalMatch.sh}:${ucl.finalMatch.sa}</span>
                 </div>`;
             }
-            html += `</div>`;
-            container.innerHTML = html;
+            uclHtml += `</div>`;
+            uclContainer.innerHTML = uclHtml;
+
+            // UEL
+            uelContainer.innerHTML = `
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 flex items-center justify-between text-xs">
+                    <span class="flex items-center gap-2 font-medium text-slate-300">Прямая путевка от чемпионата: ${renderAvatar(uel.team)} <strong class="text-indigo-300">${uel.team.name}</strong></span>
+                    <span class="px-2.5 py-1 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full font-semibold">Групповой этап ЛЕ</span>
+                </div>
+            `;
+
+            // UECL
+            ueclContainer.innerHTML = `
+                <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800 flex items-center justify-between text-xs">
+                    <span class="flex items-center gap-2 font-medium text-slate-300">Прямая путевка от чемпионата: ${renderAvatar(uecl.team)} <strong class="text-emerald-300">${uecl.team.name}</strong></span>
+                    <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full font-semibold">Квалификация ЛК</span>
+                </div>
+            `;
         }
 
         function renderScorers() {
